@@ -32,7 +32,6 @@ export function activate(context: vscode.ExtensionContext) {
     },
   ];
 
-
   bindCommand.forEach((info) => {
     const disposable = vscode.commands.registerCommand(info.cmd, info.callback);
     context.subscriptions.push(disposable);

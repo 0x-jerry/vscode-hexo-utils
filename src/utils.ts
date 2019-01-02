@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { spawn } from 'child_process';
+import * as commandExists from 'command-exists';
 
 function getPkg() {
   const rootPath = vscode.workspace.rootPath;
@@ -48,4 +49,11 @@ function exec(cmd: string, args: string[]): Promise<void> {
   });
 }
 
-export { isHexoProject, exec };
+function getPkgManagerCommand() {
+  const useNPM = commandExists.sync('npm');
+  const useYARN = commandExists.sync('yarn');
+
+  return useYARN ? 'yarn' : useNPM ? 'npm' : null;
+}
+
+export { isHexoProject, exec, getPkgManagerCommand };

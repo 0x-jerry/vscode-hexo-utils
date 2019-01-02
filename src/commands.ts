@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { isHexoProject, exec } from './utils';
+import { isHexoProject, exec, getPkgManagerCommand } from './utils';
 
 enum ArticleTypes {
   post = 'post',
@@ -18,7 +18,9 @@ async function create(type: ArticleTypes) {
         prompt: 'Please input new article name',
       })) || 'new article';
 
-    await exec('yarn', ['hexo', 'new', type, `"${name}"`]);
+    const cmd = getPkgManagerCommand() as string;
+
+    await exec(cmd , ['hexo', 'new', type, `"${name}"`]);
 
     vscode.window.showInformationMessage(
       `Create a new [${type}] named [${name}]`,
