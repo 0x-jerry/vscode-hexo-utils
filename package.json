@@ -17,8 +17,16 @@
   "contributes": {
     "commands": [
       {
-        "command": "hexo.new",
-        "title": "Add a new article",
+        "command": "hexo.new.post",
+        "title": "Add a new post",
+        "icon": {
+          "light": "resources/light/icon-add.svg",
+          "dark": "resources/dark/icon-add.svg"
+        }
+      },
+      {
+        "command": "hexo.new.draft",
+        "title": "Add a new draft",
         "icon": {
           "light": "resources/light/icon-add.svg",
           "dark": "resources/dark/icon-add.svg"
@@ -65,9 +73,14 @@
     "menus": {
       "view/title": [
         {
-          "command": "hexo.new",
+          "command": "hexo.new.post",
           "group": "navigation",
-          "when": "view =~ /hexo.(post|draft)/"
+          "when": "view == hexo.post"
+        },
+        {
+          "command": "hexo.new.draft",
+          "group": "navigation",
+          "when": "view == hexo.draft"
         }
       ]
     }
