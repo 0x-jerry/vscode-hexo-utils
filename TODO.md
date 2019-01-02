@@ -1,8 +1,9 @@
 - [x] add new post
 - [x] add new draft
+- [x] list post articles
+- [x] list draft articles
+- [x] open post or draft
 - [ ] move post to draft
 - [ ] check duplicate article name
-- [ ] list post articles
-- [ ] list draft articles
 - [ ] list articles by categories
 - [ ] list articles by tags
