@@ -11,16 +11,66 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.helloWorld"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.helloWorld",
-        "title": "Hello World"
+        "command": "hexo.new",
+        "title": "Add a new article",
+        "icon": {
+          "light": "resources/light/icon-add.svg",
+          "dark": "resources/dark/icon-add.svg"
+        }
+      },
+      {
+        "command": "hexo.remove",
+        "title": "Remove to draft",
+        "icon": {
+          "light": "resources/light/icon-remove.svg",
+          "dark": "resources/dark/icon-remove.svg"
+        }
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "hexoUtils",
+          "title": "Hexo Utils",
+          "icon": "resources/hexo-activitybar.svg"
+        }
+      ]
+    },
+    "views": {
+      "hexoUtils": [
+        {
+          "id": "hexo.post",
+          "name": "post"
+        },
+        {
+          "id": "hexo.draft",
+          "name": "draft"
+        },
+        {
+          "id": "hexo.category",
+          "name": "categories"
+        },
+        {
+          "id": "hexo.tags",
+          "name": "tags"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "hexo.new",
+          "group": "navigation",
+          "when": "view =~ /hexo.(post|draft)/"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
