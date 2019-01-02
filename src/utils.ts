@@ -2,23 +2,27 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-async function getPkg() {
+function getPkg() {
   const rootPath = vscode.workspace.rootPath;
-  if (!rootPath) return null;
+  if (!rootPath) {
+    return null;
+  }
 
   const pkgPath = path.join(rootPath, 'package.json');
 
-  if (!fs.existsSync(pkgPath)) return null;
+  if (!fs.existsSync(pkgPath)) {
+    return null;
+  }
 
-  const pkg = await import(pkgPath);
+  const pkg = fs.readFileSync(pkgPath, { encoding: 'utf-8' });
 
-  return pkg;
+  return JSON.parse(pkg);
 }
 
-async function isHexoProject(): Promise<boolean> {
-  const pkg = await getPkg();
+function isHexoProject(): boolean {
+  const pkg = getPkg();
 
-  return pkg;
+  return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
 }
 
 export { isHexoProject };
