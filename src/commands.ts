@@ -20,11 +20,9 @@ async function create(type: ArticleTypes) {
 
     const cmd = getPkgManagerCommand() as string;
 
-    await exec(cmd , ['hexo', 'new', type, `"${name}"`]);
+    await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
 
-    vscode.window.showInformationMessage(
-      `Create a new [${type}] named [${name}]`,
-    );
+    vscode.window.showInformationMessage(`Create a new [${type}] named [${name}]`);
   } catch (error) {
     console.log(error);
   }
