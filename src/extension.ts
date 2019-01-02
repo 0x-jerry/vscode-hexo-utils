@@ -1,12 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import commands from './commands';
+import commands, { ArticleTypes } from './commands';
+import { HexoArticleProvider } from './hexoProvider';
 
-enum HexoCommands {
+export enum HexoCommands {
   newPost = 'hexo.new.post',
   newDraft = 'hexo.new.draft',
   remove = 'hexo.remove',
+  open = 'hexo.open',
 }
 
 // this method is called when your extension is activated
@@ -16,10 +18,18 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "vscode-hexo-utils" is now active!');
 
+  vscode.window.registerTreeDataProvider('hexo.post', new HexoArticleProvider());
+  vscode.window.registerTreeDataProvider('hexo.draft', new HexoArticleProvider(ArticleTypes.draft));
+
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const bindCommand = [
+  interface IBindCommand {
+    cmd: string;
+    callback: (...arg: any) => any;
+  }
+
+  const bindCommand: IBindCommand[] = [
     {
       cmd: HexoCommands.newPost,
       callback: commands.createPost,
@@ -27,6 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
     {
       cmd: HexoCommands.newDraft,
       callback: commands.createDraft,
+    },
+    {
+      cmd: HexoCommands.open,
+      callback: commands.open,
     },
   ];
 

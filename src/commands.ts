@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { isHexoProject, exec, getPkgManagerCommand } from './utils';
 
-enum ArticleTypes {
+export enum ArticleTypes {
   post = 'post',
   draft = 'draft',
 }
@@ -28,6 +28,11 @@ async function create(type: ArticleTypes) {
   }
 }
 
+async function open(uri: string) {
+  const doc = await vscode.workspace.openTextDocument(uri);
+  await vscode.window.showTextDocument(doc);
+}
+
 async function createPost() {
   await create(ArticleTypes.post);
 }
@@ -36,4 +41,4 @@ async function createDraft() {
   await create(ArticleTypes.draft);
 }
 
-export default { createPost, createDraft };
+export default { createPost, createDraft, open };

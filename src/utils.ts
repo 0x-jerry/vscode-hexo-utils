@@ -56,4 +56,28 @@ function getPkgManagerCommand() {
   return useYARN ? 'yarn' : useNPM ? 'npm' : null;
 }
 
-export { isHexoProject, exec, getPkgManagerCommand };
+function fsExist(path: fs.PathLike): Thenable<boolean> {
+  return new Promise((resolve) => {
+    fs.exists(path, (exist) => {
+      return resolve(exist);
+    });
+  });
+}
+
+function fsStat(path: fs.PathLike): Thenable<fs.Stats | NodeJS.ErrnoException> {
+  return new Promise((resolve) => {
+    fs.stat(path, (err, info) => {
+      return resolve(err || info);
+    });
+  });
+}
+
+function fsReaddir(path: fs.PathLike): Thenable<string[] | NodeJS.ErrnoException> {
+  return new Promise((resolve) => {
+    fs.readdir(path, (err, files) => {
+      return resolve(err || files);
+    });
+  });
+}
+
+export { isHexoProject, exec, getPkgManagerCommand, fsExist, fsStat, fsReaddir };

@@ -39,6 +39,10 @@
           "light": "resources/light/icon-remove.svg",
           "dark": "resources/dark/icon-remove.svg"
         }
+      },
+      {
+        "command": "hexo.open",
+        "title": "Open a article"
       }
     ],
     "viewsContainers": {
@@ -54,11 +58,13 @@
       "hexoUtils": [
         {
           "id": "hexo.post",
-          "name": "post"
+          "name": "post",
+          "scope": "resource"
         },
         {
           "id": "hexo.draft",
-          "name": "draft"
+          "name": "draft",
+          "scope": "resource"
         },
         {
           "id": "hexo.category",
