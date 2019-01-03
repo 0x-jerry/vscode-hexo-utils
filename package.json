@@ -23,6 +23,9 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "hexo"
+  ],
   "icon": "resources/hexo.png",
   "activationEvents": [
     "*"
