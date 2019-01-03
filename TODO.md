@@ -5,7 +5,7 @@
 - [x] open post or draft
 - [x] move post to draft
 - [x] move draft to post
-- [ ] check duplicate article name
+- [x] check duplicate article name
 - [ ] list articles by categories
 - [ ] list articles by tags
 - [ ] support resource folder
