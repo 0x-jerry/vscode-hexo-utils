@@ -1,15 +1,5 @@
 import * as vscode from 'vscode';
-import {
-  isHexoProject,
-  exec,
-  fsUnlink,
-  fsExist,
-  fsRename,
-  fsMkdir,
-  info,
-  error,
-  warn,
-} from './utils';
+import { isHexoProject, exec, fsUnlink, fsExist, fsRename, fsMkdir, error, warn } from './utils';
 import { getConfig, ConfigProperties } from './configs';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
@@ -38,8 +28,6 @@ async function create(type: ArticleTypes) {
     const cmd = getConfig(ConfigProperties.pkgManager) as string;
 
     await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
-
-    info(`Create a new [${type}] named [${name}]`);
   } catch (err) {
     error(`Create failed on [${type}], ${err}`);
   }
@@ -77,8 +65,6 @@ async function moveFile(item: ArticleItem, to: ArticleTypes) {
   const err = await fsRename(filePath, destPath);
   if (err) {
     error(`Move ${fileName} to ${to} error: ${err}`);
-  } else {
-    info(`Move ${fileName} to ${to}`);
   }
 }
 
@@ -96,8 +82,6 @@ async function deleteFile(item: ArticleItem) {
 
   if (await fsExist(filePath)) {
     await fsUnlink(filePath);
-
-    info(`delete file ${filePath}`);
   } else {
     error(`${filePath} is not exist`);
   }
