@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 enum ConfigProperties {
-  pkgManager = 'packageManager',
   includeDraft = 'includeDraft',
 }
 

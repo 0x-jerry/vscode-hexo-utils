@@ -102,6 +102,14 @@ function fsRead(path: fs.PathLike): Thenable<NodeJS.ErrnoException | string> {
   });
 }
 
+function fsWriteFile(path: fs.PathLike, data: string): Thenable<NodeJS.ErrnoException | string> {
+  return new Promise((resolve) => {
+    fs.writeFile(path, data, { encoding: 'utf-8' }, (err) => {
+      resolve(err);
+    });
+  });
+}
+
 function info(str: string, ...items: string[]) {
   str = 'Hexo: ' + str;
   return vscode.window.showInformationMessage(str, ...items);
@@ -137,6 +145,7 @@ export {
   fsRename,
   fsMkdir,
   fsRead,
+  fsWriteFile,
   info,
   warn,
   error,

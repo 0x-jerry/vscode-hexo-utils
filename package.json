@@ -32,15 +32,6 @@
     "configuration": {
       "title": "Hexo",
       "properties": {
-        "hexo.packageManager": {
-          "type": "string",
-          "default": "yarn",
-          "description": "The package manager used to run scripts.",
-          "enum": [
-            "npm",
-            "yarn"
-          ]
-        },
         "hexo.includeDraft": {
           "type": "boolean",
           "default": false,
@@ -171,6 +162,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^2.2.42",
+    "@types/mustache": "^0.8.32",
     "@types/node": "^8.10.25",
     "conventional-changelog-cli": "^2.0.11",
     "tslint": "^5.8.0",
@@ -178,6 +170,7 @@
     "vscode": "^1.1.25"
   },
   "dependencies": {
-    "gray-matter": "^4.0.1"
+    "gray-matter": "^4.0.1",
+    "mustache": "^3.0.1"
   }
 }

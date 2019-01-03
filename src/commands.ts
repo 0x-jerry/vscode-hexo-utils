@@ -1,9 +1,19 @@
 import * as vscode from 'vscode';
-import { isHexoProject, exec, fsUnlink, fsExist, fsRename, fsMkdir, error, warn } from './utils';
-import { getConfig, ConfigProperties } from './configs';
+import {
+  isHexoProject,
+  fsUnlink,
+  fsExist,
+  fsRename,
+  fsMkdir,
+  error,
+  warn,
+  fsWriteFile,
+  fsRead,
+} from './utils';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
 import * as path from 'path';
+import * as mustache from 'mustache';
 
 export enum ArticleTypes {
   post = 'post',
@@ -25,9 +35,21 @@ async function create(type: ArticleTypes) {
   }
 
   try {
-    const cmd = getConfig(ConfigProperties.pkgManager) as string;
+    const filePath = path.join(vscode.workspace.rootPath!, 'source', `_${type}s`);
+    const scaffoldPath = path.join(vscode.workspace.rootPath!, 'scaffolds');
 
-    await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
+    if (!(await fsExist(filePath))) {
+      await fsMkdir(filePath);
+    }
+
+    const tpl = (await fsRead(path.join(scaffoldPath, type + '.md'))) as string;
+
+    const result = mustache.render(tpl, {
+      title: name,
+      date: new Date().toISOString(),
+    });
+
+    fsWriteFile(path.join(filePath, name + '.md'), result);
   } catch (err) {
     error(`Create failed on [${type}], ${err}`);
   }
