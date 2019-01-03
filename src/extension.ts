@@ -12,6 +12,7 @@ export enum HexoCommands {
   moveToPost = 'hexo.move.to.post',
   open = 'hexo.open',
   delete = 'hexo.delete',
+  refresh = 'hexo.refresh',
 }
 
 // this method is called when your extension is activated
@@ -85,6 +86,15 @@ export function activate(context: vscode.ExtensionContext) {
         await commands.deleteFile(item);
         postProvider.refresh();
         draftProvider.refresh();
+      },
+    },
+    {
+      cmd: HexoCommands.refresh,
+      callback: () => {
+        postProvider.refresh();
+        draftProvider.refresh();
+        categoryProvider.refresh();
+        tagProvider.refresh();
       },
     },
   ];

@@ -46,6 +46,14 @@
         }
       },
       {
+        "command": "hexo.refresh",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/icon-refresh.svg",
+          "dark": "resources/dark/icon-refresh.svg"
+        }
+      },
+      {
         "command": "hexo.move.to.draft",
         "title": "Move to draft"
       },
@@ -99,6 +107,10 @@
     },
     "menus": {
       "view/title": [
+        {
+          "command": "hexo.refresh",
+          "group": "navigation"
+        },
         {
           "command": "hexo.new.post",
           "group": "navigation",
