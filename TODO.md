@@ -14,3 +14,7 @@
 - [ ] change tag & category icon
 - [ ] rename a post or draft
   - [ ] key shortcut [F2]
+
+## Develop Tips
+
+- gray-matter typedef error, [fix method](https://github.com/jonschlinkert/gray-matter/pull/84/files)

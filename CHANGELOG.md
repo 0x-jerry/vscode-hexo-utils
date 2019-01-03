@@ -1,3 +1,12 @@
+## [0.0.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.1...v0.0.2) (2019-01-03)
+
+
+### Performance Improvements
+
+* Remove useless alert message ([ee0c273](https://github.com/cwxyz007/vscode-hexo-utils/commit/ee0c273))
+
+
+
 ## 0.0.1 (2019-01-03)
 
 
