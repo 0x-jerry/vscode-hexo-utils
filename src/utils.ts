@@ -94,6 +94,14 @@ function fsMkdir(path: fs.PathLike): Thenable<NodeJS.ErrnoException> {
   });
 }
 
+function fsRead(path: fs.PathLike): Thenable<NodeJS.ErrnoException | string> {
+  return new Promise((resolve) => {
+    fs.readFile(path, { encoding: 'utf-8' }, (err, data) => {
+      resolve(err || data);
+    });
+  });
+}
+
 function info(str: string, ...items: string[]) {
   str = 'Hexo: ' + str;
   return vscode.window.showInformationMessage(str, ...items);
@@ -109,6 +117,16 @@ function error(str: string, ...items: string[]) {
   return vscode.window.showErrorMessage(str, ...items);
 }
 
+async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
+  const exist = (await fsExist(dir)) && ((await fsStat(dir)) as fs.Stats).isDirectory();
+
+  if (!exist) {
+    return [];
+  }
+
+  return (await fsReaddir(dir)) as string[];
+}
+
 export {
   isHexoProject,
   exec,
@@ -118,7 +136,9 @@ export {
   fsUnlink,
   fsRename,
   fsMkdir,
+  fsRead,
   info,
   warn,
   error,
+  getDirFiles,
 };

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import commands, { ArticleTypes } from './commands';
 import { HexoArticleProvider } from './hexoProvider';
+import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
 
 export enum HexoCommands {
   newPost = 'hexo.new.post',
@@ -20,8 +21,10 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "vscode-hexo-utils" is now active!');
 
-  const postProvider = new HexoArticleProvider();
+  const postProvider = new HexoArticleProvider(ArticleTypes.post);
   const draftProvider = new HexoArticleProvider(ArticleTypes.draft);
+  const categoryProvider = new HexoClassifyProvider(ClassifyTypes.category);
+  const tagProvider = new HexoClassifyProvider(ClassifyTypes.tag);
 
   // vscode.window.createTreeView('hexo.post', {
   //   showCollapseAll: true,
@@ -30,6 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.window.registerTreeDataProvider('hexo.post', postProvider);
   vscode.window.registerTreeDataProvider('hexo.draft', draftProvider);
+  vscode.window.registerTreeDataProvider('hexo.categories', categoryProvider);
+  vscode.window.registerTreeDataProvider('hexo.tags', tagProvider);
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand

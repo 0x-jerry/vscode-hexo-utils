@@ -1,19 +1,8 @@
 import * as vscode from 'vscode';
-import { isHexoProject, fsExist, fsStat, fsReaddir } from './utils';
-import * as fs from 'fs';
+import { isHexoProject, getDirFiles } from './utils';
 import * as path from 'path';
 import { ArticleTypes } from './commands';
 import { HexoCommands } from './extension';
-
-async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
-  const exist = (await fsExist(dir)) && ((await fsStat(dir)) as fs.Stats).isDirectory();
-
-  if (!exist) {
-    return [];
-  }
-
-  return (await fsReaddir(dir)) as string[];
-}
 
 export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem> {
   private _onDidChangeTreeData = new vscode.EventEmitter<ArticleItem | undefined>();
@@ -21,7 +10,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem>
 
   type = ArticleTypes.post;
 
-  constructor(type: ArticleTypes = ArticleTypes.post) {
+  constructor(type: ArticleTypes) {
     this.type = type;
   }
 

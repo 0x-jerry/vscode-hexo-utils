@@ -88,7 +88,7 @@
           "scope": "resource"
         },
         {
-          "id": "hexo.category",
+          "id": "hexo.categories",
           "name": "categories"
         },
         {
@@ -142,5 +142,8 @@
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
     "vscode": "^1.1.25"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.1"
   }
 }
