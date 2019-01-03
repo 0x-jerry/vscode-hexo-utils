@@ -1,5 +1,15 @@
 import * as vscode from 'vscode';
-import { isHexoProject, exec, fsUnlink, fsExist, fsRename, fsMkdir } from './utils';
+import {
+  isHexoProject,
+  exec,
+  fsUnlink,
+  fsExist,
+  fsRename,
+  fsMkdir,
+  info,
+  error,
+  warn,
+} from './utils';
 import { getConfig, ConfigProperties } from './configs';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
@@ -17,13 +27,11 @@ async function create(type: ArticleTypes) {
 
   const name = await vscode.window.showInputBox({
     value: 'new article',
-    placeHolder: 'new article',
     prompt: 'Please input new article name',
   });
 
   if (!name) {
-    vscode.window.showWarningMessage(`Invalid article name`);
-    return null;
+    return warn(`Invalid article name`);
   }
 
   try {
@@ -31,9 +39,9 @@ async function create(type: ArticleTypes) {
 
     await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
 
-    vscode.window.showInformationMessage(`Create a new [${type}] named [${name}]`);
-  } catch (error) {
-    vscode.window.showErrorMessage(`Create failed on [${type}], ${error}`);
+    info(`Create a new [${type}] named [${name}]`);
+  } catch (err) {
+    error(`Create failed on [${type}], ${err}`);
   }
 }
 
@@ -61,11 +69,16 @@ async function moveFile(item: ArticleItem, to: ArticleTypes) {
     await fsMkdir(toPath);
   }
 
-  const err = await fsRename(filePath, path.join(toPath, fileName));
+  const destPath = path.join(toPath, fileName);
+  if (await fsExist(destPath)) {
+    return warn(`[${fileName}] has exist in ${to}`);
+  }
+
+  const err = await fsRename(filePath, destPath);
   if (err) {
-    vscode.window.showErrorMessage(`Move ${fileName} to ${to} error: ${err}`);
+    error(`Move ${fileName} to ${to} error: ${err}`);
   } else {
-    vscode.window.showInformationMessage(`Move ${fileName} to ${to}`);
+    info(`Move ${fileName} to ${to}`);
   }
 }
 
@@ -84,9 +97,9 @@ async function deleteFile(item: ArticleItem) {
   if (await fsExist(filePath)) {
     await fsUnlink(filePath);
 
-    vscode.window.showInformationMessage(`delete file ${filePath}`);
+    info(`delete file ${filePath}`);
   } else {
-    vscode.window.showErrorMessage(`${filePath} is not exist`);
+    error(`${filePath} is not exist`);
   }
 }
 

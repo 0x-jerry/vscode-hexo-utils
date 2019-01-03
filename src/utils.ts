@@ -25,7 +25,7 @@ function isHexoProject(): boolean {
   const isHexo = !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
 
   if (!isHexo) {
-    vscode.window.showInformationMessage('This project is not a hexo project');
+    info('This project is not a hexo project');
   }
 
   return isHexo;
@@ -94,4 +94,31 @@ function fsMkdir(path: fs.PathLike): Thenable<NodeJS.ErrnoException> {
   });
 }
 
-export { isHexoProject, exec, fsExist, fsStat, fsReaddir, fsUnlink, fsRename, fsMkdir };
+function info(str: string, ...items: string[]) {
+  str = 'Hexo: ' + str;
+  return vscode.window.showInformationMessage(str, ...items);
+}
+
+function warn(str: string, ...items: string[]) {
+  str = 'Hexo: ' + str;
+  return vscode.window.showWarningMessage(str, ...items);
+}
+
+function error(str: string, ...items: string[]) {
+  str = 'Hexo: ' + str;
+  return vscode.window.showErrorMessage(str, ...items);
+}
+
+export {
+  isHexoProject,
+  exec,
+  fsExist,
+  fsStat,
+  fsReaddir,
+  fsUnlink,
+  fsRename,
+  fsMkdir,
+  info,
+  warn,
+  error,
+};
