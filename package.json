@@ -21,10 +21,16 @@
         "hexo.packageManager": {
           "type": "string",
           "default": "yarn",
+          "description": "The package manager used to run scripts.",
           "enum": [
             "npm",
             "yarn"
           ]
+        },
+        "hexo.includeDraft": {
+          "type": "boolean",
+          "default": false,
+          "description": "Controls whether include drafts."
         }
       }
     },

@@ -4,6 +4,7 @@ import { isHexoProject, getDirFiles, fsRead } from './utils';
 import { HexoCommands } from './extension';
 import * as matter from 'gray-matter';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
+import { getConfig, ConfigProperties } from './configs';
 
 export enum ClassifyTypes {
   category = 'categories',
@@ -35,17 +36,27 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       return [];
     }
 
-    const postsPath = path.join(vscode.workspace.rootPath as string, 'source', `_posts`);
+    const postFolder = path.join(vscode.workspace.rootPath as string, 'source', `_posts`);
+    const draftFolder = path.join(vscode.workspace.rootPath as string, 'source', `_drafts`);
 
-    const paths = await getDirFiles(postsPath);
+    const include = getConfig<boolean>(ConfigProperties.includeDraft);
+
+    const postsPath = (await getDirFiles(postFolder)).map((p) => path.join(postFolder, p));
+    let draftsPath: string[] = [];
+
+    if (include) {
+      draftsPath = (await getDirFiles(draftFolder)).map((p) => path.join(draftFolder, p));
+    }
+
+    const filesPath = postsPath.concat(include ? draftsPath : []);
 
     const filesData: IHexoMetadata[] = [];
 
-    for (let i = 0; i < paths.length; i++) {
-      const filePath = path.join(postsPath, paths[i]);
+    for (let i = 0; i < filesPath.length; i++) {
+      const filePath = filesPath[i];
+
       const content = (await fsRead(filePath)) as string;
       const metadata = matter(content).data as IHexoMetadata;
-
       filesData.push({
         ...metadata,
         filePath,
