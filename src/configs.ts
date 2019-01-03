@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 
 enum ConfigProperties {
-  pkgManager = 'packageManger',
+  pkgManager = 'packageManager',
 }
 
-function configs<T>(propName: string, section = 'hexo'): T | undefined {
+function configs<T>(propName: ConfigProperties, section = 'hexo'): T | undefined {
+  console.log(`hexo: get config: ${section}.${propName}`);
   const configs = vscode.workspace.getConfiguration(section);
   return configs.get<T>(propName);
 }

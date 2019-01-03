@@ -72,4 +72,10 @@ function fsReaddir(path: fs.PathLike): Thenable<string[] | NodeJS.ErrnoException
   });
 }
 
-export { isHexoProject, exec, fsExist, fsStat, fsReaddir };
+function fsUnlink(path: fs.PathLike): Thenable<NodeJS.ErrnoException> {
+  return new Promise((resolve) => {
+    fs.unlink(path, (err) => resolve(err));
+  });
+}
+
+export { isHexoProject, exec, fsExist, fsStat, fsReaddir, fsUnlink };

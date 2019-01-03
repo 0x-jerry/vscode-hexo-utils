@@ -54,6 +54,14 @@
         }
       },
       {
+        "command": "hexo.delete",
+        "title": "Delete",
+        "icon": {
+          "light": "resources/light/icon-remove.svg",
+          "dark": "resources/dark/icon-remove.svg"
+        }
+      },
+      {
         "command": "hexo.open",
         "title": "Open a article"
       }
@@ -100,6 +108,16 @@
           "command": "hexo.new.draft",
           "group": "navigation",
           "when": "view == hexo.draft"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "hexo.delete",
+          "when": "view =~ /hexo.(draft|post)/"
+        },
+        {
+          "command": "hexo.remove",
+          "when": "view == hexo.post"
         }
       ]
     }

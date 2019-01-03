@@ -9,6 +9,7 @@ export enum HexoCommands {
   newDraft = 'hexo.new.draft',
   remove = 'hexo.remove',
   open = 'hexo.open',
+  delete = 'hexo.delete',
 }
 
 // this method is called when your extension is activated
@@ -50,6 +51,22 @@ export function activate(context: vscode.ExtensionContext) {
     {
       cmd: HexoCommands.open,
       callback: commands.open,
+    },
+    {
+      cmd: HexoCommands.remove,
+      callback: async (item) => {
+        await commands.removeToDraft(item);
+        postProvider.refresh();
+        draftProvider.refresh();
+      },
+    },
+    {
+      cmd: HexoCommands.delete,
+      callback: async (item) => {
+        await commands.deleteFile(item);
+        postProvider.refresh();
+        draftProvider.refresh();
+      },
     },
   ];
 
