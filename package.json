@@ -162,6 +162,7 @@
     }
   },
   "scripts": {
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r",
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
@@ -171,6 +172,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.25",
+    "conventional-changelog-cli": "^2.0.11",
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
     "vscode": "^1.1.25"
