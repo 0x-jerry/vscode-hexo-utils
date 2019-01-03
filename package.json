@@ -5,12 +5,25 @@
   "version": "0.0.1",
   "preview": true,
   "license": "MIT",
+  "author": {
+    "name": "Jerry wang",
+    "email": "fantasy.cwxyz@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/cwxyz007/vscode-hexo-utils/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cwxyz007/vscode-hexo-utils.git"
+  },
+  "publisher": "fantasy",
   "engines": {
     "vscode": "^1.30.0"
   },
   "categories": [
     "Other"
   ],
+  "icon": "resources/hexo.png",
   "activationEvents": [
     "*"
   ],
