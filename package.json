@@ -164,13 +164,14 @@
     "@types/mocha": "^2.2.42",
     "@types/mustache": "^0.8.32",
     "@types/node": "^8.10.25",
+    "@types/yamljs": "^0.2.30",
     "conventional-changelog-cli": "^2.0.11",
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
     "vscode": "^1.1.25"
   },
   "dependencies": {
-    "gray-matter": "^4.0.1",
-    "mustache": "^3.0.1"
+    "mustache": "^3.0.1",
+    "yamljs": "^0.3.0"
   }
 }

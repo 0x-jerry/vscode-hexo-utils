@@ -4,7 +4,7 @@ export interface IHexoMetadata {
   tags?: string[];
   categories?: string[];
   title?: string;
-  date?: string;
+  date?: Date;
   filePath: string;
 }
 

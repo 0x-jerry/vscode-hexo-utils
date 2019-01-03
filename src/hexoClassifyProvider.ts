@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { isHexoProject, getDirFiles, fsRead } from './utils';
 import { HexoCommands } from './extension';
-import * as matter from 'gray-matter';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
 import { getConfig, ConfigProperties } from './configs';
+import * as yarmljs from 'yamljs';
 
 export enum ClassifyTypes {
   category = 'categories',
@@ -54,13 +54,19 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
 
     for (let i = 0; i < filesPath.length; i++) {
       const filePath = filesPath[i];
-
       const content = (await fsRead(filePath)) as string;
-      const metadata = matter(content).data as IHexoMetadata;
-      filesData.push({
-        ...metadata,
-        filePath,
-      });
+      // /---(data)---/ => $1 === data
+      const yamlReg = /^---((.|\r\n|\r|\n)+)---$/m;
+
+      const yamlData = yamlReg.exec(content);
+
+      if (yamlData && yamlData[1]) {
+        const metadata = yarmljs.parse(yamlData[1]) as IHexoMetadata;
+        filesData.push({
+          ...metadata,
+          filePath,
+        });
+      }
     }
 
     const items: ClassifyItem[] = [];
