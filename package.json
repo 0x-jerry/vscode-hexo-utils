@@ -3,6 +3,7 @@
   "displayName": "vscode-hexo-utils",
   "description": "vscode extension for hexo",
   "version": "0.0.1",
+  "preview": true,
   "license": "MIT",
   "engines": {
     "vscode": "^1.30.0"
