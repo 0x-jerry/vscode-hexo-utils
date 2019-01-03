@@ -6,10 +6,10 @@
 - [x] move post to draft
 - [x] move draft to post
 - [x] check duplicate article name
-- [ ] list articles by categories
-- [ ] list articles by tags
-- [ ] support resource folder
+- [x] list articles by categories
+- [x] list articles by tags
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
+- [ ] support resource folder
 - [ ] rename a post or draft
   - [ ] key shortcut [F2]
