@@ -11,5 +11,6 @@
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
 - [ ] support resource folder
+- [ ] change tag & category icon
 - [ ] rename a post or draft
   - [ ] key shortcut [F2]
