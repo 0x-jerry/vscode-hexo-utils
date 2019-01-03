@@ -7,6 +7,7 @@
 - [ ] check duplicate article name
 - [ ] list articles by categories
 - [ ] list articles by tags
+- [ ] support resource folder
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
 - [ ] rename a post or draft
