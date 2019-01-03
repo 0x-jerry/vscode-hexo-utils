@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { isHexoProject, exec, getPkgManagerCommand } from './utils';
+import { isHexoProject, exec } from './utils';
+import { configs, ConfigProperties } from './configs';
 
 export enum ArticleTypes {
   post = 'post',
@@ -18,7 +19,7 @@ async function create(type: ArticleTypes) {
         prompt: 'Please input new article name',
       })) || 'new article';
 
-    const cmd = getPkgManagerCommand() as string;
+    const cmd = configs(ConfigProperties.pkgManager) as string;
 
     await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
 

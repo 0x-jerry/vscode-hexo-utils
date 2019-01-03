@@ -18,8 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "vscode-hexo-utils" is now active!');
 
-  vscode.window.registerTreeDataProvider('hexo.post', new HexoArticleProvider());
-  vscode.window.registerTreeDataProvider('hexo.draft', new HexoArticleProvider(ArticleTypes.draft));
+  const postProvider = new HexoArticleProvider();
+  const draftProvider = new HexoArticleProvider(ArticleTypes.draft);
+
+  vscode.window.registerTreeDataProvider('hexo.post', postProvider);
+  vscode.window.registerTreeDataProvider('hexo.draft', draftProvider);
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
@@ -32,11 +35,17 @@ export function activate(context: vscode.ExtensionContext) {
   const bindCommand: IBindCommand[] = [
     {
       cmd: HexoCommands.newPost,
-      callback: commands.createPost,
+      callback: async () => {
+        await commands.createPost();
+        postProvider.refresh();
+      },
     },
     {
       cmd: HexoCommands.newDraft,
-      callback: commands.createDraft,
+      callback: async () => {
+        await commands.createDraft();
+        draftProvider.refresh();
+      },
     },
     {
       cmd: HexoCommands.open,
