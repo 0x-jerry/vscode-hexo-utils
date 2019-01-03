@@ -4,6 +4,7 @@
 - [x] list draft articles
 - [x] open post or draft
 - [ ] move post to draft
+- [ ] move draft to post
 - [ ] check duplicate article name
 - [ ] list articles by categories
 - [ ] list articles by tags

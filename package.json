@@ -46,12 +46,12 @@
         }
       },
       {
-        "command": "hexo.remove",
-        "title": "Remove to draft",
-        "icon": {
-          "light": "resources/light/icon-remove.svg",
-          "dark": "resources/dark/icon-remove.svg"
-        }
+        "command": "hexo.move.to.draft",
+        "title": "Move to draft"
+      },
+      {
+        "command": "hexo.move.to.post",
+        "title": "Move to post"
       },
       {
         "command": "hexo.delete",
@@ -112,12 +112,19 @@
       ],
       "view/item/context": [
         {
-          "command": "hexo.delete",
-          "when": "view =~ /hexo.(draft|post)/"
+          "command": "hexo.move.to.draft",
+          "when": "view == hexo.post",
+          "group": "hexo@1"
         },
         {
-          "command": "hexo.remove",
-          "when": "view == hexo.post"
+          "command": "hexo.move.to.post",
+          "when": "view == hexo.draft",
+          "group": "hexo@1"
+        },
+        {
+          "command": "hexo.delete",
+          "when": "view =~ /hexo.(draft|post)/",
+          "group": "hexo@2"
         }
       ]
     }

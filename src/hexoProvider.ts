@@ -15,8 +15,8 @@ async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
   return (await fsReaddir(dir)) as string[];
 }
 
-export class HexoArticleProvider implements vscode.TreeDataProvider<HexoItem> {
-  private _onDidChangeTreeData = new vscode.EventEmitter<HexoItem | undefined>();
+export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem> {
+  private _onDidChangeTreeData = new vscode.EventEmitter<ArticleItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type = ArticleTypes.post;
@@ -29,12 +29,12 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<HexoItem> {
     this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: HexoItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+  getTreeItem(element: ArticleItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
     return element;
   }
 
-  async getChildren(element?: HexoItem): Promise<HexoItem[]> {
-    const items: HexoItem[] = [];
+  async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
+    const items: ArticleItem[] = [];
     if (!isHexoProject()) {
       return items;
     }
@@ -45,7 +45,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<HexoItem> {
 
     paths.forEach((p) => {
       if (/\.md$/.test(p)) {
-        items.push(new HexoItem(p, path.join(postsPath, p)));
+        items.push(new ArticleItem(p, path.join(postsPath, p)));
       }
     });
 
@@ -53,7 +53,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<HexoItem> {
   }
 }
 
-export class HexoItem extends vscode.TreeItem {
+export class ArticleItem extends vscode.TreeItem {
   iconPath = vscode.ThemeIcon.File;
 
   constructor(label: string, uri: string, collapsibleState?: vscode.TreeItemCollapsibleState) {

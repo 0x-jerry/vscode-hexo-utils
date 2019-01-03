@@ -7,7 +7,8 @@ import { HexoArticleProvider } from './hexoProvider';
 export enum HexoCommands {
   newPost = 'hexo.new.post',
   newDraft = 'hexo.new.draft',
-  remove = 'hexo.remove',
+  moveToDraft = 'hexo.move.to.draft',
+  moveToPost = 'hexo.move.to.post',
   open = 'hexo.open',
   delete = 'hexo.delete',
 }
@@ -21,6 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   const postProvider = new HexoArticleProvider();
   const draftProvider = new HexoArticleProvider(ArticleTypes.draft);
+
+  // vscode.window.createTreeView('hexo.post', {
+  //   showCollapseAll: true,
+  //   treeDataProvider: postProvider,
+  // });
 
   vscode.window.registerTreeDataProvider('hexo.post', postProvider);
   vscode.window.registerTreeDataProvider('hexo.draft', draftProvider);
@@ -53,9 +59,17 @@ export function activate(context: vscode.ExtensionContext) {
       callback: commands.open,
     },
     {
-      cmd: HexoCommands.remove,
+      cmd: HexoCommands.moveToDraft,
       callback: async (item) => {
-        await commands.removeToDraft(item);
+        await commands.moveToDraft(item);
+        postProvider.refresh();
+        draftProvider.refresh();
+      },
+    },
+    {
+      cmd: HexoCommands.moveToPost,
+      callback: async (item) => {
+        await commands.moveToPost(item);
         postProvider.refresh();
         draftProvider.refresh();
       },

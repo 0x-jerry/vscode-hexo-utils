@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
-import { isHexoProject, exec, fsUnlink, fsExist } from './utils';
-import { configs, ConfigProperties } from './configs';
-import { HexoItem } from './hexoProvider';
+import { isHexoProject, exec, fsUnlink, fsExist, fsRename, fsMkdir } from './utils';
+import { getConfig, ConfigProperties } from './configs';
+import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
+import * as path from 'path';
 
 export enum ArticleTypes {
   post = 'post',
@@ -26,7 +27,7 @@ async function create(type: ArticleTypes) {
   }
 
   try {
-    const cmd = configs(ConfigProperties.pkgManager) as string;
+    const cmd = getConfig(ConfigProperties.pkgManager) as string;
 
     await exec(cmd, ['hexo', 'new', type, `"${name}"`]);
 
@@ -49,11 +50,34 @@ async function createDraft() {
   await create(ArticleTypes.draft);
 }
 
-async function removeToDraft(item: HexoItem) {
-  vscode.window.showInformationMessage('Working on it');
+async function moveFile(item: ArticleItem, to: ArticleTypes) {
+  const toPath = path.join(vscode.workspace.rootPath!, 'source', `_${to}s`);
+
+  const fileUri = item.resourceUri!.path;
+  const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
+  const fileName = path.basename(filePath);
+
+  if (!(await fsExist(toPath))) {
+    await fsMkdir(toPath);
+  }
+
+  const err = await fsRename(filePath, path.join(toPath, fileName));
+  if (err) {
+    vscode.window.showErrorMessage(`Move ${fileName} to ${to} error: ${err}`);
+  } else {
+    vscode.window.showInformationMessage(`Move ${fileName} to ${to}`);
+  }
 }
 
-async function deleteFile(item: HexoItem) {
+async function moveToDraft(item: ArticleItem) {
+  await moveFile(item, ArticleTypes.draft);
+}
+
+async function moveToPost(item: ArticleItem) {
+  await moveFile(item, ArticleTypes.post);
+}
+
+async function deleteFile(item: ArticleItem) {
   const fileUri = item.resourceUri!.path;
   const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
 
@@ -66,4 +90,4 @@ async function deleteFile(item: HexoItem) {
   }
 }
 
-export default { createPost, createDraft, open, removeToDraft, deleteFile };
+export default { createPost, createDraft, open, moveToDraft, deleteFile, moveToPost };

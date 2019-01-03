@@ -78,4 +78,20 @@ function fsUnlink(path: fs.PathLike): Thenable<NodeJS.ErrnoException> {
   });
 }
 
-export { isHexoProject, exec, fsExist, fsStat, fsReaddir, fsUnlink };
+function fsRename(p1: fs.PathLike, p2: fs.PathLike): Thenable<NodeJS.ErrnoException> {
+  return new Promise((resolve) => {
+    fs.rename(p1, p2, (err) => {
+      resolve(err);
+    });
+  });
+}
+
+function fsMkdir(path: fs.PathLike): Thenable<NodeJS.ErrnoException> {
+  return new Promise((resolve) => {
+    fs.mkdir(path, null, (err) => {
+      resolve(err);
+    });
+  });
+}
+
+export { isHexoProject, exec, fsExist, fsStat, fsReaddir, fsUnlink, fsRename, fsMkdir };
