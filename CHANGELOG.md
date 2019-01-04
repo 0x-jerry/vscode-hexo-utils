@@ -1,3 +1,14 @@
+## [0.0.4](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.3...v0.0.4) (2019-01-04)
+
+
+### Performance Improvements
+
+* Auto refresh when create or delete file ([d123f31](https://github.com/cwxyz007/vscode-hexo-utils/commit/d123f31))
+* Catch metadata parser error ([670d728](https://github.com/cwxyz007/vscode-hexo-utils/commit/670d728))
+* Trim blank white when create new article ([4c0f880](https://github.com/cwxyz007/vscode-hexo-utils/commit/4c0f880))
+
+
+
 ## [0.0.3](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.2...v0.0.3) (2019-01-04)
 
 
