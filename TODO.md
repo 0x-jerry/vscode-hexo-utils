@@ -11,6 +11,8 @@
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
 - [ ] support resource folder
+  - [ ] support markdown preview image which from resource folder
+- [ ] support scaffolds
 - [ ] change tag & category icon
 - [ ] rename a post or draft
   - [ ] key shortcut [F2]
