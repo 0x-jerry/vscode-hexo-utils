@@ -44,6 +44,11 @@
     },
     "commands": [
       {
+        "command": "hexo.rename",
+        "title": "Rename",
+        "category": "Hexo Utils"
+      },
+      {
         "command": "hexo.new",
         "title": "Create a new article",
         "category": "Hexo Utils"
@@ -134,6 +139,10 @@
     "menus": {
       "commandPalette": [
         {
+          "command": "hexo.rename",
+          "when": "false"
+        },
+        {
           "command": "hexo.move.to.draft",
           "when": "false"
         },
@@ -179,6 +188,11 @@
         },
         {
           "command": "hexo.delete",
+          "when": "view =~ /hexo.(draft|post)/",
+          "group": "hexo@3"
+        },
+        {
+          "command": "hexo.rename",
           "when": "view =~ /hexo.(draft|post)/",
           "group": "hexo@2"
         }

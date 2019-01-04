@@ -7,6 +7,7 @@ import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
 
 export enum HexoCommands {
   new = 'hexo.new',
+  rename = 'hexo.rename',
   newPost = 'hexo.new.post',
   newDraft = 'hexo.new.draft',
   moveToDraft = 'hexo.move.to.draft',
@@ -102,6 +103,14 @@ export function activate(context: vscode.ExtensionContext) {
       cmd: HexoCommands.new,
       callback: async () => {
         await commands.createWithScaffolds();
+        postProvider.refresh();
+        draftProvider.refresh();
+      },
+    },
+    {
+      cmd: HexoCommands.rename,
+      callback: async (item) => {
+        await commands.rename(item);
         postProvider.refresh();
         draftProvider.refresh();
       },

@@ -9,6 +9,7 @@ import {
   fsWriteFile,
   fsRead,
   getDirFiles,
+  askForNext,
 } from './utils';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
@@ -45,14 +46,8 @@ async function create(type: ArticleTypes, template?: string) {
 
     const createPath = path.join(typeFolder, name + '.md');
 
-    if (await fsExist(createPath)) {
-      const replace = await vscode.window.showQuickPick(['yes', 'no'], {
-        placeHolder: 'Whether replace exist file?',
-      });
-
-      if (replace !== 'yes') {
-        return null;
-      }
+    if ((await fsExist(createPath)) && !(await askForNext('Whether replace exist file?'))) {
+      return null;
     }
 
     const tplPath = path.join(scaffoldPath, template + '.md');
@@ -94,14 +89,9 @@ async function moveFile(item: ArticleItem, to: ArticleTypes) {
   }
 
   const destPath = path.join(toPath, fileName);
-  if (await fsExist(destPath)) {
-    const replace = await vscode.window.showQuickPick(['yes', 'no'], {
-      placeHolder: 'Whether replace exist file?',
-    });
 
-    if (replace !== 'yes') {
-      return;
-    }
+  if ((await fsExist(destPath)) && !(await askForNext('Whether replace exist file?'))) {
+    return null;
   }
 
   const err = await fsRename(filePath, destPath);
@@ -144,8 +134,29 @@ async function createWithScaffolds() {
 
     await create(isDraft ? ArticleTypes.draft : ArticleTypes.post, file);
   }
+}
 
-  console.log('Working on it');
+async function rename(item: ArticleItem) {
+  const fileUri = item.resourceUri!.path;
+  const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
+  const oldPath = path.parse(filePath);
+
+  const newName = await vscode.window.showInputBox({
+    value: oldPath.name,
+    prompt: 'Input a new name',
+  });
+
+  if (!newName) {
+    return null;
+  }
+
+  const newPath = path.join(oldPath.dir, newName + '.md');
+
+  if ((await fsExist(newPath)) && !(await askForNext('Whether replace exist file?'))) {
+    return null;
+  }
+
+  await fsRename(filePath, newPath);
 }
 
 export default {
@@ -156,4 +167,5 @@ export default {
   deleteFile,
   moveToPost,
   createWithScaffolds,
+  rename,
 };

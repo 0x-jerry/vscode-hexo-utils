@@ -135,8 +135,21 @@ async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
   return (await fsReaddir(dir)) as string[];
 }
 
+/**
+ * true if yse
+ * @param placeHolder msg
+ */
+async function askForNext(placeHolder: string): Promise<boolean> {
+  const replace = await vscode.window.showQuickPick(['yes', 'no'], {
+    placeHolder,
+  });
+
+  return replace === 'yes';
+}
+
 export {
   isHexoProject,
+  askForNext,
   exec,
   fsExist,
   fsStat,
