@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { isHexoProject } from './utils/utils';
-import { warn } from "./utils/log";
+import { warn } from './utils/log';
 import { fsRead, getDirFiles } from './utils/fs';
-import { HexoCommands } from './extension';
+import { Commands } from './commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
 import { getConfig, ConfigProperties } from './configs';
 import * as yarmljs from 'yamljs';
@@ -132,7 +132,7 @@ export class ClassifyItem extends vscode.TreeItem {
 
       this.command = {
         title: 'open',
-        command: HexoCommands.open,
+        command: Commands.open,
         arguments: [uri],
       };
     }

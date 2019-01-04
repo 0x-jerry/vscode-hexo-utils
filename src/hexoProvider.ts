@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { isHexoProject } from './utils/utils';
 import * as path from 'path';
-import { ArticleTypes } from './commands';
-import { HexoCommands } from './extension';
+import { Commands } from './commands/common';
 import { getDirFiles } from './utils/fs';
+import { ArticleTypes } from './commands/createArticle';
 
 export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem> {
   private _onDidChangeTreeData = new vscode.EventEmitter<ArticleItem | undefined>();
@@ -52,7 +52,7 @@ export class ArticleItem extends vscode.TreeItem {
     this.resourceUri = vscode.Uri.file(uri);
     this.command = {
       title: 'open',
-      command: HexoCommands.open,
+      command: Commands.open,
       arguments: [uri],
     };
   }

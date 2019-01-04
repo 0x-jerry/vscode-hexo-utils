@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { spawn } from 'child_process';
-import { info } from './log';
 
 function getPkg() {
   const rootPath = vscode.workspace.rootPath;
@@ -23,13 +22,7 @@ function getPkg() {
 
 function isHexoProject(): boolean {
   const pkg = getPkg();
-  const isHexo = !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
-
-  if (!isHexo) {
-    info('This project is not a hexo project');
-  }
-
-  return isHexo;
+  return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
 }
 
 function exec(cmd: string, args: string[]): Promise<void> {

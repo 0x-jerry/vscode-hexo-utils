@@ -1,22 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import commands, { ArticleTypes } from './commands';
+import commands from './commands/commands';
 import { HexoArticleProvider } from './hexoProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
 import * as debounce from 'debounce';
-
-export enum HexoCommands {
-  new = 'hexo.new',
-  rename = 'hexo.rename',
-  newPost = 'hexo.new.post',
-  newDraft = 'hexo.new.draft',
-  moveToDraft = 'hexo.move.to.draft',
-  moveToPost = 'hexo.move.to.post',
-  open = 'hexo.open',
-  delete = 'hexo.delete',
-  refresh = 'hexo.refresh',
-}
+import { ArticleTypes, Commands, registerCommands } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
   const postProvider = new HexoArticleProvider(ArticleTypes.post);
@@ -84,39 +73,23 @@ export function activate(context: vscode.ExtensionContext) {
 
   const bindCommand: IBindCommand[] = [
     {
-      cmd: HexoCommands.newPost,
-      callback: commands.createPost,
-    },
-    {
-      cmd: HexoCommands.newDraft,
-      callback: commands.createDraft,
-    },
-    {
-      cmd: HexoCommands.open,
-      callback: commands.open,
-    },
-    {
-      cmd: HexoCommands.moveToDraft,
+      cmd: Commands.moveToDraft,
       callback: commands.moveToDraft,
     },
     {
-      cmd: HexoCommands.moveToPost,
+      cmd: Commands.moveToPost,
       callback: commands.moveToPost,
     },
     {
-      cmd: HexoCommands.delete,
+      cmd: Commands.delete,
       callback: commands.deleteFile,
     },
     {
-      cmd: HexoCommands.refresh,
+      cmd: Commands.refresh,
       callback: refreshProvider,
     },
     {
-      cmd: HexoCommands.new,
-      callback: commands.createWithScaffolds,
-    },
-    {
-      cmd: HexoCommands.rename,
+      cmd: Commands.rename,
       callback: commands.rename,
     },
   ];
@@ -125,6 +98,8 @@ export function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand(info.cmd, info.callback);
     context.subscriptions.push(disposable);
   });
+
+  registerCommands(context);
 }
 
 export function deactivate() {}

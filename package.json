@@ -54,7 +54,7 @@
         "category": "Hexo Utils"
       },
       {
-        "command": "hexo.new.post",
+        "command": "hexo.new[post]",
         "title": "Create a new post",
         "category": "Hexo Utils",
         "icon": {
@@ -63,7 +63,7 @@
         }
       },
       {
-        "command": "hexo.new.draft",
+        "command": "hexo.new[draft]",
         "title": "Create a new draft",
         "category": "Hexo Utils",
         "icon": {
@@ -81,12 +81,12 @@
         }
       },
       {
-        "command": "hexo.move.to.draft",
+        "command": "hexo.moveTo[draft]",
         "title": "Move to draft",
         "category": "Hexo Utils"
       },
       {
-        "command": "hexo.move.to.post",
+        "command": "hexo.moveTo[post]",
         "title": "Move to post",
         "category": "Hexo Utils"
       },
@@ -143,11 +143,11 @@
           "when": "false"
         },
         {
-          "command": "hexo.move.to.draft",
+          "command": "hexo.moveTo[draft]",
           "when": "false"
         },
         {
-          "command": "hexo.move.to.post",
+          "command": "hexo.moveTo[post]",
           "when": "false"
         },
         {
@@ -165,24 +165,24 @@
           "group": "navigation"
         },
         {
-          "command": "hexo.new.post",
+          "command": "hexo.new[post]",
           "group": "navigation",
           "when": "view == hexo.post"
         },
         {
-          "command": "hexo.new.draft",
+          "command": "hexo.new[draft]",
           "group": "navigation",
           "when": "view == hexo.draft"
         }
       ],
       "view/item/context": [
         {
-          "command": "hexo.move.to.draft",
+          "command": "hexo.moveTo[draft]",
           "when": "view == hexo.post",
           "group": "hexo@1"
         },
         {
-          "command": "hexo.move.to.post",
+          "command": "hexo.moveTo[post]",
           "when": "view == hexo.draft",
           "group": "hexo@1"
         },
