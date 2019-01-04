@@ -41,7 +41,10 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
 
     const include = getConfig<boolean>(ConfigProperties.includeDraft);
 
-    const postsPath = (await getDirFiles(postFolder)).map((p) => path.join(postFolder, p));
+    const postsPath = (await getDirFiles(postFolder))
+      .filter((p) => p.endsWith('.md'))
+      .map((p) => path.join(postFolder, p));
+
     let draftsPath: string[] = [];
 
     if (include) {
@@ -56,7 +59,7 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       const filePath = filesPath[i];
       const content = (await fsRead(filePath)) as string;
       // /---(data)---/ => $1 === data
-      const yamlReg = /^---((.|\r\n|\r|\n)+)---$/m;
+      const yamlReg = /^---((.|\n|\r)+)---$/m;
 
       const yamlData = yamlReg.exec(content);
 
@@ -80,7 +83,9 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       if (classify) {
         classify.files.forEach((f) => {
           // Avoid duplicate classify files
-          if (items.find((i) => i.resourceUri!.fsPath === f)) return;
+          if (items.find((i) => i.resourceUri!.fsPath === f)) {
+            return;
+          }
 
           const item = new ClassifyItem(path.basename(f), this.type, f);
           items.push(item);
