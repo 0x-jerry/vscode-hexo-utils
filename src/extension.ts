@@ -1,11 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import commands from './commands/commands';
 import { HexoArticleProvider } from './hexoProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
 import * as debounce from 'debounce';
-import { ArticleTypes, Commands, registerCommands } from './commands';
+import { ArticleTypes, registerCommands } from './commands';
 
 export function activate(context: vscode.ExtensionContext) {
   const postProvider = new HexoArticleProvider(ArticleTypes.post);
@@ -63,31 +62,6 @@ export function activate(context: vscode.ExtensionContext) {
       treeDataProvider: info.provider,
       showCollapseAll: info.showCollapseAll,
     });
-    context.subscriptions.push(disposable);
-  });
-
-  interface IBindCommand {
-    cmd: string;
-    callback: (...arg: any) => any;
-  }
-
-  const bindCommand: IBindCommand[] = [
-    {
-      cmd: Commands.delete,
-      callback: commands.deleteFile,
-    },
-    {
-      cmd: Commands.refresh,
-      callback: refreshProvider,
-    },
-    {
-      cmd: Commands.rename,
-      callback: commands.rename,
-    },
-  ];
-
-  bindCommand.forEach((info) => {
-    const disposable = vscode.commands.registerCommand(info.cmd, info.callback);
     context.subscriptions.push(disposable);
   });
 
