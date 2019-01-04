@@ -75,6 +75,9 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
 
       if (classify) {
         classify.files.forEach((f) => {
+          // Avoid duplicate classify files
+          if (items.find((i) => i.resourceUri!.fsPath === f)) return;
+
           const item = new ClassifyItem(path.basename(f), this.type, f);
           items.push(item);
         });
@@ -92,7 +95,7 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       });
     }
 
-    return items;
+    return items.sort((a, b) => (a.label! < b.label! ? -1 : 1));
   }
 }
 
