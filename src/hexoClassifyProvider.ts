@@ -75,14 +75,19 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
 
       if (classify) {
         classify.files.forEach((f) => {
-          const item = new ClassifyItem(path.basename(f), f);
+          const item = new ClassifyItem(path.basename(f), this.type, f);
           items.push(item);
         });
       }
     } else {
       this._hexoMetadataUtils = new HexoMetadataUtils(filesData);
       this._hexoMetadataUtils[this.type].forEach((t) => {
-        const item = new ClassifyItem(t.name, undefined, vscode.TreeItemCollapsibleState.Collapsed);
+        const item = new ClassifyItem(
+          t.name,
+          this.type,
+          undefined,
+          vscode.TreeItemCollapsibleState.Collapsed,
+        );
         items.push(item);
       });
     }
@@ -92,10 +97,21 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
 }
 
 export class ClassifyItem extends vscode.TreeItem {
-  constructor(label: string, uri?: string, collapsibleState?: vscode.TreeItemCollapsibleState) {
+  constructor(
+    label: string,
+    type: ClassifyTypes,
+    uri?: string,
+    collapsibleState?: vscode.TreeItemCollapsibleState,
+  ) {
     super(label, collapsibleState);
+    const resourcesFolder = path.join(__dirname, '..', 'resources');
 
-    this.iconPath = uri ? vscode.ThemeIcon.File : vscode.ThemeIcon.Folder;
+    this.iconPath = uri
+      ? vscode.ThemeIcon.File
+      : {
+          dark: path.join(resourcesFolder, `icon-${type}.svg`),
+          light: path.join(resourcesFolder, `icon-${type}.svg`),
+        };
 
     if (uri) {
       this.resourceUri = vscode.Uri.file(uri);
