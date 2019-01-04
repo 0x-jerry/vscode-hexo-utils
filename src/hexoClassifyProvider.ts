@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { isHexoProject, getDirFiles, fsRead } from './utils';
+import { isHexoProject, getDirFiles, fsRead, warn } from './utils';
 import { HexoCommands } from './extension';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
 import { getConfig, ConfigProperties } from './configs';
@@ -61,11 +61,15 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       const yamlData = yamlReg.exec(content);
 
       if (yamlData && yamlData[1]) {
-        const metadata = yarmljs.parse(yamlData[1]) as IHexoMetadata;
-        filesData.push({
-          ...metadata,
-          filePath,
-        });
+        try {
+          const metadata = yarmljs.parse(yamlData[1]) as IHexoMetadata;
+          filesData.push({
+            ...metadata,
+            filePath,
+          });
+        } catch (err) {
+          warn(`Parse [ ${filePath} ] metadata error: ${err}`);
+        }
       }
     }
 
