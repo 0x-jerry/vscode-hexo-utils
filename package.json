@@ -44,8 +44,14 @@
     },
     "commands": [
       {
+        "command": "hexo.new",
+        "title": "Create a new article",
+        "category": "Hexo Utils"
+      },
+      {
         "command": "hexo.new.post",
-        "title": "Add a new post",
+        "title": "Create a new post",
+        "category": "Hexo Utils",
         "icon": {
           "light": "resources/light/icon-add.svg",
           "dark": "resources/dark/icon-add.svg"
@@ -53,7 +59,8 @@
       },
       {
         "command": "hexo.new.draft",
-        "title": "Add a new draft",
+        "title": "Create a new draft",
+        "category": "Hexo Utils",
         "icon": {
           "light": "resources/light/icon-add.svg",
           "dark": "resources/dark/icon-add.svg"
@@ -62,6 +69,7 @@
       {
         "command": "hexo.refresh",
         "title": "Refresh",
+        "category": "Hexo Utils",
         "icon": {
           "light": "resources/light/icon-refresh.svg",
           "dark": "resources/dark/icon-refresh.svg"
@@ -69,15 +77,18 @@
       },
       {
         "command": "hexo.move.to.draft",
-        "title": "Move to draft"
+        "title": "Move to draft",
+        "category": "Hexo Utils"
       },
       {
         "command": "hexo.move.to.post",
-        "title": "Move to post"
+        "title": "Move to post",
+        "category": "Hexo Utils"
       },
       {
         "command": "hexo.delete",
         "title": "Delete",
+        "category": "Hexo Utils",
         "icon": {
           "light": "resources/light/icon-remove.svg",
           "dark": "resources/dark/icon-remove.svg"
@@ -85,7 +96,8 @@
       },
       {
         "command": "hexo.open",
-        "title": "Open a article"
+        "title": "Open a article",
+        "category": "Hexo Utils"
       }
     ],
     "viewsContainers": {
@@ -120,6 +132,24 @@
       ]
     },
     "menus": {
+      "commandPalette": [
+        {
+          "command": "hexo.move.to.draft",
+          "when": "false"
+        },
+        {
+          "command": "hexo.move.to.post",
+          "when": "false"
+        },
+        {
+          "command": "hexo.open",
+          "when": "false"
+        },
+        {
+          "command": "hexo.delete",
+          "when": "false"
+        }
+      ],
       "view/title": [
         {
           "command": "hexo.refresh",

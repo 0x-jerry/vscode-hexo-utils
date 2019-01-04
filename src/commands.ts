@@ -9,6 +9,8 @@ import {
   warn,
   fsWriteFile,
   fsRead,
+  getDirFiles,
+  info,
 } from './utils';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
@@ -20,10 +22,11 @@ export enum ArticleTypes {
   draft = 'draft',
 }
 
-async function create(type: ArticleTypes) {
+async function create(type: ArticleTypes, template?: string) {
   if (!isHexoProject()) {
     return null;
   }
+  template = template || type;
 
   const name = await vscode.window.showInputBox({
     value: 'new article',
@@ -31,27 +34,28 @@ async function create(type: ArticleTypes) {
   });
 
   if (!name) {
-    return warn(`Invalid article name`);
+    return null;
   }
 
   try {
-    const filePath = path.join(vscode.workspace.rootPath!, 'source', `_${type}s`);
+    const typeFolder = path.join(vscode.workspace.rootPath!, 'source', `_${type}s`);
     const scaffoldPath = path.join(vscode.workspace.rootPath!, 'scaffolds');
 
-    if (!(await fsExist(filePath))) {
-      await fsMkdir(filePath);
+    if (!(await fsExist(typeFolder))) {
+      await fsMkdir(typeFolder);
     }
 
-    const tpl = (await fsRead(path.join(scaffoldPath, type + '.md'))) as string;
+    const tplPath = path.join(scaffoldPath, template + '.md');
+    const tpl = (await fsRead(tplPath)) as string;
 
     const result = mustache.render(tpl, {
       title: name,
       date: new Date().toISOString(),
     });
 
-    fsWriteFile(path.join(filePath, name + '.md'), result);
+    fsWriteFile(path.join(typeFolder, name + '.md'), result);
   } catch (err) {
-    error(`Create failed on [${type}], ${err}`);
+    error(`Create failed on [${template}], ${err}`);
   }
 }
 
@@ -109,4 +113,31 @@ async function deleteFile(item: ArticleItem) {
   }
 }
 
-export default { createPost, createDraft, open, moveToDraft, deleteFile, moveToPost };
+async function createWithScaffolds() {
+  if (!isHexoProject()) {
+    return null;
+  }
+
+  const scaffoldPath = path.join(vscode.workspace.rootPath!, 'scaffolds');
+  const items = await getDirFiles(scaffoldPath);
+
+  const file = await vscode.window.showQuickPick(items.map((i) => i.substr(0, i.length - 3)));
+
+  if (file) {
+    const isDraft = file === 'draft';
+
+    await create(isDraft ? ArticleTypes.draft : ArticleTypes.post, file);
+  }
+
+  console.log('Working on it');
+}
+
+export default {
+  createPost,
+  createDraft,
+  open,
+  moveToDraft,
+  deleteFile,
+  moveToPost,
+  createWithScaffolds,
+};
