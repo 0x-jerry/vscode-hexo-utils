@@ -6,11 +6,9 @@ import {
   fsRename,
   fsMkdir,
   error,
-  warn,
   fsWriteFile,
   fsRead,
   getDirFiles,
-  info,
 } from './utils';
 import { ArticleItem } from './hexoProvider';
 import * as os from 'os';
@@ -45,6 +43,18 @@ async function create(type: ArticleTypes, template?: string) {
       await fsMkdir(typeFolder);
     }
 
+    const createPath = path.join(typeFolder, name + '.md');
+
+    if (await fsExist(createPath)) {
+      const replace = await vscode.window.showQuickPick(['yes', 'no'], {
+        placeHolder: 'Whether replace exist file?',
+      });
+
+      if (replace !== 'yes') {
+        return null;
+      }
+    }
+
     const tplPath = path.join(scaffoldPath, template + '.md');
     const tpl = (await fsRead(tplPath)) as string;
 
@@ -53,7 +63,7 @@ async function create(type: ArticleTypes, template?: string) {
       date: new Date().toISOString(),
     });
 
-    fsWriteFile(path.join(typeFolder, name + '.md'), result);
+    fsWriteFile(createPath, result);
   } catch (err) {
     error(`Create failed on [${template}], ${err}`);
   }
@@ -85,7 +95,13 @@ async function moveFile(item: ArticleItem, to: ArticleTypes) {
 
   const destPath = path.join(toPath, fileName);
   if (await fsExist(destPath)) {
-    return warn(`[${fileName}] has exist in ${to}`);
+    const replace = await vscode.window.showQuickPick(['yes', 'no'], {
+      placeHolder: 'Whether replace exist file?',
+    });
+
+    if (replace !== 'yes') {
+      return;
+    }
   }
 
   const err = await fsRename(filePath, destPath);
