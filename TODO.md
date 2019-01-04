@@ -8,11 +8,11 @@
 - [x] check duplicate article name
 - [x] list articles by categories
 - [x] list articles by tags
+- [x] support scaffolds
+- [x] change tag & category icon
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
 - [ ] support resource folder
   - [ ] support markdown preview image which from resource folder
-- [ ] support scaffolds
-- [ ] change tag & category icon
-- [ ] rename a post or draft
+- [x] rename a post or draft
   - [ ] key shortcut [F2]
