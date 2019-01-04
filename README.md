@@ -6,14 +6,13 @@ Open a [Hexo] project, and have fun.
 
 ## Features
 
-![screen1](docs-images/screen1.png)
-![screen2](docs-images/screen2.png)
-![screen3](docs-images/screen3.png)
+![screen](docs-images/screen.gif)
+
+![feature](docs-images/feature.gif)
 
 ## Extension Settings
 
-- `hexo.packageManager`: The package manager used to run scripts, default yarn.
-- `hexo.includeDraft`: Controls whether include drafts, default false.
+- `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default false.
 
 ## Known Issues
 
