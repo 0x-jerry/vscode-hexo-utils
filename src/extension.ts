@@ -73,14 +73,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   const bindCommand: IBindCommand[] = [
     {
-      cmd: Commands.moveToDraft,
-      callback: commands.moveToDraft,
-    },
-    {
-      cmd: Commands.moveToPost,
-      callback: commands.moveToPost,
-    },
-    {
       cmd: Commands.delete,
       callback: commands.deleteFile,
     },
