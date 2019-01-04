@@ -18,19 +18,11 @@ export enum HexoCommands {
   refresh = 'hexo.refresh',
 }
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "vscode-hexo-utils" is now active!');
-
   const postProvider = new HexoArticleProvider(ArticleTypes.post);
   const draftProvider = new HexoArticleProvider(ArticleTypes.draft);
   const categoryProvider = new HexoClassifyProvider(ClassifyTypes.category);
   const tagProvider = new HexoClassifyProvider(ClassifyTypes.tag);
-
-  const markdownFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.md');
 
   const refreshProvider = debounce(() => {
     postProvider.refresh();
@@ -38,6 +30,9 @@ export function activate(context: vscode.ExtensionContext) {
     categoryProvider.refresh();
     tagProvider.refresh();
   }, 20);
+
+  const markdownFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.md');
+  context.subscriptions.push(markdownFileWatcher);
 
   markdownFileWatcher.onDidCreate(() => {
     refreshProvider();
@@ -47,14 +42,41 @@ export function activate(context: vscode.ExtensionContext) {
     refreshProvider();
   });
 
-  vscode.window.registerTreeDataProvider('hexo.post', postProvider);
-  vscode.window.registerTreeDataProvider('hexo.draft', draftProvider);
-  vscode.window.registerTreeDataProvider('hexo.categories', categoryProvider);
-  vscode.window.registerTreeDataProvider('hexo.tags', tagProvider);
+  interface IBindProvider {
+    viewId: string;
+    provider: vscode.TreeDataProvider<any>;
+    showCollapseAll?: boolean;
+  }
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
+  const bindProvider: IBindProvider[] = [
+    {
+      viewId: 'hexo.post',
+      provider: postProvider,
+    },
+    {
+      viewId: 'hexo.draft',
+      provider: draftProvider,
+    },
+    {
+      viewId: 'hexo.categories',
+      provider: categoryProvider,
+      showCollapseAll: true,
+    },
+    {
+      viewId: 'hexo.tags',
+      provider: tagProvider,
+      showCollapseAll: true,
+    },
+  ];
+
+  bindProvider.forEach((info) => {
+    const disposable = vscode.window.createTreeView(info.viewId, {
+      treeDataProvider: info.provider,
+      showCollapseAll: info.showCollapseAll,
+    });
+    context.subscriptions.push(disposable);
+  });
+
   interface IBindCommand {
     cmd: string;
     callback: (...arg: any) => any;
@@ -105,5 +127,4 @@ export function activate(context: vscode.ExtensionContext) {
   });
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
