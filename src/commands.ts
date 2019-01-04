@@ -31,7 +31,9 @@ async function create(type: ArticleTypes, template?: string) {
     prompt: 'Please input new article name',
   });
 
-  if (!name) {
+  const title = (name || '').trim();
+
+  if (!title) {
     return null;
   }
 
@@ -43,7 +45,7 @@ async function create(type: ArticleTypes, template?: string) {
       await fsMkdir(typeFolder);
     }
 
-    const createPath = path.join(typeFolder, name + '.md');
+    const createPath = path.join(typeFolder, title + '.md');
 
     if ((await fsExist(createPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;
@@ -53,7 +55,7 @@ async function create(type: ArticleTypes, template?: string) {
     const tpl = (await fsRead(tplPath)) as string;
 
     const result = mustache.render(tpl, {
-      title: name,
+      title,
       date: new Date().toISOString(),
     });
 
