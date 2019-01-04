@@ -14,5 +14,8 @@
   - [ ] key shortcut [delete]
 - [ ] support resource folder
   - [ ] support markdown preview image which from resource folder
+- [x] sort article
+  - [x] by name
+  - [ ] by date metadata
 - [x] rename a post or draft
   - [ ] key shortcut [F2]
