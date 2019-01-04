@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import commands, { ArticleTypes } from './commands';
 import { HexoArticleProvider } from './hexoProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
+import * as debounce from 'debounce';
 
 export enum HexoCommands {
   new = 'hexo.new',
@@ -29,10 +30,20 @@ export function activate(context: vscode.ExtensionContext) {
   const categoryProvider = new HexoClassifyProvider(ClassifyTypes.category);
   const tagProvider = new HexoClassifyProvider(ClassifyTypes.tag);
 
-  // vscode.window.createTreeView('hexo.post', {
-  //   showCollapseAll: true,
-  //   treeDataProvider: postProvider,
-  // });
+  const markdownFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.md');
+
+  const refreshPostAndDraft = debounce(() => {
+    postProvider.refresh();
+    draftProvider.refresh();
+  }, 10);
+
+  markdownFileWatcher.onDidCreate(() => {
+    refreshPostAndDraft();
+  });
+
+  markdownFileWatcher.onDidDelete(() => {
+    refreshPostAndDraft();
+  });
 
   vscode.window.registerTreeDataProvider('hexo.post', postProvider);
   vscode.window.registerTreeDataProvider('hexo.draft', draftProvider);
@@ -50,17 +61,11 @@ export function activate(context: vscode.ExtensionContext) {
   const bindCommand: IBindCommand[] = [
     {
       cmd: HexoCommands.newPost,
-      callback: async () => {
-        await commands.createPost();
-        postProvider.refresh();
-      },
+      callback: commands.createPost,
     },
     {
       cmd: HexoCommands.newDraft,
-      callback: async () => {
-        await commands.createDraft();
-        draftProvider.refresh();
-      },
+      callback: commands.createDraft,
     },
     {
       cmd: HexoCommands.open,
@@ -68,52 +73,31 @@ export function activate(context: vscode.ExtensionContext) {
     },
     {
       cmd: HexoCommands.moveToDraft,
-      callback: async (item) => {
-        await commands.moveToDraft(item);
-        postProvider.refresh();
-        draftProvider.refresh();
-      },
+      callback: commands.moveToDraft,
     },
     {
       cmd: HexoCommands.moveToPost,
-      callback: async (item) => {
-        await commands.moveToPost(item);
-        postProvider.refresh();
-        draftProvider.refresh();
-      },
+      callback: commands.moveToPost,
     },
     {
       cmd: HexoCommands.delete,
-      callback: async (item) => {
-        await commands.deleteFile(item);
-        postProvider.refresh();
-        draftProvider.refresh();
-      },
+      callback: commands.deleteFile,
     },
     {
       cmd: HexoCommands.refresh,
       callback: () => {
-        postProvider.refresh();
-        draftProvider.refresh();
+        refreshPostAndDraft();
         categoryProvider.refresh();
         tagProvider.refresh();
       },
     },
     {
       cmd: HexoCommands.new,
-      callback: async () => {
-        await commands.createWithScaffolds();
-        postProvider.refresh();
-        draftProvider.refresh();
-      },
+      callback: commands.createWithScaffolds,
     },
     {
       cmd: HexoCommands.rename,
-      callback: async (item) => {
-        await commands.rename(item);
-        postProvider.refresh();
-        draftProvider.refresh();
-      },
+      callback: commands.rename,
     },
   ];
 

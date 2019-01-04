@@ -208,6 +208,7 @@
     "test": "yarn run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/debounce": "^1.2.0",
     "@types/mocha": "^2.2.42",
     "@types/mustache": "^0.8.32",
     "@types/node": "^8.10.25",
@@ -218,6 +219,7 @@
     "vscode": "^1.1.25"
   },
   "dependencies": {
+    "debounce": "^1.2.0",
     "mustache": "^3.0.1",
     "yamljs": "^0.3.0"
   }
