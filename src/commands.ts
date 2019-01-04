@@ -1,16 +1,7 @@
 import * as vscode from 'vscode';
-import {
-  isHexoProject,
-  fsUnlink,
-  fsExist,
-  fsRename,
-  fsMkdir,
-  error,
-  fsWriteFile,
-  fsRead,
-  getDirFiles,
-  askForNext,
-} from './utils';
+import { isHexoProject, askForNext } from './utils/utils';
+import { error } from './utils/log';
+import { fsUnlink, fsExist, fsRename, fsMkdir, fsWriteFile, fsRead, getDirFiles } from './utils/fs';
 import { ArticleItem } from './hexoProvider';
 import * as path from 'path';
 import * as mustache from 'mustache';

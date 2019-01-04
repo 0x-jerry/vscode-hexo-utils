@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { isHexoProject, getDirFiles, fsRead, warn } from './utils';
+import { isHexoProject } from './utils/utils';
+import { warn } from "./utils/log";
+import { fsRead, getDirFiles } from './utils/fs';
 import { HexoCommands } from './extension';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
 import { getConfig, ConfigProperties } from './configs';

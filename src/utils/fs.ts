@@ -1,52 +1,4 @@
-import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
-import { spawn } from 'child_process';
-
-function getPkg() {
-  const rootPath = vscode.workspace.rootPath;
-  if (!rootPath) {
-    return null;
-  }
-
-  const pkgPath = path.join(rootPath, 'package.json');
-
-  if (!fs.existsSync(pkgPath)) {
-    return null;
-  }
-
-  const pkg = fs.readFileSync(pkgPath, { encoding: 'utf-8' });
-
-  return JSON.parse(pkg);
-}
-
-function isHexoProject(): boolean {
-  const pkg = getPkg();
-  const isHexo = !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
-
-  if (!isHexo) {
-    info('This project is not a hexo project');
-  }
-
-  return isHexo;
-}
-
-function exec(cmd: string, args: string[]): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const proc = spawn(cmd, args, {
-      cwd: vscode.workspace.rootPath,
-      shell: true,
-    });
-
-    proc.on('exit', () => {
-      resolve();
-    });
-
-    proc.on('error', (err) => {
-      reject(err);
-    });
-  });
-}
 
 function fsExist(path: fs.PathLike): Thenable<boolean> {
   return new Promise((resolve) => {
@@ -110,21 +62,6 @@ function fsWriteFile(path: fs.PathLike, data: string): Thenable<NodeJS.ErrnoExce
   });
 }
 
-function info(str: string, ...items: string[]) {
-  str = 'Hexo: ' + str;
-  return vscode.window.showInformationMessage(str, ...items);
-}
-
-function warn(str: string, ...items: string[]) {
-  str = 'Hexo: ' + str;
-  return vscode.window.showWarningMessage(str, ...items);
-}
-
-function error(str: string, ...items: string[]) {
-  str = 'Hexo: ' + str;
-  return vscode.window.showErrorMessage(str, ...items);
-}
-
 async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
   const exist = (await fsExist(dir)) && ((await fsStat(dir)) as fs.Stats).isDirectory();
 
@@ -135,32 +72,14 @@ async function getDirFiles(dir: fs.PathLike): Promise<string[]> {
   return (await fsReaddir(dir)) as string[];
 }
 
-/**
- * true if yse
- * @param placeHolder msg
- */
-async function askForNext(placeHolder: string): Promise<boolean> {
-  const replace = await vscode.window.showQuickPick(['yes', 'no'], {
-    placeHolder,
-  });
-
-  return replace === 'yes';
-}
-
 export {
-  isHexoProject,
-  askForNext,
-  exec,
   fsExist,
-  fsStat,
-  fsReaddir,
-  fsUnlink,
-  fsRename,
   fsMkdir,
   fsRead,
+  fsReaddir,
+  fsRename,
+  fsStat,
+  fsUnlink,
   fsWriteFile,
-  info,
-  warn,
-  error,
   getDirFiles,
 };
