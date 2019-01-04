@@ -1,3 +1,17 @@
+## [0.0.5](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.4...v0.0.5) (2019-01-04)
+
+
+### Bug Fixes
+
+* Fix yaml parse regex ([78f9ac8](https://github.com/cwxyz007/vscode-hexo-utils/commit/78f9ac8))
+
+
+### Performance Improvements
+
+* Show collapse icon on tag & category view ([484d274](https://github.com/cwxyz007/vscode-hexo-utils/commit/484d274))
+
+
+
 ## [0.0.4](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.3...v0.0.4) (2019-01-04)
 
 
