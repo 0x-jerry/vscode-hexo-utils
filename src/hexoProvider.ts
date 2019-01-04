@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
-import { isHexoProject } from './utils/utils';
 import * as path from 'path';
 import { Commands } from './commands/common';
-import { getDirFiles } from './utils/fs';
 import { ArticleTypes } from './commands/createArticle';
+import { getDirFiles, isHexoProject } from './utils';
 
 export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem> {
   private _onDidChangeTreeData = new vscode.EventEmitter<ArticleItem | undefined>();

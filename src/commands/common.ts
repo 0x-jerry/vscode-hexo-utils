@@ -1,5 +1,5 @@
 import { ExtensionContext, Disposable, commands } from 'vscode';
-import { isHexoProject } from '../utils/utils';
+import { isHexoProject } from '../utils';
 
 /**
  * hexo.<command>[[...args]]

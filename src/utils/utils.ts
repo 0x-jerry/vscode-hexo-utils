@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { spawn } from 'child_process';
+import { workspace, window } from 'vscode';
 
 function getPkg() {
-  const rootPath = vscode.workspace.rootPath;
+  const rootPath = workspace.rootPath;
   if (!rootPath) {
     return null;
   }
@@ -28,7 +28,7 @@ function isHexoProject(): boolean {
 function exec(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const proc = spawn(cmd, args, {
-      cwd: vscode.workspace.rootPath,
+      cwd: workspace.rootPath,
       shell: true,
     });
 
@@ -47,7 +47,7 @@ function exec(cmd: string, args: string[]): Promise<void> {
  * @param placeHolder msg
  */
 async function askForNext(placeHolder: string): Promise<boolean> {
-  const replace = await vscode.window.showQuickPick(['yes', 'no'], {
+  const replace = await window.showQuickPick(['yes', 'no'], {
     placeHolder,
   });
 

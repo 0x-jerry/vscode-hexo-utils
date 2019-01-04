@@ -1,8 +1,6 @@
 import * as path from 'path';
 import * as mustache from 'mustache';
-import { askForNext } from '../utils/utils';
-import { error } from '../utils/log';
-import { fsExist, fsMkdir, fsWriteFile, fsRead, getDirFiles } from '../utils/fs';
+import { fsExist, fsMkdir, fsWriteFile, fsRead, getDirFiles, askForNext, error } from '../utils';
 import { window } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
 import { configs } from '../configs';

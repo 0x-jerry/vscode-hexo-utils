@@ -1,7 +1,5 @@
 import * as path from 'path';
-import { askForNext } from '../utils/utils';
-import { error } from '../utils/log';
-import { fsExist, fsRename, fsMkdir } from '../utils/fs';
+import { fsExist, fsRename, fsMkdir, askForNext, error } from '../utils';
 import { ArticleItem } from '../hexoProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';

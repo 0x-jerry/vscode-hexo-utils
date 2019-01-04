@@ -1,18 +1,18 @@
-import * as vscode from 'vscode';
+import { window } from 'vscode';
 
 function info(str: string, ...items: string[]) {
   str = 'Hexo: ' + str;
-  return vscode.window.showInformationMessage(str, ...items);
+  return window.showInformationMessage(str, ...items);
 }
 
 function warn(str: string, ...items: string[]) {
   str = 'Hexo: ' + str;
-  return vscode.window.showWarningMessage(str, ...items);
+  return window.showWarningMessage(str, ...items);
 }
 
 function error(str: string, ...items: string[]) {
   str = 'Hexo: ' + str;
-  return vscode.window.showErrorMessage(str, ...items);
+  return window.showErrorMessage(str, ...items);
 }
 
 export { info, warn, error };

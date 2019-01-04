@@ -1,5 +1,4 @@
-import { error } from '../utils/log';
-import { fsUnlink, fsExist } from '../utils/fs';
+import { fsUnlink, fsExist, error } from '../utils';
 import { ArticleItem } from '../hexoProvider';
 import { Command, ICommandParsed, Commands, command } from './common';
 
