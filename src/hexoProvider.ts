@@ -38,7 +38,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem>
       }
     });
 
-    return items;
+    return items.sort((a, b) => (a.label! < b.label! ? -1 : 1));
   }
 }
 

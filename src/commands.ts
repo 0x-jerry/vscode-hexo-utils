@@ -12,7 +12,6 @@ import {
   askForNext,
 } from './utils';
 import { ArticleItem } from './hexoProvider';
-import * as os from 'os';
 import * as path from 'path';
 import * as mustache from 'mustache';
 
@@ -80,8 +79,8 @@ async function createDraft() {
 async function moveFile(item: ArticleItem, to: ArticleTypes) {
   const toPath = path.join(vscode.workspace.rootPath!, 'source', `_${to}s`);
 
-  const fileUri = item.resourceUri!.path;
-  const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
+  const filePath = item.resourceUri!.fsPath;
+
   const fileName = path.basename(filePath);
 
   if (!(await fsExist(toPath))) {
@@ -109,8 +108,7 @@ async function moveToPost(item: ArticleItem) {
 }
 
 async function deleteFile(item: ArticleItem) {
-  const fileUri = item.resourceUri!.path;
-  const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
+  const filePath = item.resourceUri!.fsPath;
 
   if (await fsExist(filePath)) {
     await fsUnlink(filePath);
@@ -137,8 +135,7 @@ async function createWithScaffolds() {
 }
 
 async function rename(item: ArticleItem) {
-  const fileUri = item.resourceUri!.path;
-  const filePath = os.platform() === 'win32' ? fileUri.slice(1) : fileUri;
+  const filePath = item.resourceUri!.fsPath;
   const oldPath = path.parse(filePath);
 
   const newName = await vscode.window.showInputBox({
