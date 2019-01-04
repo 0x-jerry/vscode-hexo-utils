@@ -1,3 +1,26 @@
+## [0.0.3](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.2...v0.0.3) (2019-01-04)
+
+
+### Bug Fixes
+
+* Fix duplicate classify files ([901ec83](https://github.com/cwxyz007/vscode-hexo-utils/commit/901ec83))
+
+
+### Features
+
+* Support create article with template ([bdb7c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/bdb7c48))
+* Support rename article ([6042036](https://github.com/cwxyz007/vscode-hexo-utils/commit/6042036))
+
+
+### Performance Improvements
+
+* Change tag & category icons ([824ab28](https://github.com/cwxyz007/vscode-hexo-utils/commit/824ab28))
+* Check exist when create file ([b3aab1e](https://github.com/cwxyz007/vscode-hexo-utils/commit/b3aab1e))
+* Replace hexo cli new command ([171d1f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/171d1f8))
+* Sort by name ([9b17fd9](https://github.com/cwxyz007/vscode-hexo-utils/commit/9b17fd9))
+
+
+
 ## [0.0.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.1...v0.0.2) (2019-01-03)
 
 
@@ -7,7 +30,7 @@
 
 
 
-## 0.0.1 (2019-01-03)
+## [0.0.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/073b0d3...v0.0.1) (2019-01-03)
 
 
 ### Bug Fixes
@@ -33,4 +56,6 @@
 ### Performance Improvements
 
 * Update message format ([b86b33d](https://github.com/cwxyz007/vscode-hexo-utils/commit/b86b33d))
+
+
 
