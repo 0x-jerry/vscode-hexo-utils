@@ -32,17 +32,19 @@ export function activate(context: vscode.ExtensionContext) {
 
   const markdownFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.md');
 
-  const refreshPostAndDraft = debounce(() => {
+  const refreshProvider = debounce(() => {
     postProvider.refresh();
     draftProvider.refresh();
-  }, 10);
+    categoryProvider.refresh();
+    tagProvider.refresh();
+  }, 20);
 
   markdownFileWatcher.onDidCreate(() => {
-    refreshPostAndDraft();
+    refreshProvider();
   });
 
   markdownFileWatcher.onDidDelete(() => {
-    refreshPostAndDraft();
+    refreshProvider();
   });
 
   vscode.window.registerTreeDataProvider('hexo.post', postProvider);
@@ -85,11 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
     },
     {
       cmd: HexoCommands.refresh,
-      callback: () => {
-        refreshPostAndDraft();
-        categoryProvider.refresh();
-        tagProvider.refresh();
-      },
+      callback: refreshProvider,
     },
     {
       cmd: HexoCommands.new,
