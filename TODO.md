@@ -12,7 +12,7 @@
 - [x] change tag & category icon
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
-- [ ] support resource folder
+- [x] support resource folder
   - [ ] support markdown preview image which from resource folder
 - [x] sort article
   - [x] by name
