@@ -1,3 +1,12 @@
+## [0.0.6](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.5...v0.0.6) (2019-01-12)
+
+
+### Features
+
+* Add image completion with relative resource folder ([6222b0f](https://github.com/cwxyz007/vscode-hexo-utils/commit/6222b0f))
+
+
+
 ## [0.0.5](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.4...v0.0.5) (2019-01-04)
 
 
