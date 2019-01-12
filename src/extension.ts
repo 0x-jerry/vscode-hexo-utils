@@ -1,16 +1,30 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import { HexoArticleProvider } from './hexoProvider';
+import { ExtensionContext, languages, workspace, TreeDataProvider, window } from 'vscode';
+import { HexoArticleProvider } from './hexoArticleProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
 import * as debounce from 'debounce';
 import { ArticleTypes, registerCommands } from './commands';
+import { HexoCompletionProvider } from './hexoCompletionProvider';
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
   const postProvider = new HexoArticleProvider(ArticleTypes.post);
   const draftProvider = new HexoArticleProvider(ArticleTypes.draft);
   const categoryProvider = new HexoClassifyProvider(ClassifyTypes.category);
   const tagProvider = new HexoClassifyProvider(ClassifyTypes.tag);
+
+  const selectors = [
+    { language: 'markdown', scheme: 'file' },
+    { language: 'markdown', scheme: 'untitled' },
+  ];
+
+  const completionItemProvider = languages.registerCompletionItemProvider(
+    selectors,
+    new HexoCompletionProvider(),
+    '(',
+  );
+
+  context.subscriptions.push(completionItemProvider);
 
   const refreshProvider = debounce(() => {
     postProvider.refresh();
@@ -19,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
     tagProvider.refresh();
   }, 20);
 
-  const markdownFileWatcher = vscode.workspace.createFileSystemWatcher('**/*.md');
+  const markdownFileWatcher = workspace.createFileSystemWatcher('**/*.md');
   context.subscriptions.push(markdownFileWatcher);
 
   markdownFileWatcher.onDidCreate(() => {
@@ -32,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   interface IBindProvider {
     viewId: string;
-    provider: vscode.TreeDataProvider<any>;
+    provider: TreeDataProvider<any>;
     showCollapseAll?: boolean;
   }
 
@@ -58,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
   ];
 
   bindProvider.forEach((info) => {
-    const disposable = vscode.window.createTreeView(info.viewId, {
+    const disposable = window.createTreeView(info.viewId, {
       treeDataProvider: info.provider,
       showCollapseAll: info.showCollapseAll,
     });

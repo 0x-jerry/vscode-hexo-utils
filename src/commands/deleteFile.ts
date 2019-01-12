@@ -1,5 +1,5 @@
 import { fsUnlink, fsExist, error } from '../utils';
-import { ArticleItem } from '../hexoProvider';
+import { ArticleItem } from '../hexoArticleProvider';
 import { Command, ICommandParsed, Commands, command } from './common';
 
 @command()

@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { fsExist, fsRename, fsMkdir, askForNext, error } from '../utils';
-import { ArticleItem } from '../hexoProvider';
+import { ArticleItem } from '../hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
 import { workspace } from 'vscode';
