@@ -75,7 +75,7 @@ function hexoTag(token: Token, md: MarkdownIt) {
   const imgReg = /{%\s+([\w\d]+)\s+([\w\d\.]+)\s+%}/.exec(token.content);
 
   if (imgReg && imgReg.length >= 3) {
-    const [_, alt, src] = imgReg;
+    const [, alt, src] = imgReg;
 
     const prefix = 'vscode-resource:/';
     if (window.activeTextEditor && workspace.rootPath) {
