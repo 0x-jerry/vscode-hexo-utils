@@ -35,16 +35,26 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       return [];
     }
 
-    let preInput = matches[1];
-
     const filename = path.parse(document.uri.fsPath).name;
 
-    const resFolder = `source/_posts/${filename}/${preInput}*.{png,jpg,jpeg,svg,gif}`;
+    const resFolder = `source/_posts/${filename}/**/*.{png,jpg,jpeg,svg,gif}`;
+
     return workspace.findFiles(resFolder, '**/node_modules/**').then((uris) => {
       return uris.map((imgUri) => {
         const relPath = path.relative(document.uri.fsPath, imgUri.fsPath);
 
-        const item = new CompletionItem(path.basename(imgUri.fsPath), CompletionItemKind.File);
+        const filePath = document.uri.fsPath;
+        const resourceDir = path.join(
+          workspace.rootPath!,
+          'source',
+          '_posts',
+          path.parse(filePath).name,
+        );
+
+        const itemLabel = imgUri.fsPath.substr(resourceDir.length + 1).replace('\\', '/');
+
+        const item = new CompletionItem(itemLabel, CompletionItemKind.File);
+
         item.documentation = new MarkdownString(
           `![${relPath}](${imgUri.fsPath.replace(/\\/g, '/')})`,
         );
