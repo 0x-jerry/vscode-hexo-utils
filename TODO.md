@@ -13,7 +13,7 @@
 - [x] delete a draft or post
   - [ ] key shortcut [delete]
 - [x] support resource folder
-  - [ ] support markdown preview image which from resource folder
+  - [x] support markdown preview image from hexo resource folder
 - [x] sort article
   - [x] by name
   - [ ] by date metadata

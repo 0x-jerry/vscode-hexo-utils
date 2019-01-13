@@ -1,3 +1,17 @@
+## [0.0.7](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.6...v0.0.7) (2019-01-13)
+
+
+### Bug Fixes
+
+* Fix completion with hexo resource path ([6789096](https://github.com/cwxyz007/vscode-hexo-utils/commit/6789096))
+
+
+### Features
+
+* Support {% img img.png %} and ![img](img.png) in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
+
+
+
 ## [0.0.6](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.5...v0.0.6) (2019-01-12)
 
 
