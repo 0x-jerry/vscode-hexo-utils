@@ -3,6 +3,7 @@ import * as path from 'path';
 
 enum ConfigProperties {
   includeDraft = 'includeDraft',
+  resolveMarkdownResource = 'markdown.resource',
 }
 
 function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T | undefined {

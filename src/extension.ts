@@ -3,9 +3,12 @@
 import { ExtensionContext, languages, workspace, TreeDataProvider, window } from 'vscode';
 import { HexoArticleProvider } from './hexoArticleProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
-import * as debounce from 'debounce';
 import { ArticleTypes, registerCommands } from './commands';
 import { HexoCompletionProvider } from './hexoCompletionProvider';
+import * as debounce from 'debounce';
+import * as MarkdownIt from 'markdown-it';
+import plugin from './markdownItHexoResource';
+import { getConfig, ConfigProperties } from './configs';
 
 export function activate(context: ExtensionContext) {
   const postProvider = new HexoArticleProvider(ArticleTypes.post);
@@ -80,6 +83,18 @@ export function activate(context: ExtensionContext) {
   });
 
   registerCommands(context);
+
+  return {
+    extendMarkdownIt(md: MarkdownIt) {
+      const resolve = getConfig<boolean>(ConfigProperties.resolveMarkdownResource);
+
+      if (resolve) {
+        return md.use(plugin);
+      } else {
+        return md;
+      }
+    },
+  };
 }
 
 export function deactivate() {}

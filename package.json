@@ -39,6 +39,11 @@
           "type": "boolean",
           "default": false,
           "description": "Controls whether include drafts."
+        },
+        "hexo.markdown.resource": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether resolve image with hexo resource folder."
         }
       }
     },
@@ -197,7 +202,8 @@
           "group": "hexo@2"
         }
       ]
-    }
+    },
+    "markdown.markdownItPlugins": true
   },
   "scripts": {
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r",
@@ -209,6 +215,7 @@
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
+    "@types/markdown-it": "^0.0.7",
     "@types/mocha": "^2.2.42",
     "@types/mustache": "^0.8.32",
     "@types/node": "^8.10.25",
