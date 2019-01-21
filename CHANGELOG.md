@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.7...v0.0.8) (2019-01-21)
+
+
+### Bug Fixes
+
+* Fix register refresh command ([00fc8c0](https://github.com/cwxyz007/vscode-hexo-utils/commit/00fc8c0))
+
+
+
 ## [0.0.7](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.6...v0.0.7) (2019-01-13)
 
 
