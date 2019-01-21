@@ -1,9 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, languages, workspace, TreeDataProvider, window } from 'vscode';
+import { ExtensionContext, languages, workspace, TreeDataProvider, window, commands } from 'vscode';
 import { HexoArticleProvider } from './hexoArticleProvider';
 import { HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
-import { ArticleTypes, registerCommands } from './commands';
+import { ArticleTypes, registerCommands, Commands } from './commands';
 import { HexoCompletionProvider } from './hexoCompletionProvider';
 import * as debounce from 'debounce';
 import * as MarkdownIt from 'markdown-it';
@@ -82,7 +82,14 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(disposable);
   });
 
-  registerCommands(context);
+  try {
+    const refreshCommand = commands.registerCommand(Commands.refresh, refreshProvider);
+    context.subscriptions.push(refreshCommand);
+
+    registerCommands(context);
+  } catch (err) {
+    window.showErrorMessage(err);
+  }
 
   return {
     extendMarkdownIt(md: MarkdownIt) {

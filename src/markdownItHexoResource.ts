@@ -1,30 +1,8 @@
+import Token = require('markdown-it/lib/token');
 import * as MarkdownIt from 'markdown-it';
 import * as path from 'path';
 import { window, workspace } from 'vscode';
 import * as fs from 'fs';
-
-// ! Fix can't find global Token define
-interface Token {
-  // constructor(type: string, tag: string, nesting: number);
-  attrGet: (name: string) => string | null;
-  attrIndex: (name: string) => number;
-  attrJoin: (name: string, value: string) => void;
-  attrPush: (attrData: string[]) => void;
-  attrSet: (name: string, value: string) => void;
-  attrs: string[][];
-  block: boolean;
-  children: Token[];
-  content: string;
-  hidden: boolean;
-  info: string;
-  level: number;
-  map: number[];
-  markup: string;
-  meta: any;
-  nesting: number;
-  tag: string;
-  type: string;
-}
 
 export default function plugin(md: MarkdownIt) {
   md.core.ruler.after('inline', 'hexo-resource', (status) => {
