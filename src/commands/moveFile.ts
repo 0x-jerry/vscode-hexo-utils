@@ -1,9 +1,10 @@
 import * as path from 'path';
-import { fsExist, fsRename, fsMkdir, askForNext, error } from '../utils';
+import { askForNext, error } from '../utils';
 import { ArticleItem } from '../hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
 import { workspace } from 'vscode';
+import * as fs from 'fs-extra';
 
 @command()
 export class MoveFile extends Command {
@@ -17,18 +18,17 @@ export class MoveFile extends Command {
 
     const fileName = path.basename(filePath);
 
-    if (!(await fsExist(toPath))) {
-      await fsMkdir(toPath);
-    }
+    await fs.ensureDir(toPath);
 
     const destPath = path.join(toPath, fileName);
 
-    if ((await fsExist(destPath)) && !(await askForNext('Whether replace exist file?'))) {
+    if ((await fs.pathExists(destPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;
     }
 
-    const err = await fsRename(filePath, destPath);
-    if (err) {
+    try {
+      await fs.rename(filePath, destPath);
+    } catch (err) {
       error(`Move ${fileName} to ${to} error: ${err}`);
     }
   }

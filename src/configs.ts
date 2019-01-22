@@ -1,7 +1,8 @@
 import { workspace } from 'vscode';
 import * as path from 'path';
-import { fsRead, isHexoProject } from './utils';
+import { isHexoProject } from './utils';
 import * as yamljs from 'yamljs';
+import * as fs from 'fs-extra';
 
 enum ConfigProperties {
   includeDraft = 'includeDraft',
@@ -30,7 +31,7 @@ const configs = {
       return null;
     }
     try {
-      const hexoConfig = await fsRead(path.join(workspace.rootPath!, '_config.yml'));
+      const hexoConfig = await fs.readFile(path.join(workspace.rootPath!, '_config.yml'));
       return yamljs.parse(hexoConfig.toString());
     } catch (error) {
       return null;

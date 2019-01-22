@@ -1,8 +1,9 @@
 import * as path from 'path';
-import { fsExist, fsRename, askForNext } from '../utils';
+import { askForNext } from '../utils';
 import { ArticleItem } from '../hexoArticleProvider';
 import { window } from 'vscode';
 import { Command, ICommandParsed, Commands, command } from './common';
+import * as fs from 'fs-extra';
 
 @command()
 export class RenameFile extends Command {
@@ -23,10 +24,10 @@ export class RenameFile extends Command {
     }
 
     const newPath = path.join(oldPath.dir, newName + '.md');
-    if ((await fsExist(newPath)) && !(await askForNext('Whether replace exist file?'))) {
+    if ((await fs.pathExists(newPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;
     }
 
-    await fsRename(filePath, newPath);
+    await fs.rename(filePath, newPath);
   }
 }

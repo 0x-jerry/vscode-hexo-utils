@@ -1,6 +1,7 @@
-import { fsUnlink, fsExist, error } from '../utils';
+import { error } from '../utils';
 import { ArticleItem } from '../hexoArticleProvider';
 import { Command, ICommandParsed, Commands, command } from './common';
+import * as fs from 'fs-extra';
 
 @command()
 export class DeleteFile extends Command {
@@ -10,8 +11,8 @@ export class DeleteFile extends Command {
 
   async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {
     const filePath = item.resourceUri!.fsPath;
-    if (await fsExist(filePath)) {
-      await fsUnlink(filePath);
+    if (await fs.pathExists(filePath)) {
+      await fs.unlink(filePath);
     } else {
       error(`${filePath} is not exist`);
     }

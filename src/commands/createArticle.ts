@@ -1,9 +1,10 @@
 import * as path from 'path';
 import * as mustache from 'mustache';
-import { fsExist, fsMkdir, fsWriteFile, fsRead, getDirFiles, askForNext, error } from '../utils';
+import { getDirFiles, askForNext, error } from '../utils';
 import { window } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
 import { configs } from '../configs';
+import * as fs from 'fs-extra';
 
 export enum ArticleTypes {
   post = 'post',
@@ -40,32 +41,33 @@ export class CreateArticle extends Command {
   private async createTplFile(filename: string, type: ArticleTypes, template: string) {
     const typeFolder = configs.paths[type];
 
-    if (!(await fsExist(typeFolder))) {
-      await fsMkdir(typeFolder);
-    }
+    await fs.ensureDir(typeFolder);
 
     const createFilePath = path.join(typeFolder, filename + '.md');
 
-    if ((await fsExist(createFilePath)) && !(await askForNext('Whether replace exist file?'))) {
+    if (
+      (await fs.pathExists(createFilePath)) &&
+      !(await askForNext('Whether replace exist file?'))
+    ) {
       return null;
     }
 
     const tplPath = path.join(configs.paths.scaffold, template + '.md');
-    const tpl = (await fsRead(tplPath)) as string;
+    const tpl = await fs.readFile(tplPath, { encoding: 'utf-8' });
 
     const result = mustache.render(tpl, {
       title: filename,
       date: new Date().toISOString(),
     });
 
-    await fsWriteFile(createFilePath, result);
+    await fs.writeFile(createFilePath, result, { encoding: 'utf-8' });
   }
 
   private async createResourceDir(filename: string) {
     const hexoConf = await configs.hexoConfig();
     const fileAssetPath = path.join(configs.paths.post, filename);
-    if (hexoConf && hexoConf.post_asset_folder && !(await fsExist(fileAssetPath))) {
-      await fsMkdir(fileAssetPath);
+    if (hexoConf && hexoConf.post_asset_folder && !(await fs.pathExists(fileAssetPath))) {
+      await fs.mkdir(fileAssetPath);
     }
   }
 
