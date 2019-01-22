@@ -1,6 +1,5 @@
 import { workspace } from 'vscode';
 import * as path from 'path';
-import { isHexoProject } from './utils';
 import * as yamljs from 'yamljs';
 import * as fs from 'fs-extra';
 
@@ -27,12 +26,9 @@ const configs = {
     },
   },
   async hexoConfig() {
-    if (!isHexoProject()) {
-      return null;
-    }
     try {
-      const hexoConfig = await fs.readFile(path.join(workspace.rootPath!, '_config.yml'));
-      return yamljs.parse(hexoConfig.toString());
+      const hexoConf = await fs.readFile(path.join(workspace.rootPath!, '_config.yml'));
+      return yamljs.parse(hexoConf.toString());
     } catch (error) {
       return null;
     }
