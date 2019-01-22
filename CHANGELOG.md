@@ -1,3 +1,18 @@
+## [0.0.9](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.8...v0.0.9) (2019-01-22)
+
+
+### Features
+
+* Support create resource folder ([b5b7cec](https://github.com/cwxyz007/vscode-hexo-utils/commit/b5b7cec))
+* Support delete the asset folder when empty ([e843986](https://github.com/cwxyz007/vscode-hexo-utils/commit/e843986))
+
+
+### Performance Improvements
+
+* Support full hexo img syntax `{% img img.png this is a img %}` ([c2afd14](https://github.com/cwxyz007/vscode-hexo-utils/commit/c2afd14))
+
+
+
 ## [0.0.8](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.7...v0.0.8) (2019-01-21)
 
 
@@ -17,7 +32,7 @@
 
 ### Features
 
-* Support {% img img.png %} and ![img](img.png) in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
+* Support `{% img img.png %}` and `![img](img.png)` in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
 
 
 
