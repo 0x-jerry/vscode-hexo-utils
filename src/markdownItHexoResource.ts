@@ -48,12 +48,17 @@ function hexoImage(token: Token) {
   }
 }
 
-// {% assert_img img.png%}
+// {% asset_img img.png this is a img %}
 function hexoTag(token: Token, md: MarkdownIt) {
-  const imgReg = /{%\s+([\w\d]+)\s+([\w\d\.]+)\s+%}/.exec(token.content);
+  const imgReg = /{%(.+)?%}/.exec(token.content);
+  if (imgReg && imgReg[1]) {
+    //[asset_img, img.png, this, is, a, img]
+    const attrs = imgReg[1].split(/\s+/).filter((s) => !!s);
+    if (attrs.length < 2) {
+      return;
+    }
 
-  if (imgReg && imgReg.length >= 3) {
-    const [, alt, src] = imgReg;
+    const [alt, src] = attrs;
 
     const prefix = 'vscode-resource:/';
     if (window.activeTextEditor && workspace.rootPath) {
