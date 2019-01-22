@@ -30,29 +30,42 @@ export class CreateArticle extends Command {
     }
 
     try {
-      const typeFolder = configs.paths[type];
-
-      if (!(await fsExist(typeFolder))) {
-        await fsMkdir(typeFolder);
-      }
-
-      const createFilePath = path.join(typeFolder, title + '.md');
-
-      if ((await fsExist(createFilePath)) && !(await askForNext('Whether replace exist file?'))) {
-        return null;
-      }
-
-      const tplPath = path.join(configs.paths.scaffold, template + '.md');
-      const tpl = (await fsRead(tplPath)) as string;
-
-      const result = mustache.render(tpl, {
-        title,
-        date: new Date().toISOString(),
-      });
-
-      fsWriteFile(createFilePath, result);
+      await this.createResourceDir(title);
+      await this.createTplFile(title, type, template);
     } catch (err) {
       error(`Create failed on [${template}], ${err}`);
+    }
+  }
+
+  private async createTplFile(filename: string, type: ArticleTypes, template: string) {
+    const typeFolder = configs.paths[type];
+
+    if (!(await fsExist(typeFolder))) {
+      await fsMkdir(typeFolder);
+    }
+
+    const createFilePath = path.join(typeFolder, filename + '.md');
+
+    if ((await fsExist(createFilePath)) && !(await askForNext('Whether replace exist file?'))) {
+      return null;
+    }
+
+    const tplPath = path.join(configs.paths.scaffold, template + '.md');
+    const tpl = (await fsRead(tplPath)) as string;
+
+    const result = mustache.render(tpl, {
+      title: filename,
+      date: new Date().toISOString(),
+    });
+
+    await fsWriteFile(createFilePath, result);
+  }
+
+  private async createResourceDir(filename: string) {
+    const hexoConf = await configs.hexoConfig();
+    const fileAssetPath = path.join(configs.paths.post, filename);
+    if (hexoConf && hexoConf.post_asset_folder && !(await fsExist(fileAssetPath))) {
+      await fsMkdir(fileAssetPath);
     }
   }
 
