@@ -47,6 +47,10 @@ export function activate(context: ExtensionContext) {
     refreshProvider();
   });
 
+  markdownFileWatcher.onDidChange(() => {
+    refreshProvider();
+  });
+
   interface IBindProvider {
     viewId: string;
     provider: TreeDataProvider<any>;
