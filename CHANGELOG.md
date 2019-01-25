@@ -9,7 +9,7 @@
 
 ### Performance Improvements
 
-* Support full hexo img syntax `{% img img.png this is a img %}` ([c2afd14](https://github.com/cwxyz007/vscode-hexo-utils/commit/c2afd14))
+* Support full hexo img syntax `{% assert_img img.png [title] %}` ([c2afd14](https://github.com/cwxyz007/vscode-hexo-utils/commit/c2afd14))
 
 
 
@@ -32,7 +32,7 @@
 
 ### Features
 
-* Support `{% img img.png %}` and `![img](img.png)` in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
+* Support `{% assert_img img.png %}` and `![img](img.png)` in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
 
 
 
