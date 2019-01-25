@@ -1,3 +1,18 @@
+# [0.1.0](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.9...v0.1.0) (2019-01-25)
+
+
+### Bug Fixes
+
+* Fix miss text when render `some text: {% assert_img img.png %}` ([1c3ffe7](https://github.com/cwxyz007/vscode-hexo-utils/commit/1c3ffe7))
+
+
+### Features
+
+* Auto refresh tags & categories when `*.md` changed ([ab0d761](https://github.com/cwxyz007/vscode-hexo-utils/commit/ab0d761))
+* Support hexo link syntax `{% asset_link img.png title %}` ([be61ddf](https://github.com/cwxyz007/vscode-hexo-utils/commit/be61ddf))
+
+
+
 ## [0.0.9](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.8...v0.0.9) (2019-01-22)
 
 
