@@ -37,7 +37,7 @@ class MarkdownHexoPlugin {
       const hexoTags = [
         'img',
         'asset_img',
-        // 'asset_link',
+        'asset_link',
         //   'asset_path'
       ];
 
@@ -54,26 +54,36 @@ class MarkdownHexoPlugin {
         this.createHexoImg(token, src, alts.join(' '));
       }
 
+      if (tag === 'asset_link') {
+        this.hexoLinkTagRule(status, src, alts.join(' '));
+      }
+
       status.pos += hexoTagReg[0].length;
 
       return true;
     });
   }
 
-  hexoImageTagRule(status: StateInline, src: string, alt: string) {
-    const token = status.push('image', 'img', 0);
+  private hexoLinkTagRule(status: StateInline, href: string, text: string) {
+    const token = status.push('link', 'a', 1);
 
-    const prefix = MarkdownHexoPlugin.vsResPrefix;
-    const filePath = window.activeTextEditor!.document.uri.fsPath;
-    const resourceDir = this.getResDir(filePath);
+    const info = this.getResInfo(href);
+    token.attrs = [['href', info.src], ['alt', text]];
+    token.content = `[${text}](${info.src})`;
 
-    const localPath = path.join(resourceDir, src);
-    const vscodeSrc = prefix + localPath;
+    const textToken = status.push('text', '', 0);
+    textToken.content = text || '';
 
-    this.createHexoImg(token, vscodeSrc, alt);
+    status.push('link', 'a', -1);
   }
 
-  hexoImageRenderRule() {
+  private hexoImageTagRule(status: StateInline, src: string, alt: string) {
+    const token = status.push('image', 'img', 0);
+    const info = this.getResInfo(src);
+    this.createHexoImg(token, info.src, alt);
+  }
+
+  private hexoImageRenderRule() {
     const defaultRender = this.md.renderer.rules.image;
 
     this.md.renderer.rules.image = (tokens, idx, opts, env, self) => {
@@ -100,7 +110,7 @@ class MarkdownHexoPlugin {
     };
   }
 
-  createHexoImg(token: Token, src: string, alt: string) {
+  private createHexoImg(token: Token, src: string, alt: string) {
     token.type = 'image';
     token.tag = 'img';
     token.attrs = [['src', src], ['alt', alt]];
@@ -112,7 +122,19 @@ class MarkdownHexoPlugin {
     token.children = [textToken];
   }
 
-  createHexoLink(token: Token, src: string, alt: string) {}
+  private getResInfo(resRelativePath: string) {
+    const prefix = MarkdownHexoPlugin.vsResPrefix;
+    const filePath = window.activeTextEditor!.document.uri.fsPath;
+    const resourceDir = this.getResDir(filePath);
+
+    const localPath = path.join(resourceDir, resRelativePath);
+    const vscodeSrc = prefix + localPath;
+
+    return {
+      src: vscodeSrc,
+      filePath,
+    };
+  }
 
   private getResDir(filePath: string) {
     const resourceDir = path.join(
