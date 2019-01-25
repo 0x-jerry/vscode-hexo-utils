@@ -20,4 +20,5 @@
 - [x] rename a post or draft
   - [ ] key shortcut [F2]
 - [x] auto refresh tags & categories when markdown file changed
-- [ ] support `{% assert_link slug %}` & `{% assert_path slug %}` in markdown preview. [docs](https://hexo.io/docs/asset-folders.html)
+- [x] support `{% assert_link slug %}` & `{% img slug title %}` in markdown preview. [docs](https://hexo.io/docs/asset-folders.html)
+- [ ] support hexo tag syntax highlight

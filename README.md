@@ -6,9 +6,15 @@ Open a [Hexo] project, and have fun.
 
 ## Features
 
+- Sidebar, include tags, categories, posts and drafts
+- Markdown preview
+- Assets path completion
+
 ![screen](docs-images/screen.gif)
 
 ![feature](docs-images/feature.gif)
+
+![markdown](docs-images/markdown-preview.png)
 
 ## Extension Settings
 
