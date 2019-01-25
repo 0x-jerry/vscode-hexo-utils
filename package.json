@@ -229,6 +229,7 @@
   "dependencies": {
     "debounce": "^1.2.0",
     "fs-extra": "^7.0.1",
+    "markdown-it": "^8.4.2",
     "mustache": "^3.0.1",
     "yamljs": "^0.3.0"
   }
