@@ -3,8 +3,8 @@ import { askForNext, error } from '../utils';
 import { ArticleItem } from '../hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
-import { workspace } from 'vscode';
 import * as fs from 'fs-extra';
+import { configs } from '../configs';
 
 @command()
 export class MoveFile extends Command {
@@ -13,7 +13,7 @@ export class MoveFile extends Command {
   }
 
   private async _move(item: ArticleItem, to: ArticleTypes) {
-    const toPath = path.join(workspace.rootPath!, 'source', `_${to}s`);
+    const toPath = path.join(configs.hexoRoot!, 'source', `_${to}s`);
     const filePath = item.resourceUri!.fsPath;
 
     const fileName = path.basename(filePath);

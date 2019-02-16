@@ -39,6 +39,17 @@ export function activate(context: ExtensionContext) {
   const markdownFileWatcher = workspace.createFileSystemWatcher('**/*.md');
   context.subscriptions.push(markdownFileWatcher);
 
+  // Auto refresh when hexo root changed
+  workspace.onDidChangeConfiguration((e) => {
+    const hexoProjectConfig = ConfigProperties.SECTION + '.' + ConfigProperties.hexoRoot;
+
+    const hexoRootChanged = e.affectsConfiguration(hexoProjectConfig);
+
+    if (hexoRootChanged) {
+      refreshProvider();
+    }
+  });
+
   markdownFileWatcher.onDidCreate(() => {
     refreshProvider();
   });

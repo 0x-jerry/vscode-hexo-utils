@@ -1,11 +1,19 @@
-import * as vscode from 'vscode';
+import {
+  TreeDataProvider,
+  EventEmitter,
+  TreeItem,
+  ThemeIcon,
+  TreeItemCollapsibleState,
+  Uri,
+} from 'vscode';
 import * as path from 'path';
 import { Commands } from './commands/common';
 import { ArticleTypes } from './commands/createArticle';
 import { getDirFiles, isHexoProject } from './utils';
+import { configs } from './configs';
 
-export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem> {
-  private _onDidChangeTreeData = new vscode.EventEmitter<ArticleItem | undefined>();
+export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
+  private _onDidChangeTreeData = new EventEmitter<ArticleItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type = ArticleTypes.post;
@@ -18,7 +26,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem>
     this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: ArticleItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+  getTreeItem(element: ArticleItem): TreeItem | Thenable<TreeItem> {
     return element;
   }
 
@@ -28,7 +36,7 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem>
       return items;
     }
 
-    const postsPath = path.join(vscode.workspace.rootPath as string, 'source', `_${this.type}s`);
+    const postsPath = path.join(configs.hexoRoot!, 'source', `_${this.type}s`);
 
     const paths = await getDirFiles(postsPath);
 
@@ -42,13 +50,13 @@ export class HexoArticleProvider implements vscode.TreeDataProvider<ArticleItem>
   }
 }
 
-export class ArticleItem extends vscode.TreeItem {
-  iconPath = vscode.ThemeIcon.File;
+export class ArticleItem extends TreeItem {
+  iconPath = ThemeIcon.File;
 
-  constructor(label: string, uri: string, collapsibleState?: vscode.TreeItemCollapsibleState) {
+  constructor(label: string, uri: string, collapsibleState?: TreeItemCollapsibleState) {
     super(label, collapsibleState);
 
-    this.resourceUri = vscode.Uri.file(uri);
+    this.resourceUri = Uri.file(uri);
     this.command = {
       title: 'open',
       command: Commands.open,

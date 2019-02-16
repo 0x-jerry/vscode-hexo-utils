@@ -2,8 +2,9 @@ import Token = require('markdown-it/lib/token');
 import StateInline = require('markdown-it/lib/rules_inline/state_inline');
 import * as MarkdownIt from 'markdown-it';
 import * as path from 'path';
-import { window, workspace } from 'vscode';
+import { window } from 'vscode';
 import * as fs from 'fs-extra';
+import { configs } from './configs';
 
 class MarkdownHexoPlugin {
   md: MarkdownIt;
@@ -137,12 +138,7 @@ class MarkdownHexoPlugin {
   }
 
   private getResDir(filePath: string) {
-    const resourceDir = path.join(
-      workspace.rootPath!,
-      'source',
-      '_posts',
-      path.parse(filePath).name,
-    );
+    const resourceDir = path.join(configs.hexoRoot!, 'source', '_posts', path.parse(filePath).name);
     return resourceDir;
   }
 }

@@ -13,6 +13,7 @@ import {
   CompletionItemKind,
 } from 'vscode';
 import { isHexoProject } from './utils';
+import { configs } from './configs';
 
 export class HexoCompletionProvider implements CompletionItemProvider {
   provideCompletionItems(
@@ -45,7 +46,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
 
         const filePath = document.uri.fsPath;
         const resourceDir = path.join(
-          workspace.rootPath!,
+          configs.hexoRoot!,
           'source',
           '_posts',
           path.parse(filePath).name,

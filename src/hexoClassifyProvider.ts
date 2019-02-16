@@ -1,19 +1,26 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
 import { getDirFiles, isHexoProject, warn } from './utils';
 import { Commands } from './commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
-import { getConfig, ConfigProperties } from './configs';
+import { getConfig, ConfigProperties, configs } from './configs';
 import * as yarmljs from 'yamljs';
 import * as fs from 'fs-extra';
+import {
+  TreeDataProvider,
+  EventEmitter,
+  TreeItem,
+  TreeItemCollapsibleState,
+  ThemeIcon,
+  Uri,
+} from 'vscode';
 
 export enum ClassifyTypes {
   category = 'categories',
   tag = 'tags',
 }
 
-export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyItem> {
-  private _onDidChangeTreeData = new vscode.EventEmitter<ClassifyItem | undefined>();
+export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
+  private _onDidChangeTreeData = new EventEmitter<ClassifyItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type: ClassifyTypes = ClassifyTypes.category;
@@ -28,7 +35,7 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
     this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: ClassifyItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+  getTreeItem(element: ClassifyItem): TreeItem | Thenable<TreeItem> {
     return element;
   }
 
@@ -37,8 +44,8 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
       return [];
     }
 
-    const postFolder = path.join(vscode.workspace.rootPath as string, 'source', `_posts`);
-    const draftFolder = path.join(vscode.workspace.rootPath as string, 'source', `_drafts`);
+    const postFolder = path.join(configs.hexoRoot!, 'source', `_posts`);
+    const draftFolder = path.join(configs.hexoRoot!, 'source', `_drafts`);
 
     const include = getConfig<boolean>(ConfigProperties.includeDraft);
 
@@ -99,7 +106,7 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
           t.name,
           this.type,
           undefined,
-          vscode.TreeItemCollapsibleState.Collapsed,
+          TreeItemCollapsibleState.Collapsed,
         );
         items.push(item);
       });
@@ -109,25 +116,25 @@ export class HexoClassifyProvider implements vscode.TreeDataProvider<ClassifyIte
   }
 }
 
-export class ClassifyItem extends vscode.TreeItem {
+export class ClassifyItem extends TreeItem {
   constructor(
     label: string,
     type: ClassifyTypes,
     uri?: string,
-    collapsibleState?: vscode.TreeItemCollapsibleState,
+    collapsibleState?: TreeItemCollapsibleState,
   ) {
     super(label, collapsibleState);
     const resourcesFolder = path.join(__dirname, '..', 'resources');
 
     this.iconPath = uri
-      ? vscode.ThemeIcon.File
+      ? ThemeIcon.File
       : {
           dark: path.join(resourcesFolder, `icon-${type}.svg`),
           light: path.join(resourcesFolder, `icon-${type}.svg`),
         };
 
     if (uri) {
-      this.resourceUri = vscode.Uri.file(uri);
+      this.resourceUri = Uri.file(uri);
 
       this.command = {
         title: 'open',

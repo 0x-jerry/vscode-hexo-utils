@@ -40,6 +40,11 @@
           "default": false,
           "description": "Controls whether include drafts."
         },
+        "hexo.hexoProjectRoot": {
+          "type": "string",
+          "default": "/",
+          "description": "`Hexo` project path(relative to current workspace root), default is workspace root"
+        },
         "hexo.markdown.resource": {
           "type": "boolean",
           "default": true,

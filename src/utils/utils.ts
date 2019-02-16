@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { spawn } from 'child_process';
-import { workspace, window } from 'vscode';
+import { window } from 'vscode';
+import { configs } from '../configs';
 
 function getPkg() {
-  const rootPath = workspace.rootPath;
+  const rootPath = configs.hexoRoot;
   if (!rootPath) {
     return null;
   }
@@ -28,7 +29,7 @@ function isHexoProject(): boolean {
 function exec(cmd: string, args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     const proc = spawn(cmd, args, {
-      cwd: workspace.rootPath,
+      cwd: configs.hexoRoot,
       shell: true,
     });
 
