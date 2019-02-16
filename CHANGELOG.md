@@ -1,3 +1,12 @@
+## [0.1.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.0...v0.1.1) (2019-02-16)
+
+
+### Features
+
+* Support when `hexo` project is a sub folder ([f5d94d2](https://github.com/cwxyz007/vscode-hexo-utils/commit/f5d94d2))
+
+
+
 # [0.1.0](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.9...v0.1.0) (2019-01-25)
 
 

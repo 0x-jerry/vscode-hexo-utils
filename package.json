@@ -2,8 +2,7 @@
   "name": "vscode-hexo-utils",
   "displayName": "vscode-hexo-utils",
   "description": "vscode extension for hexo",
-  "version": "0.1.0",
-  "preview": true,
+  "version": "0.1.1",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
@@ -42,7 +41,7 @@
         },
         "hexo.hexoProjectRoot": {
           "type": "string",
-          "default": "/",
+          "default": "",
           "description": "`Hexo` project path(relative to current workspace root), default is workspace root"
         },
         "hexo.markdown.resource": {
