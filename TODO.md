@@ -21,4 +21,5 @@
   - [ ] key shortcut [F2]
 - [x] auto refresh tags & categories when markdown file changed
 - [x] support `{% assert_link slug %}` & `{% img slug title %}` in markdown preview. [docs](https://hexo.io/docs/asset-folders.html)
+- [x] support `hexo` project is a sub folder. [config](./README.md#Extension-Setting)
 - [ ] support hexo tag syntax highlight

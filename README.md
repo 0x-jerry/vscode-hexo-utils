@@ -19,6 +19,7 @@ Open a [Hexo] project, and have fun.
 ## Extension Settings
 
 - `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default false.
+- `hexo.hexoProjectRoot`: `Hexo` project path(relative to current workspace root), default is workspace root.
 
 ## Known Issues
 
