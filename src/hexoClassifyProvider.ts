@@ -67,7 +67,7 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
       const filePath = filesPath[i];
       const content = await fs.readFile(filePath, { encoding: 'utf-8' });
       // /---(data)---/ => $1 === data
-      const yamlReg = /^---((.|\n|\r)+)---$/m;
+      const yamlReg = /^---((.|\n|\r)+?)---$/m;
 
       const yamlData = yamlReg.exec(content);
 
