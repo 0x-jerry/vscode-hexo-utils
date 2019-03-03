@@ -32,7 +32,8 @@ export class CreateArticle extends Command {
 
     try {
       await this.createResourceDir(title);
-      await this.createTplFile(title, type, template);
+      const filename = title.split('.').pop()!;
+      await this.createTplFile(filename, type, template);
     } catch (err) {
       error(`Create failed on [${template}], ${err}`);
     }
