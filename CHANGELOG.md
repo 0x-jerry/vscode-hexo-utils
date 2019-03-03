@@ -1,3 +1,20 @@
+## [0.1.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.0...v0.1.2) (2019-03-03)
+
+
+### Bug Fixes
+
+* Fix parse metadata error [#10](https://github.com/cwxyz007/vscode-hexo-utils/issues/10) ([1ff1b6d](https://github.com/cwxyz007/vscode-hexo-utils/commit/1ff1b6d))
+
+
+### Features
+
+* Support create with sub folder ([68e9fa5](https://github.com/cwxyz007/vscode-hexo-utils/commit/68e9fa5))
+* Support sub folder ([63c76ec](https://github.com/cwxyz007/vscode-hexo-utils/commit/63c76ec))
+* Support sub folder with markdown ([4de187f](https://github.com/cwxyz007/vscode-hexo-utils/commit/4de187f))
+* Support when `hexo` project is a sub folder ([f5d94d2](https://github.com/cwxyz007/vscode-hexo-utils/commit/f5d94d2))
+
+
+
 ## [0.1.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.0...v0.1.1) (2019-02-16)
 
 
