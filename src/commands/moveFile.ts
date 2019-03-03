@@ -13,14 +13,17 @@ export class MoveFile extends Command {
   }
 
   private async _move(item: ArticleItem, to: ArticleTypes) {
-    const toPath = path.join(configs.hexoRoot!, 'source', `_${to}s`);
+    const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
     const filePath = item.resourceUri!.fsPath;
 
-    const fileName = path.basename(filePath);
-
-    await fs.ensureDir(toPath);
+    const fileName = path.relative(
+      to === ArticleTypes.draft ? configs.paths.post : configs.paths.draft,
+      filePath,
+    );
 
     const destPath = path.join(toPath, fileName);
+
+    await fs.ensureDir(path.dirname(destPath));
 
     if ((await fs.pathExists(destPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;

@@ -9,7 +9,7 @@ import {
 import * as path from 'path';
 import { Commands } from './commands/common';
 import { ArticleTypes } from './commands/createArticle';
-import { getDirFiles, isHexoProject } from './utils';
+import { isHexoProject, getMDFiles } from './utils';
 import { configs } from './configs';
 
 export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
@@ -36,14 +36,13 @@ export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
       return items;
     }
 
-    const postsPath = path.join(configs.hexoRoot!, 'source', `_${this.type}s`);
+    const articleRootPath =
+      this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
 
-    const paths = await getDirFiles(postsPath);
+    const paths = await getMDFiles(articleRootPath);
 
     paths.forEach((p) => {
-      if (/\.md$/.test(p)) {
-        items.push(new ArticleItem(p, path.join(postsPath, p)));
-      }
+      items.push(new ArticleItem(p, path.join(articleRootPath, p)));
     });
 
     return items.sort((a, b) => (a.label! < b.label! ? -1 : 1));

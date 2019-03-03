@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { getDirFiles, isHexoProject, warn } from './utils';
+import { isHexoProject, warn, getMDFiles } from './utils';
 import { Commands } from './commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
 import { getConfig, ConfigProperties, configs } from './configs';
@@ -44,19 +44,17 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
       return [];
     }
 
-    const postFolder = path.join(configs.hexoRoot!, 'source', `_posts`);
-    const draftFolder = path.join(configs.hexoRoot!, 'source', `_drafts`);
+    const postFolder = configs.paths.post;
+    const draftFolder = configs.paths.draft;
 
     const include = getConfig<boolean>(ConfigProperties.includeDraft);
 
-    const postsPath = (await getDirFiles(postFolder))
-      .filter((p) => p.endsWith('.md'))
-      .map((p) => path.join(postFolder, p));
+    const postsPath = (await getMDFiles(postFolder)).map((p) => path.join(postFolder, p));
 
     let draftsPath: string[] = [];
 
     if (include) {
-      draftsPath = (await getDirFiles(draftFolder)).map((p) => path.join(draftFolder, p));
+      draftsPath = (await getMDFiles(draftFolder)).map((p) => path.join(draftFolder, p));
     }
 
     const filesPath = postsPath.concat(include ? draftsPath : []);
@@ -95,7 +93,11 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
             return;
           }
 
-          const item = new ClassifyItem(path.basename(f), this.type, f);
+          const isDraft = include && draftsPath.indexOf(f) !== -1;
+
+          const name = path.relative(isDraft ? draftFolder : postFolder, f);
+
+          const item = new ClassifyItem(name, this.type, f);
           items.push(item);
         });
       }
