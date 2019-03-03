@@ -36,21 +36,19 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       return [];
     }
 
-    const filename = path.parse(document.uri.fsPath).name;
+    const filePath = document.uri.fsPath;
+    const isDraft = filePath.includes('_drafts');
+    const fileDir = path
+      .relative(isDraft ? configs.paths.draft : configs.paths.post, filePath)
+      .replace(/\.md$/, '');
 
-    const resFolder = `source/_posts/${filename}/**/*.{png,jpg,jpeg,svg,gif}`;
+    const resFolder = `source/_posts/${fileDir}/**/*.{png,jpg,jpeg,svg,gif}`;
 
     return workspace.findFiles(resFolder, '**/node_modules/**').then((uris) => {
       return uris.map((imgUri) => {
         const relPath = path.relative(document.uri.fsPath, imgUri.fsPath);
 
-        const filePath = document.uri.fsPath;
-        const resourceDir = path.join(
-          configs.hexoRoot!,
-          'source',
-          '_posts',
-          path.parse(filePath).name,
-        );
+        const resourceDir = path.join(configs.paths.post, fileDir);
 
         const itemLabel = imgUri.fsPath.substr(resourceDir.length + 1).replace('\\', '/');
 

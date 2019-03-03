@@ -138,7 +138,12 @@ class MarkdownHexoPlugin {
   }
 
   private getResDir(filePath: string) {
-    const resourceDir = path.join(configs.hexoRoot!, 'source', '_posts', path.parse(filePath).name);
+    const isDraft = filePath.indexOf('_drafts') !== -1;
+    const fileDir = path
+      .relative(isDraft ? configs.paths.draft : configs.paths.post, filePath)
+      .replace(/\.md$/, '');
+
+    const resourceDir = path.join(configs.paths.post, fileDir);
     return resourceDir;
   }
 }
