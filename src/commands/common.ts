@@ -15,14 +15,14 @@ export enum Commands {
   delete = 'hexo.delete',
   rename = 'hexo.rename',
   refresh = 'hexo.refresh',
+  refreshPost = 'hexo.refresh[post]',
+  refreshDraft = 'hexo.refresh[draft]',
+  refreshTags = 'hexo.refresh[tags]',
+  refreshCategories = 'hexo.refresh[categories]',
   newPost = 'hexo.new[post]',
   newDraft = 'hexo.new[draft]',
   moveToDraft = 'hexo.moveTo[draft]',
   moveToPost = 'hexo.moveTo[post]',
-}
-
-interface ICommandConstructor {
-  new (): any;
 }
 
 export interface ICommandParsed {
@@ -84,7 +84,7 @@ export abstract class Command implements Disposable {
   }
 }
 
-const registrableCommands: ICommandConstructor[] = [];
+const registrableCommands: any[] = [];
 
 export function command(): ClassDecorator {
   return (target: any) => {

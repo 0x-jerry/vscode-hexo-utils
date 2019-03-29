@@ -1,8 +1,8 @@
 import * as path from 'path';
-import { isHexoProject, warn, getMDFiles } from './utils';
-import { Commands } from './commands/common';
-import { HexoMetadataUtils, IHexoMetadata } from './hexoMetadata';
-import { getConfig, ConfigProperties, configs } from './configs';
+import { isHexoProject, warn, getMDFiles } from '../../utils';
+import { Commands } from '../../commands/common';
+import { HexoMetadataUtils, IHexoMetadata } from '../../hexoMetadata';
+import { getConfig, ConfigProperties, configs } from '../../configs';
 import * as yarmljs from 'yamljs';
 import * as fs from 'fs-extra';
 import {
@@ -126,7 +126,7 @@ export class ClassifyItem extends TreeItem {
     collapsibleState?: TreeItemCollapsibleState,
   ) {
     super(label, collapsibleState);
-    const resourcesFolder = path.join(__dirname, '..', 'resources');
+    const resourcesFolder = configs.project.resource;
 
     this.iconPath = uri
       ? ThemeIcon.File

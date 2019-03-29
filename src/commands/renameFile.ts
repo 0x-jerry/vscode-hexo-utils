@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { askForNext } from '../utils';
-import { ArticleItem } from '../hexoArticleProvider';
+import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { window } from 'vscode';
 import { Command, ICommandParsed, Commands, command } from './common';
 import * as fs from 'fs-extra';

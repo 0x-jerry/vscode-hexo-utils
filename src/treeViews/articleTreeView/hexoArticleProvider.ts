@@ -7,10 +7,10 @@ import {
   Uri,
 } from 'vscode';
 import * as path from 'path';
-import { Commands } from './commands/common';
-import { ArticleTypes } from './commands/createArticle';
-import { isHexoProject, getMDFiles } from './utils';
-import { configs } from './configs';
+import { Commands } from '../../commands/common';
+import { ArticleTypes } from '../../commands/createArticle';
+import { isHexoProject, getMDFiles } from '../../utils';
+import { configs } from '../../configs';
 
 export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
   private _onDidChangeTreeData = new EventEmitter<ArticleItem | undefined>();

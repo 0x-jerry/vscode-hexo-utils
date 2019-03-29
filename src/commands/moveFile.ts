@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { askForNext, error } from '../utils';
-import { ArticleItem } from '../hexoArticleProvider';
+import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
 import * as fs from 'fs-extra';

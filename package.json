@@ -82,7 +82,39 @@
       },
       {
         "command": "hexo.refresh",
-        "title": "Refresh",
+        "title": "Refresh sidebar",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.refresh[post]",
+        "title": "Refresh post",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-refresh.svg",
+          "dark": "resources/dark/icon-refresh.svg"
+        }
+      },
+      {
+        "command": "hexo.refresh[draft]",
+        "title": "Refresh draft",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-refresh.svg",
+          "dark": "resources/dark/icon-refresh.svg"
+        }
+      },
+      {
+        "command": "hexo.refresh[tags]",
+        "title": "Refresh tags",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-refresh.svg",
+          "dark": "resources/dark/icon-refresh.svg"
+        }
+      },
+      {
+        "command": "hexo.refresh[categories]",
+        "title": "Refresh categories",
         "category": "Hexo Utils",
         "icon": {
           "light": "resources/light/icon-refresh.svg",
@@ -170,8 +202,24 @@
       ],
       "view/title": [
         {
-          "command": "hexo.refresh",
-          "group": "navigation"
+          "command": "hexo.refresh[post]",
+          "group": "navigation",
+          "when": "view == hexo.post"
+        },
+        {
+          "command": "hexo.refresh[draft]",
+          "group": "navigation",
+          "when": "view == hexo.draft"
+        },
+        {
+          "command": "hexo.refresh[tags]",
+          "group": "navigation",
+          "when": "view == hexo.tags"
+        },
+        {
+          "command": "hexo.refresh[categories]",
+          "group": "navigation",
+          "when": "view == hexo.categories"
         },
         {
           "command": "hexo.new[post]",

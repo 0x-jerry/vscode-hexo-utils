@@ -43,6 +43,9 @@ const configs = {
       return null;
     }
   },
+  project: {
+    resource: path.join(__dirname, '..', 'resources'),
+  },
 };
 
 export { getConfig, ConfigProperties, configs };

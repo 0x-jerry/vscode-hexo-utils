@@ -1,5 +1,5 @@
 import { error } from '../utils';
-import { ArticleItem } from '../hexoArticleProvider';
+import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { Command, ICommandParsed, Commands, command } from './common';
 import * as fs from 'fs-extra';
 import * as path from 'path';

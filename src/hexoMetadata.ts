@@ -1,4 +1,4 @@
-import { ClassifyTypes } from './hexoClassifyProvider';
+import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider';
 
 export interface IHexoMetadata {
   tags?: string[];
