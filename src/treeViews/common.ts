@@ -1,8 +1,24 @@
-import { ExtensionContext, window, TreeDataProvider, TreeViewOptions, TreeView } from 'vscode';
+import {
+  ExtensionContext,
+  window,
+  TreeDataProvider,
+  TreeViewOptions,
+  TreeView,
+  Disposable,
+} from 'vscode';
 
 const treeViews: any[] = [];
 
-export abstract class BaseTreeView<T> {
+export enum ViewTypes {
+  post = 'hexo.post',
+  draft = 'hexo.draft',
+  categories = 'hexo.categories',
+  tags = 'hexo.tags',
+}
+
+export abstract class BaseTreeView<T> implements Disposable {
+  private _disposable: Disposable;
+
   treeView: TreeView<T>;
 
   constructor(id: string, provider: TreeDataProvider<T>, opts: Partial<TreeViewOptions<T>>) {
@@ -12,6 +28,16 @@ export abstract class BaseTreeView<T> {
       treeDataProvider: provider,
       ...opts,
     });
+
+    this._disposable = Disposable.from(this.treeView);
+  }
+
+  subscribe(...disposables: Disposable[]) {
+    this._disposable = Disposable.from(this._disposable, ...disposables);
+  }
+
+  dispose() {
+    this._disposable.dispose();
   }
 }
 
@@ -23,8 +49,6 @@ export function treeView(): ClassDecorator {
 
 export function registerTreeViews(context: ExtensionContext) {
   for (const TreeViewClass of treeViews) {
-    const tv: BaseTreeView<any> = new TreeViewClass(context);
-
-    context.subscriptions.push(tv.treeView);
+    context.subscriptions.push(new TreeViewClass(context));
   }
 }

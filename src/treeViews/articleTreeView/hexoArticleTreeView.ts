@@ -1,22 +1,19 @@
 import { HexoArticleProvider, ArticleItem } from './hexoArticleProvider';
 import { ArticleTypes, Commands } from '../../commands';
-import { TreeViewOptions, ExtensionContext, commands } from 'vscode';
-import { BaseTreeView } from '../common';
+import { TreeViewOptions, commands } from 'vscode';
+import { BaseTreeView, ViewTypes } from '../common';
 
 export class ArticleTreeView extends BaseTreeView<ArticleItem> {
-  ctx: ExtensionContext;
   provider: HexoArticleProvider;
 
   constructor(
-    ctx: ExtensionContext,
-    viewId: string,
+    viewId: ViewTypes,
     type: ArticleTypes,
     opts: Partial<TreeViewOptions<ArticleItem>> = {},
   ) {
     const provider = new HexoArticleProvider(type);
     super(viewId, provider, opts);
 
-    this.ctx = ctx;
     this.provider = provider;
 
     this.onDidChanged();
@@ -30,6 +27,6 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
 
   registerRefreshCmd(cmd: Commands) {
     const _cmd = commands.registerCommand(cmd, () => this.provider.refresh());
-    this.ctx.subscriptions.push(_cmd);
+    this.subscribe(_cmd);
   }
 }

@@ -1,21 +1,19 @@
 import { ArticleTreeView } from './hexoArticleTreeView';
 import { ArticleTypes, Commands } from '../../commands';
-import { treeView } from '../common';
-import { ExtensionContext } from 'vscode';
+import { treeView, ViewTypes } from '../common';
 
 @treeView()
 export class PostArticleTreeView extends ArticleTreeView {
-  constructor(context: ExtensionContext) {
-    super(context, 'hexo.post', ArticleTypes.post);
+  constructor() {
+    super(ViewTypes.post, ArticleTypes.post);
     this.registerRefreshCmd(Commands.refreshPost);
   }
 }
 
 @treeView()
 export class DraftArticleTreeView extends ArticleTreeView {
-  constructor(context: ExtensionContext) {
-    super(context, 'hexo.draft', ArticleTypes.draft);
-    this.ctx = context;
+  constructor() {
+    super(ViewTypes.draft, ArticleTypes.draft);
     this.registerRefreshCmd(Commands.refreshDraft);
   }
 }

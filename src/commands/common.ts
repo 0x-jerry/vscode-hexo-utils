@@ -79,6 +79,10 @@ export abstract class Command implements Disposable {
     return this.execute(cmd, ...args);
   }
 
+  subscribe(...disposables: Disposable[]) {
+    this._disposable = Disposable.from(this._disposable, ...disposables);
+  }
+
   dispose() {
     this._disposable.dispose();
   }
