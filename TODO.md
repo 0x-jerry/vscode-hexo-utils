@@ -16,7 +16,7 @@
   - [x] support markdown preview image from hexo resource folder
 - [x] sort article
   - [x] by name
-  - [ ] by date metadata
+  - [x] by date metadata
 - [x] rename a post or draft
   - [ ] key shortcut [F2]
 - [x] auto refresh tags & categories when markdown file changed
