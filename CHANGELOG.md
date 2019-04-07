@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.2...v0.1.3) (2019-04-07)
+
+
+### Features
+
+* Add sort method config [#11](https://github.com/cwxyz007/vscode-hexo-utils/issues/11) ([a038244](https://github.com/cwxyz007/vscode-hexo-utils/commit/a038244))
+
+
+
 ## [0.1.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.0...v0.1.2) (2019-03-03)
 
 
