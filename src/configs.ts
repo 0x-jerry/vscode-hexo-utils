@@ -8,6 +8,12 @@ enum ConfigProperties {
   includeDraft = 'includeDraft',
   resolveMarkdownResource = 'markdown.resource',
   hexoRoot = 'hexoProjectRoot',
+  sortMethod = 'sortMethod',
+}
+
+export enum SortBy {
+  name = 'name',
+  date = 'date',
 }
 
 function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T | undefined {

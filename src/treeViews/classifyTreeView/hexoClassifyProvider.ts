@@ -1,10 +1,9 @@
 import * as path from 'path';
-import { isHexoProject, warn, getMDFiles } from '../../utils';
+import { isHexoProject, warn, getMDFiles, getMDFileMetadata } from '../../utils';
 import { Commands } from '../../commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from '../../hexoMetadata';
 import { getConfig, ConfigProperties, configs } from '../../configs';
-import * as yarmljs from 'yamljs';
-import * as fs from 'fs-extra';
+
 import {
   TreeDataProvider,
   EventEmitter,
@@ -61,24 +60,15 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
 
     const filesData: IHexoMetadata[] = [];
 
-    for (let i = 0; i < filesPath.length; i++) {
-      const filePath = filesPath[i];
-      const content = await fs.readFile(filePath, { encoding: 'utf-8' });
-      // /---(data)---/ => $1 === data
-      const yamlReg = /^---((.|\n|\r)+?)---$/m;
-
-      const yamlData = yamlReg.exec(content);
-
-      if (yamlData && yamlData[1]) {
-        try {
-          const metadata = yarmljs.parse(yamlData[1]) as IHexoMetadata;
-          filesData.push({
-            ...metadata,
-            filePath,
-          });
-        } catch (err) {
-          warn(`Parse [ ${filePath} ] metadata error: ${err}`);
-        }
+    for (const filePath of filesPath) {
+      try {
+        const metadata = await getMDFileMetadata(filePath);
+        filesData.push({
+          ...metadata,
+          filePath,
+        });
+      } catch (error) {
+        warn(`Parse [ ${filePath} ] metadata error: ${error}`);
       }
     }
 

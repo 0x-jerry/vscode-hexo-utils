@@ -1,8 +1,10 @@
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
+import * as yamljs from 'yamljs';
 import { spawn } from 'child_process';
 import { window } from 'vscode';
 import { configs } from '../configs';
+import { IHexoMetadata } from '../hexoMetadata';
 
 function getPkg() {
   const rootPath = configs.hexoRoot;
@@ -55,4 +57,14 @@ async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
-export { isHexoProject, askForNext, exec };
+async function getMDFileMetadata(path: string) {
+  const content = await fs.readFile(path, { encoding: 'utf-8' });
+  // /---(data)---/ => $1 === data
+  const yamlReg = /^---((.|\n|\r)+?)---$/m;
+
+  const yamlData = yamlReg.exec(content);
+
+  return yamljs.parse(yamlData![1]) as IHexoMetadata;
+}
+
+export { isHexoProject, askForNext, exec, getMDFileMetadata };

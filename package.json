@@ -34,6 +34,12 @@
     "configuration": {
       "title": "Hexo",
       "properties": {
+        "hexo.sortMethod": {
+          "type": "string",
+          "default": "name",
+          "enum": ["name", "date"],
+          "description": "Controls posts(drafts) sorted method, default sort by name."
+        },
         "hexo.includeDraft": {
           "type": "boolean",
           "default": false,

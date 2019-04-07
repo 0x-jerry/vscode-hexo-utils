@@ -26,13 +26,15 @@ export class RefreshSidebar extends Command {
   }
 
   configChanged() {
-    // Auto refresh when hexo root changed
+    // Auto refresh when config changed
     workspace.onDidChangeConfiguration((e) => {
       const hexoProjectConfig = ConfigProperties.SECTION + '.' + ConfigProperties.hexoRoot;
+      const sortMethodConfig = ConfigProperties.SECTION + '.' + ConfigProperties.sortMethod;
 
       const hexoRootChanged = e.affectsConfiguration(hexoProjectConfig);
+      const sortMethod = e.affectsConfiguration(sortMethodConfig);
 
-      if (hexoRootChanged) {
+      if (hexoRootChanged || sortMethod) {
         this.refreshAll();
       }
     });
