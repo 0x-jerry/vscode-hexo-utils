@@ -37,7 +37,10 @@
         "hexo.sortMethod": {
           "type": "string",
           "default": "name",
-          "enum": ["name", "date"],
+          "enum": [
+            "name",
+            "date"
+          ],
           "description": "Controls posts(drafts) sorted method, default sort by name."
         },
         "hexo.includeDraft": {
@@ -265,9 +268,11 @@
   },
   "scripts": {
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r",
-    "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "webpack --mode production",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch",
+    "test-compile": "tsc -p ./",
+    "lint": "tslint -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "yarn run compile && node ./node_modules/vscode/bin/test"
   },
@@ -280,9 +285,12 @@
     "@types/node": "^8.10.25",
     "@types/yamljs": "^0.2.30",
     "conventional-changelog-cli": "^2.0.11",
+    "ts-loader": "^6.0.1",
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
-    "vscode": "^1.1.25"
+    "vscode": "^1.1.25",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
   },
   "dependencies": {
     "debounce": "^1.2.0",
