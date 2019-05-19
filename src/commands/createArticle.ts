@@ -31,20 +31,22 @@ export class CreateArticle extends Command {
     }
 
     try {
-      await this.createResourceDir(title);
-      const filename = title.split('.').pop()!;
-      await this.createTplFile(filename, type, template);
+      const filePath = title.split('.').pop()!;
+      await this.createTplFile(filePath, type, template);
     } catch (err) {
       error(`Create failed on [${template}], ${err}`);
     }
   }
 
-  private async createTplFile(filename: string, type: ArticleTypes, template: string) {
+  private async createTplFile(filePath: string, type: ArticleTypes, template: string) {
+    const filePathInfo = path.parse(filePath + '.md');
+    console.log(filePathInfo);
+
     const typeFolder = configs.paths[type];
 
     await fs.ensureDir(typeFolder);
 
-    const createFilePath = path.join(typeFolder, filename + '.md');
+    const createFilePath = path.join(typeFolder, filePathInfo.dir, filePathInfo.base);
 
     if (
       (await fs.pathExists(createFilePath)) &&
@@ -57,16 +59,20 @@ export class CreateArticle extends Command {
     const tpl = await fs.readFile(tplPath, { encoding: 'utf-8' });
 
     const result = mustache.render(tpl, {
-      title: filename,
+      title: filePathInfo.name,
       date: new Date().toISOString(),
     });
 
+    // ensure file dir
+    await fs.ensureDir(path.join(typeFolder, filePathInfo.dir));
+
     await fs.writeFile(createFilePath, result, { encoding: 'utf-8' });
+
+    await this.createResourceDir(path.join(typeFolder, filePathInfo.dir, filePathInfo.name));
   }
 
-  private async createResourceDir(filename: string) {
+  private async createResourceDir(fileAssetPath: string) {
     const hexoConf = await configs.hexoConfig();
-    const fileAssetPath = path.join(configs.paths.post, filename);
     if (hexoConf && hexoConf.post_asset_folder && !(await fs.pathExists(fileAssetPath))) {
       await fs.mkdir(fileAssetPath);
     }

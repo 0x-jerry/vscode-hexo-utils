@@ -22,8 +22,6 @@ export abstract class BaseTreeView<T> implements Disposable {
   treeView: TreeView<T>;
 
   constructor(id: string, provider: TreeDataProvider<T>, opts: Partial<TreeViewOptions<T>>) {
-    console.log(id, provider, opts);
-
     this.treeView = window.createTreeView(id, {
       treeDataProvider: provider,
       ...opts,
