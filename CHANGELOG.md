@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.3...v0.1.4) (2019-05-19)
+
+
+### Bug Fixes
+
+* Fixed create file when input sub folder ([f875ccc](https://github.com/cwxyz007/vscode-hexo-utils/commit/f875ccc))
+
+
+
 ## [0.1.3](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.2...v0.1.3) (2019-04-07)
 
 
