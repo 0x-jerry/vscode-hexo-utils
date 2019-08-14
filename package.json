@@ -271,10 +271,10 @@
     "vscode:prepublish": "webpack --mode production",
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch",
-    "test-compile": "tsc -p ./",
+    "test:compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "yarn run compile && node ./node_modules/vscode/bin/test"
+    "test": "yarn run test:compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
