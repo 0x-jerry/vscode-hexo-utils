@@ -1,3 +1,12 @@
+## [0.1.7](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.6...v0.1.7) (2019-08-14)
+
+
+### Bug Fixes
+
+* Fixed resource path ([962a138](https://github.com/cwxyz007/vscode-hexo-utils/commit/962a138))
+
+
+
 ## [0.1.6](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.5...v0.1.6) (2019-08-14)
 
 
