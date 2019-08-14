@@ -1,3 +1,12 @@
+## [0.1.5](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.4...v0.1.5) (2019-08-14)
+
+
+### Performance Improvements
+
+* Update resource ([14b0f6f](https://github.com/cwxyz007/vscode-hexo-utils/commit/14b0f6f))
+
+
+
 ## [0.1.4](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.3...v0.1.4) (2019-05-19)
 
 
