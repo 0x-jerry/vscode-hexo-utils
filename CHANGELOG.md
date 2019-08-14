@@ -1,3 +1,12 @@
+## [0.1.6](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.5...v0.1.6) (2019-08-14)
+
+
+### Bug Fixes
+
+* Fixed extension entry point ([474acf0](https://github.com/cwxyz007/vscode-hexo-utils/commit/474acf0))
+
+
+
 ## [0.1.5](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.4...v0.1.5) (2019-08-14)
 
 
