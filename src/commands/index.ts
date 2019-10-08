@@ -5,3 +5,4 @@ export * from './moveFile';
 export * from './deleteFile';
 export * from './renameFile';
 export * from './refreshSidebar';
+export * from './pasteImage';

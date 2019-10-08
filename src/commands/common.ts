@@ -12,6 +12,7 @@ import { isHexoProject } from '../utils';
 export enum Commands {
   new = 'hexo.new',
   open = 'hexo.open',
+  paste = 'hexo.paste',
   delete = 'hexo.delete',
   rename = 'hexo.rename',
   refresh = 'hexo.refresh',
