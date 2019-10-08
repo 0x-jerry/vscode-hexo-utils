@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { spawn } from 'child_process';
 import * as dayjs from 'dayjs';
-import { window } from 'vscode';
+import { window, TextEditor } from 'vscode';
 import { warn, error, askForNext } from '../utils';
 import { Command, ICommandParsed, command, Commands } from './common';
 
@@ -12,11 +12,7 @@ export class PasteImage extends Command {
     super(Commands.paste);
   }
 
-  getCurrentDocPath() {
-    const editor = window.activeTextEditor;
-    if (!editor) {
-      return false;
-    }
+  getCurrentDocPath(editor: TextEditor) {
     const uri = editor.document.uri;
 
     if (uri.scheme === 'untitled') {
@@ -26,33 +22,66 @@ export class PasteImage extends Command {
     return uri.fsPath;
   }
 
+  async getImageFilePath(editor: TextEditor) {
+    const filePath = this.getCurrentDocPath(editor);
+    if (!filePath) {
+      return false;
+    }
+
+    const uri = path.parse(filePath);
+    const imageFolder = path.join(uri.dir, uri.name);
+
+    const selectText = editor.document.getText(editor.selection);
+
+    let name = dayjs().format('YYYY-MM-DDTHHmmss.png');
+
+    if (selectText && !/[\/\\:*?<>|\s]/.test(selectText)) {
+      name = selectText + '.png';
+    }
+
+    await fs.ensureDir(imageFolder);
+    return path.join(imageFolder, name);
+  }
+
   async execute(cmd: ICommandParsed): Promise<any> {
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
     try {
-      const filePath = this.getCurrentDocPath();
-      if (!filePath) {
+      const imagePath = await this.getImageFilePath(editor);
+      if (!imagePath) {
         return;
       }
 
-      const uri = path.parse(filePath);
-      const imageFolder = path.join(uri.dir, uri.name);
-      await fs.ensureDir(imageFolder);
-
-      const name = dayjs().format('YYYY-MM-DD HHmmss.png');
-
-      const imagePath = path.join(imageFolder, name);
-
-      if (await fs.pathExists(imagePath)) {
-        try {
-          await askForNext(`${imagePath} existed, would you want to replace ?`);
-        } catch (error) {
-          return;
-        }
+      if (
+        (await fs.pathExists(imagePath)) &&
+        !(await askForNext(`${imagePath} existed, would you want to replace ?`))
+      ) {
+        return;
       }
 
       await this.pasteImage(imagePath);
+      this.updateEditor(imagePath, editor);
     } catch (err) {
       error(err);
     }
+  }
+
+  updateEditor(imagePath: string, editor: TextEditor) {
+    editor.edit((edit) => {
+      const current = editor.selection;
+
+      const parsed = path.parse(imagePath);
+      const insertText = `![${parsed.name}](${parsed.base})`;
+
+      if (current.isEmpty) {
+        edit.insert(current.start, insertText);
+      } else {
+        edit.replace(current, insertText);
+      }
+    });
   }
 
   getCommand(destPath: string) {
