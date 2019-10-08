@@ -9,6 +9,7 @@ Open a [Hexo] project, and have fun.
 - Sidebar, include tags, categories, posts and drafts
 - Markdown preview
 - Assets path completion
+- Paste image directly from clipboard, default shortcut is `ctrl+alt+v` (Thanks [vscode-paste-image] project)
 
 ![screen](docs-images/screen.gif)
 
@@ -19,8 +20,9 @@ Open a [Hexo] project, and have fun.
 ## Extension Settings
 
 - `hexo.sortMethod`: Controls posts(drafts) sorted method, default sort by name.
-- `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default false.
+- `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default `false`.
 - `hexo.hexoProjectRoot`: `Hexo` project path(relative to current workspace root), default is workspace root.
+- `hexo.markdown.resource`: Controls whether resolve image with hexo resource folder, default is `true`.
 
 ## Known Issues
 
@@ -37,3 +39,4 @@ See [CHANGELOG](CHANGELOG.md)
 **Enjoy!**
 
 [hexo]: https://hexo.io
+[vscode-paste-image]: https://github.com/mushanshitiancai/vscode-paste-image
