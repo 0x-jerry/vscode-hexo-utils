@@ -1,4 +1,4 @@
-# vscode-hexo-utils README
+# VSCode Hexo Utils
 
 A sidebar for [Hexo].
 
