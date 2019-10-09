@@ -1,3 +1,17 @@
+## [0.1.8](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.7...v0.1.8) (2019-10-09)
+
+
+### Features
+
+* Add paste image directly ([2562290](https://github.com/cwxyz007/vscode-hexo-utils/commit/2562290))
+
+
+### Performance Improvements
+
+* Update editor text when paste image ([a0153cb](https://github.com/cwxyz007/vscode-hexo-utils/commit/a0153cb))
+
+
+
 ## [0.1.7](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.6...v0.1.7) (2019-08-14)
 
 
