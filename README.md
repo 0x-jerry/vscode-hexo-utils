@@ -26,11 +26,11 @@ Open a [Hexo] project, and have fun.
 
 ## Known Issues
 
-[Bug report](https://github.com/cwxyz007/vscode-hexo-utils/issues)
+[Bug report](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
 
 ## Need Feature
 
-[Feature require](https://github.com/cwxyz007/vscode-hexo-utils/issues)
+[Feature require](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=feature_request.md&title=)
 
 ## Release Notes
 
