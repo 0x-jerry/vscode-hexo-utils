@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { isHexoProject, warn, getMDFiles, getMDFileMetadata } from '../../utils';
+import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
 import { Commands } from '../../commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from '../../hexoMetadata';
 import { getConfig, ConfigProperties, configs } from '../../configs';
@@ -61,15 +61,9 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
     const filesData: IHexoMetadata[] = [];
 
     for (const filePath of filesPath) {
-      try {
-        const metadata = await getMDFileMetadata(filePath);
-        filesData.push({
-          ...metadata,
-          filePath,
-        });
-      } catch (error) {
-        warn(`Parse [ ${filePath} ] metadata error: ${error}`);
-      }
+      const metadata = (await getMDFileMetadata(filePath))!;
+
+      filesData.push(metadata);
     }
 
     const items: ClassifyItem[] = [];

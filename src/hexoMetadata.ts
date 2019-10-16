@@ -1,10 +1,10 @@
 import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider';
 
 export interface IHexoMetadata {
-  tags?: string[];
-  categories?: string[];
-  title?: string;
-  date?: Date;
+  tags: string[];
+  categories: string[];
+  title: string;
+  date: Date;
   filePath: string;
 }
 

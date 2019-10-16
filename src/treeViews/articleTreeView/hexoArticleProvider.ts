@@ -44,7 +44,7 @@ export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
 
     for (const p of paths) {
       const filePath = path.join(articleRootPath, p);
-      const metadata = await getMDFileMetadata(filePath);
+      const metadata = (await getMDFileMetadata(filePath))!;
       items.push(new ArticleItem(p, path.join(articleRootPath, p), metadata));
     }
 

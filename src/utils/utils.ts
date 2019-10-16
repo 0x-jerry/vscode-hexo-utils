@@ -5,6 +5,7 @@ import { spawn } from 'child_process';
 import { window } from 'vscode';
 import { configs } from '../configs';
 import { IHexoMetadata } from '../hexoMetadata';
+import { warn } from './log';
 
 function getPkg() {
   const rootPath = configs.hexoRoot;
@@ -57,14 +58,26 @@ async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
-async function getMDFileMetadata(path: string) {
-  const content = await fs.readFile(path, { encoding: 'utf-8' });
-  // /---(data)---/ => $1 === data
-  const yamlReg = /^---((.|\n|\r)+?)---$/m;
+async function getMDFileMetadata(path: string): Promise<IHexoMetadata | undefined> {
+  try {
+    const content = await fs.readFile(path, { encoding: 'utf-8' });
+    // /---(data)---/ => $1 === data
+    const yamlReg = /^---((.|\n|\r)+?)---$/m;
 
-  const yamlData = yamlReg.exec(content);
+    const yamlData = yamlReg.exec(content);
 
-  return yamljs.parse(yamlData![1]) as IHexoMetadata;
+    const data = yamljs.parse(yamlData![1]) || {};
+
+    return {
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      filePath: path,
+      categories: Array.isArray(data.categories) ? data.categories : [],
+      title: data.title || '',
+      date: data.date || '',
+    };
+  } catch (error) {
+    warn(`Parse [ ${path} ] metadata error: ${error}`);
+  }
 }
 
 export { isHexoProject, askForNext, exec, getMDFileMetadata };
