@@ -1,3 +1,12 @@
+## [0.1.9](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.8...v0.1.9) (2019-10-19)
+
+
+### Bug Fixes
+
+* Fixed parse metadata [#20](https://github.com/cwxyz007/vscode-hexo-utils/issues/20) ([5e30f90](https://github.com/cwxyz007/vscode-hexo-utils/commit/5e30f90))
+
+
+
 ## [0.1.8](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.7...v0.1.8) (2019-10-09)
 
 
