@@ -2,14 +2,12 @@ import Token = require('markdown-it/lib/token');
 import StateInline = require('markdown-it/lib/rules_inline/state_inline');
 import * as MarkdownIt from 'markdown-it';
 import * as path from 'path';
-import { window } from 'vscode';
+import { window, Uri } from 'vscode';
 import * as fs from 'fs-extra';
 import { configs } from './configs';
 
 class MarkdownHexoPlugin {
   md: MarkdownIt;
-
-  static vsResPrefix = 'vscode-resource:/';
 
   constructor(md: MarkdownIt) {
     this.md = md;
@@ -68,9 +66,13 @@ class MarkdownHexoPlugin {
   private hexoLinkTagRule(status: StateInline, href: string, text: string) {
     const token = status.push('link', 'a', 1);
 
-    const info = this.getResInfo(href);
-    token.attrs = [['href', info.src], ['alt', text]];
-    token.content = `[${text}](${info.src})`;
+    const src = this.getImgCorrectPath(href);
+    token.attrs = [
+      ['href', src],
+      ['alt', text],
+    ];
+
+    token.content = `[${text}](${src})`;
 
     const textToken = status.push('text', '', 0);
     textToken.content = text || '';
@@ -80,8 +82,7 @@ class MarkdownHexoPlugin {
 
   private hexoImageTagRule(status: StateInline, src: string, alt: string) {
     const token = status.push('image', 'img', 0);
-    const info = this.getResInfo(src);
-    this.createHexoImg(token, info.src, alt);
+    this.createHexoImg(token, this.getImgCorrectPath(src), alt);
   }
 
   private hexoImageRenderRule() {
@@ -90,31 +91,22 @@ class MarkdownHexoPlugin {
     this.md.renderer.rules.image = (tokens, idx, opts, env, self) => {
       const token = tokens[idx];
 
-      const prefix = MarkdownHexoPlugin.vsResPrefix;
-      const filePath = window.activeTextEditor!.document.uri.fsPath;
+      // relative path
+      const src = this.getImgCorrectPath(token.attrGet('src') || '');
 
-      const oldSrc = token.attrGet('src') || '';
-      const srcUri = oldSrc.substr(prefix.length);
-      // c:/xxx/xx/source/_posts/xxx/xxx.png => xxx/xxx.png
-      const srcName = srcUri.substr(path.dirname(filePath).length + 1);
+      token.attrSet('src', src);
 
-      const resourceDir = this.getResDir(filePath);
-
-      if (!fs.existsSync(srcUri) && fs.existsSync(path.join(resourceDir, srcName))) {
-        const alt = token.attrGet('alt') || '';
-
-        return `<img src="${prefix + path.join(resourceDir, srcName)}" alt="${alt}" />`;
-      } else {
-        // pass token to default renderer.
-        return defaultRender(tokens, idx, opts, env, self);
-      }
+      return defaultRender(tokens, idx, opts, env, self);
     };
   }
 
   private createHexoImg(token: Token, src: string, alt: string) {
     token.type = 'image';
     token.tag = 'img';
-    token.attrs = [['src', src], ['alt', alt]];
+    token.attrs = [
+      ['src', src],
+      ['alt', alt],
+    ];
     token.content = `![${alt}](${src})`;
 
     const textToken = new Token('text', '', 0);
@@ -123,18 +115,27 @@ class MarkdownHexoPlugin {
     token.children = [textToken];
   }
 
-  private getResInfo(resRelativePath: string) {
-    const prefix = MarkdownHexoPlugin.vsResPrefix;
-    const filePath = window.activeTextEditor!.document.uri.fsPath;
-    const resourceDir = this.getResDir(filePath);
+  private getImgCorrectPath(imgNameWidthExt: string): string {
+    let resultPath = imgNameWidthExt;
 
-    const localPath = path.join(resourceDir, resRelativePath);
-    const vscodeSrc = prefix + localPath;
+    try {
+      Uri.parse(imgNameWidthExt, true);
+      resultPath = imgNameWidthExt;
+    } catch {
+      if (!window.activeTextEditor) {
+        resultPath = imgNameWidthExt;
+      } else {
+        const filePath = window.activeTextEditor.document.uri.fsPath;
+        const resourceDir = this.getResDir(filePath);
 
-    return {
-      src: vscodeSrc,
-      filePath,
-    };
+        const imgPath = path.join(resourceDir, imgNameWidthExt);
+        const relativePath = path.relative(path.parse(filePath).dir, imgPath);
+
+        resultPath = fs.existsSync(imgPath) ? relativePath : imgNameWidthExt;
+      }
+    }
+
+    return resultPath;
   }
 
   private getResDir(filePath: string) {
