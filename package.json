@@ -16,6 +16,9 @@
     "url": "https://github.com/cwxyz007/vscode-hexo-utils.git"
   },
   "publisher": "fantasy",
+  "engines": {
+    "vscode": "^1.41.1"
+  },
   "categories": [
     "Other"
   ],
