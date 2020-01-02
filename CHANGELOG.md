@@ -1,3 +1,17 @@
+## [0.1.10](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.9...v0.1.10) (2020-01-02)
+
+
+### Bug Fixes
+
+* Fixed markdown plugin. ([8b334f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/8b334f8))
+
+
+### Features
+
+* Support upload image to imgchr.com ([0fa0c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/0fa0c48))
+
+
+
 ## [0.1.9](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.8...v0.1.9) (2019-10-19)
 
 

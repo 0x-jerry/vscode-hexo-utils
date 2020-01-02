@@ -2,7 +2,7 @@
   "name": "vscode-hexo-utils",
   "displayName": "vscode-hexo-utils",
   "description": "vscode extension for hexo",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
@@ -76,10 +76,12 @@
           "description": "路过图床 https://imgchr.com/",
           "properties": {
             "username": {
-              "type": "string"
+              "type": "string",
+              "default": ""
             },
             "password": {
-              "type": "string"
+              "type": "string",
+              "default": ""
             }
           }
         }
