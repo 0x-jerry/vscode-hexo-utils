@@ -9,6 +9,9 @@ enum ConfigProperties {
   resolveMarkdownResource = 'markdown.resource',
   hexoRoot = 'hexoProjectRoot',
   sortMethod = 'sortMethod',
+  upload = 'upload',
+  uploadType = 'uploadType',
+  imgChr = 'uploadImgchr',
 }
 
 export enum SortBy {
@@ -16,9 +19,9 @@ export enum SortBy {
   date = 'date',
 }
 
-function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T | undefined {
+function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
   const configs = workspace.getConfiguration(section);
-  return configs.get<T>(propName);
+  return configs.get<T>(propName)!;
 }
 
 const configs = {

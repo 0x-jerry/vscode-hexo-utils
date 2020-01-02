@@ -57,6 +57,31 @@
           "type": "boolean",
           "default": true,
           "description": "Controls whether resolve image with hexo resource folder."
+        },
+        "hexo.upload": {
+          "type": "boolean",
+          "default": false,
+          "description": "Controls whether upload image when use paste image command."
+        },
+        "hexo.uploadType": {
+          "type": "string",
+          "enum": [
+            "imgchr"
+          ],
+          "default": "imgchr",
+          "description": "Upload types."
+        },
+        "hexo.uploadImgchr": {
+          "type": "object",
+          "description": "路过图床 https://imgchr.com/",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
         }
       }
     },
@@ -305,8 +330,10 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "dayjs": "^1.8.16",
     "debounce": "^1.2.0",
+    "form-data": "^3.0.0",
     "fs-extra": "^7.0.1",
     "markdown-it": "^8.4.2",
     "mustache": "^3.0.1",

@@ -2,9 +2,12 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { spawn } from 'child_process';
 import * as dayjs from 'dayjs';
-import { window, TextEditor } from 'vscode';
+import { window, TextEditor, ProgressLocation } from 'vscode';
 import { warn, error, askForNext } from '../utils';
 import { Command, ICommandParsed, command, Commands } from './common';
+import { upload } from '../uploader/uploader';
+import { getConfig, ConfigProperties } from '../configs';
+import * as os from 'os';
 
 @command()
 export class PasteImage extends Command {
@@ -50,31 +53,71 @@ export class PasteImage extends Command {
     }
 
     try {
+      const imagePath = await this.saveImage(editor);
+
+      if (imagePath) {
+        await this.updateEditor(imagePath, editor);
+      }
+    } catch (err) {
+      error(err);
+    }
+  }
+
+  async saveImage(editor: TextEditor): Promise<string | false> {
+    const uploadEnabled = getConfig<boolean>(ConfigProperties.upload);
+
+    if (uploadEnabled) {
+      const tempFilename =
+        Math.random()
+          .toString()
+          .substr(2) + '.jpg';
+      const tempPath = path.join(os.tmpdir(), tempFilename);
+
+      const url = await window.withProgress(
+        {
+          cancellable: true,
+          location: ProgressLocation.Notification,
+          title: 'Upload image',
+        },
+        async () => {
+          await this.pasteImage(tempPath);
+          return await upload(tempPath);
+        },
+      );
+
+      return url || false;
+    } else {
       const imagePath = await this.getImageFilePath(editor);
       if (!imagePath) {
-        return;
+        return false;
       }
 
       if (
         (await fs.pathExists(imagePath)) &&
         !(await askForNext(`${imagePath} existed, would you want to replace ?`))
       ) {
-        return;
+        return false;
       }
 
       await this.pasteImage(imagePath);
-      this.updateEditor(imagePath, editor);
-    } catch (err) {
-      error(err);
+      return imagePath;
     }
   }
 
-  updateEditor(imagePath: string, editor: TextEditor) {
+  async updateEditor(imageURI: string, editor: TextEditor) {
+    const parsed = path.parse(imageURI);
+
     editor.edit((edit) => {
       const current = editor.selection;
 
-      const parsed = path.parse(imagePath);
-      const insertText = `![${parsed.name}](${parsed.base})`;
+      try {
+      } catch (error) {
+        warn('Uploaded failed');
+      }
+
+      const insertText = `![${parsed.name}](${
+        imageURI.startsWith('http') ? imageURI : parsed.base
+      })`;
 
       if (current.isEmpty) {
         edit.insert(current.start, insertText);
