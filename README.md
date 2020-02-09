@@ -26,6 +26,7 @@ Open a [Hexo] project, and have fun.
 - `hexo.upload`: Controls whether upload image when use paste image command.
 - `hexo.uploadType`: Only support 'imgchr'.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.
+- `hexo.generateTimeFormat`: The time format when generate new article, default is ISO format. ([time-format-tokens])
 
 ## Known Issues
 
@@ -43,3 +44,4 @@ See [CHANGELOG](CHANGELOG.md)
 
 [hexo]: https://hexo.io
 [vscode-paste-image]: https://github.com/mushanshitiancai/vscode-paste-image
+[time-format-tokens]: https://day.js.org/docs/en/plugin/custom-parse-format#list-of-all-available-format-tokens

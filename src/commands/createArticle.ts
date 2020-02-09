@@ -3,8 +3,9 @@ import * as mustache from 'mustache';
 import { getDirFiles, askForNext, error } from '../utils';
 import { window } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
-import { configs } from '../configs';
+import { configs, getConfig, ConfigProperties } from '../configs';
 import * as fs from 'fs-extra';
+import dayjs = require('dayjs');
 
 export enum ArticleTypes {
   post = 'post',
@@ -60,7 +61,7 @@ export class CreateArticle extends Command {
 
     const result = mustache.render(tpl, {
       title: filePathInfo.name,
-      date: new Date().toISOString(),
+      date: dayjs().format(getConfig(ConfigProperties.generateTimeFormat)),
     });
 
     // ensure file dir

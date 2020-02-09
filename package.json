@@ -63,6 +63,11 @@
           "default": false,
           "description": "Controls whether upload image when use paste image command."
         },
+        "hexo.generateTimeFormat": {
+          "type": "string",
+          "default": "",
+          "description": "The time format when generate new article, default is ISO format."
+        },
         "hexo.uploadType": {
           "type": "string",
           "enum": [
