@@ -1,3 +1,18 @@
+## [0.1.11](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.10...v0.1.11) (2020-02-09)
+
+
+### Features
+
+* add time format setting ([048cbdb](https://github.com/cwxyz007/vscode-hexo-utils/commit/048cbdbcf922721da8605cd19ec46cdd47cef218))
+
+
+### Performance Improvements
+
+* Upgrade denpencies. ([46d19cb](https://github.com/cwxyz007/vscode-hexo-utils/commit/46d19cbd0be4dd98f24cd6f701af8ddfc37f7ccc))
+* Upgrade vscode version at package.json ([bfb08f7](https://github.com/cwxyz007/vscode-hexo-utils/commit/bfb08f76ee7b1159600402c38fee55eba6a8d298))
+
+
+
 ## [0.1.10](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.9...v0.1.10) (2020-01-02)
 
 
