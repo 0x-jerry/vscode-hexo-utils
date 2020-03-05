@@ -9,6 +9,7 @@ Open a [Hexo] project, and have fun.
 - Sidebar, include tags, categories, posts and drafts
 - Markdown preview
 - Assets path completion
+- Hexo tag syntax highlight and hexo snippets ([Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235))
 - Paste image directly from clipboard, default shortcut is `ctrl+alt+v`. (Thanks [vscode-paste-image] project)
 
 ![screen](docs-images/screen.gif)

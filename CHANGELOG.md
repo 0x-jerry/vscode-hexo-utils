@@ -1,3 +1,13 @@
+## [0.1.12](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.11...v0.1.12) (2020-03-05)
+
+
+### Features
+
+* add snippets for hexo ([fa1ea8e](https://github.com/cwxyz007/vscode-hexo-utils/commit/fa1ea8edeb9ef2c6f771ee870d1dd170089c6acf))
+* add syntax highlight for hexo ([ec136cd](https://github.com/cwxyz007/vscode-hexo-utils/commit/ec136cd4299918948f03389883540a704abc3224))
+
+
+
 ## [0.1.11](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.10...v0.1.11) (2020-02-09)
 
 
