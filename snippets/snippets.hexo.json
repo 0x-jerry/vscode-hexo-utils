@@ -1,0 +1,37 @@
+{
+  "hexo.post_path": {
+    "prefix": ["hexo.post_path"],
+    "body": ["{% post_path ${1:filename} %}"],
+    "description": "Include links to other posts."
+  },
+  "hexo.post_link": {
+    "prefix": ["hexo.post_link"],
+    "body": ["{% post_link ${1:filename} ${2:[title] [escape]} %}"],
+    "description": "Include links to other posts."
+  },
+  "hexo.asset_path": {
+    "prefix": ["hexo.asset_path"],
+    "body": ["{% asset_path ${1:filename} %}"],
+    "description": "Include post assets."
+  },
+  "hexo.asset_img": {
+    "prefix": ["hexo.asset_img"],
+    "body": ["{% asset_img ${1:filename} ${2:[title]} %}"],
+    "description": "Include post assets."
+  },
+  "hexo.asset_link": {
+    "prefix": ["hexo.asset_link"],
+    "body": ["{% post_link ${1:filename} ${2:[title] [escape]} %}"],
+    "description": "Include post assets."
+  },
+  "hexo.raw": {
+    "prefix": ["hexo.raw"],
+    "body": ["{% raw %}", "${1:content}", "{% endraw %}", "$0"],
+    "description": "If certain content is causing processing issues in your posts, wrap it with the raw tag to avoid rendering errors."
+  },
+  "hexo.more": {
+    "prefix": "hexo.more",
+    "body": ["<!-- more -->", "$0"],
+    "description": "Use text placed before the <!-- more --> tag as an excerpt for the post. excerpt: value in the front-matter, if specified, will take precedent."
+  }
+}
