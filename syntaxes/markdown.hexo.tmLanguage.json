@@ -1,0 +1,18 @@
+{
+  "fileTypes": [],
+  "scopeName": "text.hexo",
+  "injectionSelector": "L:meta.paragraph.markdown",
+  "patterns": [
+    {
+      "include": "#quoted"
+    }
+  ],
+  "repository": {
+    "quoted": {
+      "name": "support.class.tag.hexo",
+      "begin": "\\{%",
+      "end": "\\%}",
+      "contentName": "string.other.link.title.markdown.content.tag.hexo"
+    }
+  }
+}

@@ -308,6 +308,21 @@
         }
       ]
     },
+    "grammars": [
+      {
+        "scopeName": "text.hexo",
+        "path": "./syntaxes/markdown.hexo.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "markdown",
+        "path": "./snippets/snippets.hexo.json"
+      }
+    ],
     "markdown.markdownItPlugins": true
   },
   "scripts": {
