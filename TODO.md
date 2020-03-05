@@ -22,5 +22,6 @@
 - [x] auto refresh tags & categories when markdown file changed
 - [x] support `{% assert_link slug %}` & `{% img slug title %}` in markdown preview. [docs](https://hexo.io/docs/asset-folders.html)
 - [x] support `hexo` project is a sub folder. [config](./README.md#extension-settings)
-- [ ] support hexo tag syntax highlight
+- [x] support hexo tag syntax highlight
+- [x] support hexo code snippets
 - [ ] support drag and drop tree item [drag and drop](https://github.com/Microsoft/vscode/issues/32592)
