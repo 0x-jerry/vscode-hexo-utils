@@ -71,7 +71,8 @@
         "hexo.uploadType": {
           "type": "string",
           "enum": [
-            "imgchr"
+            "imgchr",
+            "tencentoss"
           ],
           "default": "imgchr",
           "description": "Upload types."
@@ -87,6 +88,28 @@
             "password": {
               "type": "string",
               "default": ""
+            }
+          }
+        },
+        "hexo.uploadTencentOSS": {
+          "type":"object",
+          "description": "Upload to TencentOSS",
+          "properties": {
+            "SecretId": {
+              "type": "string",
+              "description": "Tencent Account Secret ID"
+            },
+            "SecretKey": {
+              "type": "string",
+              "description": "Tencent Account Secret Key"
+            },
+            "Region": {
+              "type": "string",
+              "description": "Tencent COS Region, like: ap-hongkong"
+            },
+            "Bucket": {
+              "type": "string",
+              "description": "Tencent COS Bucket"
             }
           }
         }
@@ -353,6 +376,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "cos-nodejs-sdk-v5": "^2.5.20",
     "dayjs": "^1.8.18",
     "debounce": "^1.2.0",
     "form-data": "^3.0.0",
