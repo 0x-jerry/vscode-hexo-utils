@@ -1,3 +1,12 @@
+## [0.1.13](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.12...v0.1.13) (2020-04-30)
+
+
+### Features
+
+* add support for tencent OSS service ([ad80a9a](https://github.com/cwxyz007/vscode-hexo-utils/commit/ad80a9ab915cf8b143383c1ced8029fe2afdb581))
+
+
+
 ## [0.1.12](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.0.11...v0.1.12) (2020-03-05)
 
 

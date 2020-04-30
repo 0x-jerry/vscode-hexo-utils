@@ -2,7 +2,7 @@
   "name": "vscode-hexo-utils",
   "displayName": "vscode-hexo-utils",
   "description": "vscode extension for hexo",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
@@ -92,7 +92,7 @@
           }
         },
         "hexo.uploadTencentOSS": {
-          "type":"object",
+          "type": "object",
           "description": "Upload to TencentOSS",
           "properties": {
             "SecretId": {
