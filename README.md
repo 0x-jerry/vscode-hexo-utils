@@ -27,6 +27,7 @@ Open a [Hexo] project, and have fun.
 - `hexo.upload`: Controls whether upload image when use paste image command.
 - `hexo.uploadType`: Only support 'imgchr'.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.
+- `hexo.uploadTencentOSS`: Account settings for tencent OSS service. Only available when `hexo.upload` is `true`.
 - `hexo.generateTimeFormat`: The time format when generate new article, default is ISO format. ([time-format-tokens])
 
 ## Known Issues
