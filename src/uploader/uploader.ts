@@ -1,8 +1,10 @@
 import { getConfig, ConfigProperties } from '../configs';
 import { ImgChr, IImgChrOption } from './Imgchr';
+import { TencentOSS, TencentOSSOption } from './TencentOSS';
 
 enum UploadType {
   imgchr = 'imgchr',
+  tencentoss = 'tencentoss',
 }
 
 export interface Uploader {
@@ -22,7 +24,8 @@ export async function upload(filePath: string) {
     case UploadType.imgchr:
       uploader = new ImgChr(getConfig<IImgChrOption>(ConfigProperties.imgChr)!);
       break;
-
+    case UploadType.tencentoss:
+      uploader = new TencentOSS(getConfig<TencentOSSOption>(ConfigProperties.tencentOSS)!);
     default:
       break;
   }

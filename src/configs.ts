@@ -12,6 +12,7 @@ enum ConfigProperties {
   upload = 'upload',
   uploadType = 'uploadType',
   imgChr = 'uploadImgchr',
+  tencentOSS = 'uploadTencentOSS',
   generateTimeFormat = 'generateTimeFormat',
 }
 
