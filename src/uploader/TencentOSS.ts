@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as cos from 'cos-nodejs-sdk-v5';
 import * as path from 'path';
 import * as fs from 'fs-extra';
@@ -29,18 +30,21 @@ export class TencentOSS {
     });
     const p = path.parse(imgPath);
     let data = await new Promise((res, rej) => {
-      COS.putObject({
-        Bucket: this.Bucket,
-        Region: this.Region,
-        Key: 'media/image/' + p.base,
-        Body: fs.createReadStream(imgPath),
-      }, function(err: any, data: any) {
-        if (err) {
-          rej(err);
-        } else {
-          res(data);
-        }
-      });
+      COS.putObject(
+        {
+          Bucket: this.Bucket,
+          Region: this.Region,
+          Key: 'media/image/' + p.base,
+          Body: fs.createReadStream(imgPath),
+        },
+        function (err: any, data: any) {
+          if (err) {
+            rej(err);
+          } else {
+            res(data);
+          }
+        },
+      );
     });
 
     return data;
@@ -52,7 +56,6 @@ export class TencentOSS {
     return 'https://' + res.Location;
   }
 }
-
 
 // COS putObject Response
 // {
@@ -69,4 +72,3 @@ export class TencentOSS {
 //   },
 //   ETag: '"06d9fc046d856a444d431a2787449051"'
 // }
-
