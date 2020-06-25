@@ -20,7 +20,7 @@ Open a [Hexo] project, and have fun.
 
 ## Extension Settings
 
-- `hexo.sortMethod`: Controls posts(drafts) sorted method, default sort by name.
+- `hexo.sortMethod`: Controls posts(drafts) and categories(tags) sorted method, default sort by name.
 - `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default `false`.
 - `hexo.hexoProjectRoot`: `Hexo` project path(relative to current workspace root), default is workspace root.
 - `hexo.markdown.resource`: Controls whether resolve image with hexo resource folder, default is `true`.
