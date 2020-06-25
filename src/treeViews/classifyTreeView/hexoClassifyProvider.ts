@@ -71,17 +71,12 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
       const classify = this._hexoMetadataUtils[this.type].find((t) => t.name === element.label);
 
       if (classify) {
-        classify.files.forEach((f) => {
-          // Avoid duplicate classify files
-          if (items.find((i) => i.resourceUri!.fsPath === f)) {
-            return;
-          }
+        classify.files.forEach((metadata) => {
+          const isDraft = include && draftsPath.findIndex((p) => p === metadata.filePath) !== -1;
 
-          const isDraft = include && draftsPath.indexOf(f) !== -1;
+          const name = path.relative(isDraft ? draftFolder : postFolder, metadata.filePath);
 
-          const name = path.relative(isDraft ? draftFolder : postFolder, f);
-
-          const item = new ClassifyItem(name, this.type, f);
+          const item = new ClassifyItem(name, this.type, metadata.filePath);
           items.push(item);
         });
       }
@@ -98,7 +93,7 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
       });
     }
 
-    return items.sort((a, b) => (a.label! < b.label! ? -1 : 1));
+    return items;
   }
 }
 

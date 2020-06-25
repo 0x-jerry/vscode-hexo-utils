@@ -20,9 +20,9 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
   }
 
   onDidChanged() {
-    this.treeView.onDidChangeSelection((e) => {
-      console.log(e);
-    });
+    // this.treeView.onDidChangeSelection((e) => {
+    //   console.log(e);
+    // });
   }
 
   registerRefreshCmd(cmd: Commands) {

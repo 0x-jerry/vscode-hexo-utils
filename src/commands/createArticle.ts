@@ -41,7 +41,6 @@ export class CreateArticle extends Command {
 
   private async createTplFile(filePath: string, type: ArticleTypes, template: string) {
     const filePathInfo = path.parse(filePath + '.md');
-    console.log(filePathInfo);
 
     const typeFolder = configs.paths[type];
 
