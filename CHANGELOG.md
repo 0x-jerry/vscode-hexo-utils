@@ -1,3 +1,12 @@
+## [0.1.14](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.13...v0.1.14) (2020-06-25)
+
+
+### Features
+
+* sort category & tags with sortMethod: [#26](https://github.com/cwxyz007/vscode-hexo-utils/issues/26) ([3237359](https://github.com/cwxyz007/vscode-hexo-utils/commit/3237359a4d8375ffa6dbb947355ea606affa618b))
+
+
+
 ## [0.1.13](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.12...v0.1.13) (2020-04-30)
 
 
@@ -17,7 +26,7 @@
 
 
 
-## [0.1.11](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.10...v0.1.11) (2020-02-09)
+## [0.0.11](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.10...v0.0.11) (2020-02-09)
 
 
 ### Features
@@ -37,12 +46,12 @@
 
 ### Bug Fixes
 
-* Fixed markdown plugin. ([8b334f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/8b334f8))
+* Fixed markdown plugin. ([8b334f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/8b334f8b7b2556a33d601f6c6370770f9a1be238))
 
 
 ### Features
 
-* Support upload image to imgchr.com ([0fa0c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/0fa0c48))
+* Support upload image to imgchr.com ([0fa0c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/0fa0c488b5141df26730ffe9ea4e0f16c4c084cd))
 
 
 
@@ -51,7 +60,7 @@
 
 ### Bug Fixes
 
-* Fixed parse metadata [#20](https://github.com/cwxyz007/vscode-hexo-utils/issues/20) ([5e30f90](https://github.com/cwxyz007/vscode-hexo-utils/commit/5e30f90))
+* Fixed parse metadata [#20](https://github.com/cwxyz007/vscode-hexo-utils/issues/20) ([5e30f90](https://github.com/cwxyz007/vscode-hexo-utils/commit/5e30f90d8eb43ef9413a56addb5e7f96aecefd8f))
 
 
 
@@ -60,12 +69,12 @@
 
 ### Features
 
-* Add paste image directly ([2562290](https://github.com/cwxyz007/vscode-hexo-utils/commit/2562290))
+* Add paste image directly ([2562290](https://github.com/cwxyz007/vscode-hexo-utils/commit/25622903be0c97812d0041e528a7e3aeb2f5ea02))
 
 
 ### Performance Improvements
 
-* Update editor text when paste image ([a0153cb](https://github.com/cwxyz007/vscode-hexo-utils/commit/a0153cb))
+* Update editor text when paste image ([a0153cb](https://github.com/cwxyz007/vscode-hexo-utils/commit/a0153cb218bb8e793c07bafe584464f027e3908e))
 
 
 
@@ -74,7 +83,7 @@
 
 ### Bug Fixes
 
-* Fixed resource path ([962a138](https://github.com/cwxyz007/vscode-hexo-utils/commit/962a138))
+* Fixed resource path ([962a138](https://github.com/cwxyz007/vscode-hexo-utils/commit/962a138f195c42ea4f9e781dadcca593a525343d))
 
 
 
@@ -83,7 +92,7 @@
 
 ### Bug Fixes
 
-* Fixed extension entry point ([474acf0](https://github.com/cwxyz007/vscode-hexo-utils/commit/474acf0))
+* Fixed extension entry point ([474acf0](https://github.com/cwxyz007/vscode-hexo-utils/commit/474acf06baf8857da19decfbb91b3d5d332feae3))
 
 
 
@@ -92,7 +101,7 @@
 
 ### Performance Improvements
 
-* Update resource ([14b0f6f](https://github.com/cwxyz007/vscode-hexo-utils/commit/14b0f6f))
+* Update resource ([14b0f6f](https://github.com/cwxyz007/vscode-hexo-utils/commit/14b0f6ffb1b0755a7a3847dea15a30f4ebe296b5))
 
 
 
@@ -101,7 +110,7 @@
 
 ### Bug Fixes
 
-* Fixed create file when input sub folder ([f875ccc](https://github.com/cwxyz007/vscode-hexo-utils/commit/f875ccc))
+* Fixed create file when input sub folder ([f875ccc](https://github.com/cwxyz007/vscode-hexo-utils/commit/f875ccc140a806f437338e7e36fb789165ab1c65))
 
 
 
@@ -110,24 +119,23 @@
 
 ### Features
 
-* Add sort method config [#11](https://github.com/cwxyz007/vscode-hexo-utils/issues/11) ([a038244](https://github.com/cwxyz007/vscode-hexo-utils/commit/a038244))
+* Add sort method config [#11](https://github.com/cwxyz007/vscode-hexo-utils/issues/11) ([a038244](https://github.com/cwxyz007/vscode-hexo-utils/commit/a0382444da5b0ae4745ebe4a31adcd2a348eb089))
 
 
 
-## [0.1.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.0...v0.1.2) (2019-03-03)
+## [0.1.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.1...v0.1.2) (2019-03-03)
 
 
 ### Bug Fixes
 
-* Fix parse metadata error [#10](https://github.com/cwxyz007/vscode-hexo-utils/issues/10) ([1ff1b6d](https://github.com/cwxyz007/vscode-hexo-utils/commit/1ff1b6d))
+* Fix parse metadata error [#10](https://github.com/cwxyz007/vscode-hexo-utils/issues/10) ([1ff1b6d](https://github.com/cwxyz007/vscode-hexo-utils/commit/1ff1b6dd95384525e439f309c302a581acd63458))
 
 
 ### Features
 
-* Support create with sub folder ([68e9fa5](https://github.com/cwxyz007/vscode-hexo-utils/commit/68e9fa5))
-* Support sub folder ([63c76ec](https://github.com/cwxyz007/vscode-hexo-utils/commit/63c76ec))
-* Support sub folder with markdown ([4de187f](https://github.com/cwxyz007/vscode-hexo-utils/commit/4de187f))
-* Support when `hexo` project is a sub folder ([f5d94d2](https://github.com/cwxyz007/vscode-hexo-utils/commit/f5d94d2))
+* Support create with sub folder ([68e9fa5](https://github.com/cwxyz007/vscode-hexo-utils/commit/68e9fa5b9505953c04391f6fed0cc4939588a56e))
+* Support sub folder ([63c76ec](https://github.com/cwxyz007/vscode-hexo-utils/commit/63c76ec1860ee6c7511c54abe78308d5f7d0544f))
+* Support sub folder with markdown ([4de187f](https://github.com/cwxyz007/vscode-hexo-utils/commit/4de187fe8b2d252e40e4c313bb30b148f5e92e6f))
 
 
 
@@ -136,7 +144,7 @@
 
 ### Features
 
-* Support when `hexo` project is a sub folder ([f5d94d2](https://github.com/cwxyz007/vscode-hexo-utils/commit/f5d94d2))
+* Support when `hexo` project is a sub folder ([f5d94d2](https://github.com/cwxyz007/vscode-hexo-utils/commit/f5d94d2d4e6b27eb6d7c4477af065ac0e19b34cc))
 
 
 
@@ -145,13 +153,13 @@
 
 ### Bug Fixes
 
-* Fix miss text when render `some text: {% assert_img img.png %}` ([1c3ffe7](https://github.com/cwxyz007/vscode-hexo-utils/commit/1c3ffe7))
+* Fix miss text when render `some text: {% assert_img img.png %}` ([1c3ffe7](https://github.com/cwxyz007/vscode-hexo-utils/commit/1c3ffe77833caf82a39a60bcc6ed2ff003ad54fa))
 
 
 ### Features
 
-* Auto refresh tags & categories when `*.md` changed ([ab0d761](https://github.com/cwxyz007/vscode-hexo-utils/commit/ab0d761))
-* Support hexo link syntax `{% asset_link img.png title %}` ([be61ddf](https://github.com/cwxyz007/vscode-hexo-utils/commit/be61ddf))
+* Auto refresh tags & categories when `*.md` changed ([ab0d761](https://github.com/cwxyz007/vscode-hexo-utils/commit/ab0d76187e6269e215f825a97a2ff99eecc4d5cb))
+* Support hexo link syntax `{% asset_link img.png title %}` ([be61ddf](https://github.com/cwxyz007/vscode-hexo-utils/commit/be61ddfa7b1e7e27aa4190f9dbed29a0cc546c17))
 
 
 
@@ -160,13 +168,13 @@
 
 ### Features
 
-* Support create resource folder ([b5b7cec](https://github.com/cwxyz007/vscode-hexo-utils/commit/b5b7cec))
-* Support delete the asset folder when empty ([e843986](https://github.com/cwxyz007/vscode-hexo-utils/commit/e843986))
+* Support create resource folder ([b5b7cec](https://github.com/cwxyz007/vscode-hexo-utils/commit/b5b7cece4125fa62cba8585fb9c0035126599fda))
+* Support delete the asset folder when empty ([e843986](https://github.com/cwxyz007/vscode-hexo-utils/commit/e843986dd7b79e2f7ed2e40c921e85cc7ee0ce77))
 
 
 ### Performance Improvements
 
-* Support full hexo img syntax `{% assert_img img.png [title] %}` ([c2afd14](https://github.com/cwxyz007/vscode-hexo-utils/commit/c2afd14))
+* Support full hexo img syntax `{% img img.png this is a img %}` ([c2afd14](https://github.com/cwxyz007/vscode-hexo-utils/commit/c2afd142846ba78f0b15c82f1c867d8c1c2797e1))
 
 
 
@@ -175,7 +183,7 @@
 
 ### Bug Fixes
 
-* Fix register refresh command ([00fc8c0](https://github.com/cwxyz007/vscode-hexo-utils/commit/00fc8c0))
+* Fix register refresh command ([00fc8c0](https://github.com/cwxyz007/vscode-hexo-utils/commit/00fc8c0f0d72b367bfa1f76ed629ff3b217b4ed6))
 
 
 
@@ -184,12 +192,12 @@
 
 ### Bug Fixes
 
-* Fix completion with hexo resource path ([6789096](https://github.com/cwxyz007/vscode-hexo-utils/commit/6789096))
+* Fix completion with hexo resource path ([6789096](https://github.com/cwxyz007/vscode-hexo-utils/commit/6789096f110ac3dba38fc0cd341de2e6c57455fb))
 
 
 ### Features
 
-* Support `{% assert_img img.png %}` and `![img](img.png)` in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c12))
+* Support {% img img.png %} and ![img](img.png) in markdown preview ([c086c12](https://github.com/cwxyz007/vscode-hexo-utils/commit/c086c126cb408aad5afc08c8d340428ab84fceef))
 
 
 
@@ -198,7 +206,7 @@
 
 ### Features
 
-* Add image completion with relative resource folder ([6222b0f](https://github.com/cwxyz007/vscode-hexo-utils/commit/6222b0f))
+* Add image completion with relative resource folder ([6222b0f](https://github.com/cwxyz007/vscode-hexo-utils/commit/6222b0f9f25d3762c1e45af10f803bf68db75994))
 
 
 
@@ -207,12 +215,12 @@
 
 ### Bug Fixes
 
-* Fix yaml parse regex ([78f9ac8](https://github.com/cwxyz007/vscode-hexo-utils/commit/78f9ac8))
+* Fix yaml parse regex ([78f9ac8](https://github.com/cwxyz007/vscode-hexo-utils/commit/78f9ac81be636fb2ad20d8c614f9c1d4506d0dd4))
 
 
 ### Performance Improvements
 
-* Show collapse icon on tag & category view ([484d274](https://github.com/cwxyz007/vscode-hexo-utils/commit/484d274))
+* Show collapse icon on tag & category view ([484d274](https://github.com/cwxyz007/vscode-hexo-utils/commit/484d27442d1a707b94c9d889b0d13676ea7154be))
 
 
 
@@ -221,9 +229,9 @@
 
 ### Performance Improvements
 
-* Auto refresh when create or delete file ([d123f31](https://github.com/cwxyz007/vscode-hexo-utils/commit/d123f31))
-* Catch metadata parser error ([670d728](https://github.com/cwxyz007/vscode-hexo-utils/commit/670d728))
-* Trim blank white when create new article ([4c0f880](https://github.com/cwxyz007/vscode-hexo-utils/commit/4c0f880))
+* Auto refresh when create or delete file ([d123f31](https://github.com/cwxyz007/vscode-hexo-utils/commit/d123f31fd2b36e2844ce42dffbe9bda9a2f0eb95))
+* Catch metadata parser error ([670d728](https://github.com/cwxyz007/vscode-hexo-utils/commit/670d7281d2b7435704334daa2c7cad9f2b52ac02))
+* Trim blank white when create new article ([4c0f880](https://github.com/cwxyz007/vscode-hexo-utils/commit/4c0f88050e75c1ea3942a0c4f5c04222b53d08b2))
 
 
 
@@ -232,21 +240,21 @@
 
 ### Bug Fixes
 
-* Fix duplicate classify files ([901ec83](https://github.com/cwxyz007/vscode-hexo-utils/commit/901ec83))
+* Fix duplicate classify files ([901ec83](https://github.com/cwxyz007/vscode-hexo-utils/commit/901ec83ef62433821d20d1a2dec36ecdc65dd54d))
 
 
 ### Features
 
-* Support create article with template ([bdb7c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/bdb7c48))
-* Support rename article ([6042036](https://github.com/cwxyz007/vscode-hexo-utils/commit/6042036))
+* Support create article with template ([bdb7c48](https://github.com/cwxyz007/vscode-hexo-utils/commit/bdb7c484d959404ce785bb5dbf1c8911d342e01c))
+* Support rename article ([6042036](https://github.com/cwxyz007/vscode-hexo-utils/commit/6042036e08ade7e34a0094f75befdd0d83f7fd02))
 
 
 ### Performance Improvements
 
-* Change tag & category icons ([824ab28](https://github.com/cwxyz007/vscode-hexo-utils/commit/824ab28))
-* Check exist when create file ([b3aab1e](https://github.com/cwxyz007/vscode-hexo-utils/commit/b3aab1e))
-* Replace hexo cli new command ([171d1f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/171d1f8))
-* Sort by name ([9b17fd9](https://github.com/cwxyz007/vscode-hexo-utils/commit/9b17fd9))
+* Change tag & category icons ([824ab28](https://github.com/cwxyz007/vscode-hexo-utils/commit/824ab286d6beacd174c9f14e805b3777e3db10b2))
+* Check exist when create file ([b3aab1e](https://github.com/cwxyz007/vscode-hexo-utils/commit/b3aab1e0b225ccfe59c70bc59ba7d22499fed650))
+* Replace hexo cli new command ([171d1f8](https://github.com/cwxyz007/vscode-hexo-utils/commit/171d1f8355bb0e1d2f095195a3378b5a4444dc0b))
+* Sort by name ([9b17fd9](https://github.com/cwxyz007/vscode-hexo-utils/commit/9b17fd996277b3a11f65a8eaf47c2e0ea5b02a00))
 
 
 
@@ -255,36 +263,36 @@
 
 ### Performance Improvements
 
-* Remove useless alert message ([ee0c273](https://github.com/cwxyz007/vscode-hexo-utils/commit/ee0c273))
+* Remove useless alert message ([ee0c273](https://github.com/cwxyz007/vscode-hexo-utils/commit/ee0c273e0b6ce239f85af45266d3ee58bde11a32))
 
 
 
-## [0.0.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/073b0d3...v0.0.1) (2019-01-03)
+## [0.0.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/073b0d3f7a63f3a4e9fd97e6e8d53a14849a7dd5...v0.0.1) (2019-01-03)
 
 
 ### Bug Fixes
 
-* Check npm manager command ([795fb67](https://github.com/cwxyz007/vscode-hexo-utils/commit/795fb67))
-* Fix get package method ([854a6b4](https://github.com/cwxyz007/vscode-hexo-utils/commit/854a6b4))
+* Check npm manager command ([795fb67](https://github.com/cwxyz007/vscode-hexo-utils/commit/795fb676d6bfe81b9f019b6459a42c13a2fb54b8))
+* Fix get package method ([854a6b4](https://github.com/cwxyz007/vscode-hexo-utils/commit/854a6b4b7b49eb7ed5a4803f94565a0ecf7f6fb3))
 
 
 ### Features
 
-* Add include draft option ([164848d](https://github.com/cwxyz007/vscode-hexo-utils/commit/164848d))
-* Add refresh button ([ec4bbcf](https://github.com/cwxyz007/vscode-hexo-utils/commit/ec4bbcf))
-* Add view container & views ([073b0d3](https://github.com/cwxyz007/vscode-hexo-utils/commit/073b0d3))
-* Create new post or draft ([a882fef](https://github.com/cwxyz007/vscode-hexo-utils/commit/a882fef))
-* Delete draft or post ([a23d5a1](https://github.com/cwxyz007/vscode-hexo-utils/commit/a23d5a1))
-* Get package config ([62c13e0](https://github.com/cwxyz007/vscode-hexo-utils/commit/62c13e0))
-* List by category & tag ([a026082](https://github.com/cwxyz007/vscode-hexo-utils/commit/a026082))
-* Move post to draft & move drfat to post ([0003a40](https://github.com/cwxyz007/vscode-hexo-utils/commit/0003a40))
-* Open post or draft in editor ([42772c8](https://github.com/cwxyz007/vscode-hexo-utils/commit/42772c8))
-* Refresh tree view when add article ([8a81911](https://github.com/cwxyz007/vscode-hexo-utils/commit/8a81911))
+* Add include draft option ([164848d](https://github.com/cwxyz007/vscode-hexo-utils/commit/164848d3c41e2d4a095bfe2355eb222a565d5c12))
+* Add refresh button ([ec4bbcf](https://github.com/cwxyz007/vscode-hexo-utils/commit/ec4bbcf2446d70edf8eccaf2432358e34dbbbeda))
+* Add view container & views ([073b0d3](https://github.com/cwxyz007/vscode-hexo-utils/commit/073b0d3f7a63f3a4e9fd97e6e8d53a14849a7dd5))
+* Create new post or draft ([a882fef](https://github.com/cwxyz007/vscode-hexo-utils/commit/a882fef0ac01230ca342070a099bc675bbb428b7))
+* Delete draft or post ([a23d5a1](https://github.com/cwxyz007/vscode-hexo-utils/commit/a23d5a199c486252fb98b33886d5a317d92bc65f))
+* Get package config ([62c13e0](https://github.com/cwxyz007/vscode-hexo-utils/commit/62c13e047083e4cd0d6a4bc2e0e15fa7507ac756))
+* List by category & tag ([a026082](https://github.com/cwxyz007/vscode-hexo-utils/commit/a026082a1e87993b1edfb07609ae0d4bfc41f14a))
+* Move post to draft & move drfat to post ([0003a40](https://github.com/cwxyz007/vscode-hexo-utils/commit/0003a4049831e6c99a5647d48bfd48b872bca476))
+* Open post or draft in editor ([42772c8](https://github.com/cwxyz007/vscode-hexo-utils/commit/42772c84caf1a4122d0b8d1da85595e602c9a2ef))
+* Refresh tree view when add article ([8a81911](https://github.com/cwxyz007/vscode-hexo-utils/commit/8a81911fefb0da963e9fcd07a8b0c7b21d7c030c))
 
 
 ### Performance Improvements
 
-* Update message format ([b86b33d](https://github.com/cwxyz007/vscode-hexo-utils/commit/b86b33d))
+* Update message format ([b86b33d](https://github.com/cwxyz007/vscode-hexo-utils/commit/b86b33def4357dda47f598f6d76e05a9a586e563))
 
 
 
