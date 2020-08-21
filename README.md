@@ -1,14 +1,12 @@
 # VSCode Hexo Utils
 
-A sidebar for [Hexo].
-
-Open a [Hexo] project, and have fun.
+A sidebar for [Hexo] blog system.
 
 ## Features
 
+- Create new article with exists template
 - Sidebar, include tags, categories, posts and drafts
-- Markdown preview
-- Assets path completion
+- Markdown preview with relative path
 - Hexo tag syntax highlight and hexo snippets ([Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235))
 - Paste image directly from clipboard, default shortcut is `ctrl+alt+v`. (Thanks [vscode-paste-image] project)
 
@@ -32,11 +30,7 @@ Open a [Hexo] project, and have fun.
 
 ## Known Issues
 
-[Bug report](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
-
-## Need Feature
-
-[Feature require](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=feature_request.md&title=)
+If you found some bugs. Please open an [issue](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
 
 ## Release Notes
 
