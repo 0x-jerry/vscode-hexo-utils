@@ -1,3 +1,19 @@
+## [0.1.15](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.14...v0.1.15) (2020-08-22)
+
+
+### Features
+
+* dbclick to focus on the open file. ([8315ab2](https://github.com/cwxyz007/vscode-hexo-utils/commit/8315ab2a3c2144176e332c6a083ce7bbfd322342))
+* reveal post/draft item when active editor changed ([7f087cd](https://github.com/cwxyz007/vscode-hexo-utils/commit/7f087cd4cf2fd74ef41bb721bd2f8a02201be2e7))
+
+
+### Performance Improvements
+
+* update rename & move command behavior ([4bc37a1](https://github.com/cwxyz007/vscode-hexo-utils/commit/4bc37a15191db5cf3a34fa72ff4f3ad462bd6503))
+* upgrade dependencies ([12d5232](https://github.com/cwxyz007/vscode-hexo-utils/commit/12d523271dc2d562430313889596f00e5ce6176e))
+
+
+
 ## [0.1.14](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.13...v0.1.14) (2020-06-25)
 
 
