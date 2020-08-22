@@ -80,7 +80,7 @@ export class ArticleItem extends TreeItem {
     this.command = {
       title: 'open',
       command: Commands.open,
-      arguments: [uri],
+      arguments: [this.resourceUri],
     };
   }
 }
