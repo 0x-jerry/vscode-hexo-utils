@@ -48,10 +48,6 @@ export class HexoMetadataUtils {
 
     const sortClassify = (category: IClassify) => {
       category.files.sort((a, b) => (a[key]! < b[key]! ? 1 : -1));
-
-      if (category.name.toLowerCase() === 'javascript') {
-        category.files.forEach((f) => console.log(f));
-      }
     };
 
     this.tags.sort((a, b) => (a.name < b.name ? 1 : -1));

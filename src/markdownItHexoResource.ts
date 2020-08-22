@@ -2,7 +2,7 @@ import Token = require('markdown-it/lib/token');
 import StateInline = require('markdown-it/lib/rules_inline/state_inline');
 import * as MarkdownIt from 'markdown-it';
 import * as path from 'path';
-import { window, Uri } from 'vscode';
+import { window } from 'vscode';
 import * as fs from 'fs-extra';
 import { configs } from './configs';
 
@@ -23,12 +23,12 @@ class MarkdownHexoPlugin {
 
       const hexoTagReg = /^{%(.+)?%}/.exec(text);
       if (!(hexoTagReg && hexoTagReg[1])) {
-        return;
+        return false;
       }
 
       const attrs = hexoTagReg[1].split(/\s+/).filter((s) => !!s);
       if (attrs.length < 2) {
-        return;
+        return false;
       }
 
       const [tag, src, ...alts] = attrs;
@@ -41,7 +41,7 @@ class MarkdownHexoPlugin {
       ];
 
       if (!hexoTags.find((t) => t === tag)) {
-        return;
+        return false;
       }
 
       if (tag === 'asset_img') {
@@ -86,7 +86,7 @@ class MarkdownHexoPlugin {
   }
 
   private hexoImageRenderRule() {
-    const defaultRender = this.md.renderer.rules.image;
+    const defaultRender = this.md.renderer.rules.image!;
 
     this.md.renderer.rules.image = (tokens, idx, opts, env, self) => {
       const token = tokens[idx];
@@ -118,21 +118,14 @@ class MarkdownHexoPlugin {
   private getImgCorrectPath(imgNameWidthExt: string): string {
     let resultPath = imgNameWidthExt;
 
-    try {
-      Uri.parse(imgNameWidthExt, true);
-      resultPath = imgNameWidthExt;
-    } catch {
-      if (!window.activeTextEditor) {
-        resultPath = imgNameWidthExt;
-      } else {
-        const filePath = window.activeTextEditor.document.uri.fsPath;
-        const resourceDir = this.getResDir(filePath);
+    if (window.activeTextEditor) {
+      const filePath = window.activeTextEditor.document.uri.fsPath;
+      const resourceDir = this.getResDir(filePath);
 
-        const imgPath = path.join(resourceDir, imgNameWidthExt);
-        const relativePath = path.relative(path.parse(filePath).dir, imgPath);
+      const imgPath = path.join(resourceDir, imgNameWidthExt);
+      const relativePath = path.relative(path.parse(filePath).dir, imgPath);
 
-        resultPath = fs.existsSync(imgPath) ? relativePath : imgNameWidthExt;
-      }
+      resultPath = fs.pathExistsSync(imgPath) ? relativePath : imgNameWidthExt;
     }
 
     return resultPath;
