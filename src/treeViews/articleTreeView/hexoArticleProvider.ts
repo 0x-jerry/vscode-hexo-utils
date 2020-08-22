@@ -5,6 +5,7 @@ import {
   ThemeIcon,
   TreeItemCollapsibleState,
   Uri,
+  ProviderResult,
 } from 'vscode';
 import * as path from 'path';
 import { Commands } from '../../commands/common';
@@ -12,23 +13,46 @@ import { ArticleTypes } from '../../commands/createArticle';
 import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
 import { configs, getConfig, ConfigProperties, SortBy } from '../../configs';
 import { IHexoMetadata } from '../../hexoMetadata';
+import { BaseDispose } from '../common';
 
-export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
+export class HexoArticleProvider extends BaseDispose implements TreeDataProvider<ArticleItem> {
   private _onDidChangeTreeData = new EventEmitter<ArticleItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type = ArticleTypes.post;
 
+  private allItems: Map<string, ArticleItem> = new Map();
+
   constructor(type: ArticleTypes) {
+    super();
     this.type = type;
+    this.subscribe(this._onDidChangeTreeData);
+
+    this.recalculateItems();
+  }
+
+  private recalculateItems() {
+    const _dispose = this.onDidChangeTreeData(() => {
+      this.allItems = new Map();
+    });
+
+    this.subscribe(_dispose);
   }
 
   refresh() {
     this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: ArticleItem): TreeItem | Thenable<TreeItem> {
+  getTreeItem(element: ArticleItem): TreeItem {
     return element;
+  }
+
+  getItem(file: string) {
+    return this.allItems.get(file);
+  }
+
+  getParent(element: ArticleItem): ProviderResult<ArticleItem> {
+    return null;
   }
 
   async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
@@ -45,7 +69,10 @@ export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
     for (const p of paths) {
       const filePath = path.join(articleRootPath, p);
       const metadata = (await getMDFileMetadata(filePath))!;
-      items.push(new ArticleItem(p, path.join(articleRootPath, p), metadata));
+      const item = new ArticleItem(p, path.join(articleRootPath, p), metadata);
+
+      items.push(item);
+      this.allItems.set(Uri.parse(filePath).toString(), item);
     }
 
     return items.sort((a, b) => {
@@ -60,6 +87,10 @@ export class HexoArticleProvider implements TreeDataProvider<ArticleItem> {
           return a.label! < b.label! ? -1 : 1;
       }
     });
+  }
+
+  dispose() {
+    // this.
   }
 }
 

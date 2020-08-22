@@ -11,23 +11,36 @@ import {
   TreeItemCollapsibleState,
   ThemeIcon,
   Uri,
+  ProviderResult,
 } from 'vscode';
+import { BaseDispose } from '../common';
 
 export enum ClassifyTypes {
   category = 'categories',
   tag = 'tags',
 }
 
-export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
+export class HexoClassifyProvider extends BaseDispose implements TreeDataProvider<ClassifyItem> {
   private _onDidChangeTreeData = new EventEmitter<ClassifyItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type: ClassifyTypes = ClassifyTypes.category;
 
   private _hexoMetadataUtils?: HexoMetadataUtils;
+  private _allItems: Map<string, ClassifyItem> = new Map();
 
   constructor(type: ClassifyTypes) {
+    super();
     this.type = type;
+    this.subscribe(this._onDidChangeTreeData);
+    this.recalculateItems();
+  }
+
+  private recalculateItems() {
+    const dispose = this.onDidChangeTreeData(() => {
+      this._allItems = new Map();
+    });
+    this.subscribe(dispose);
   }
 
   refresh() {
@@ -36,6 +49,15 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
 
   getTreeItem(element: ClassifyItem): TreeItem | Thenable<TreeItem> {
     return element;
+  }
+
+  getItem(file: string) {
+    const name = Uri.parse(file).toString();
+    return this._allItems.get(name);
+  }
+
+  getParent(element: ClassifyItem): ProviderResult<ClassifyItem> {
+    return element.parent;
   }
 
   async getChildren(element?: ClassifyItem): Promise<ClassifyItem[]> {
@@ -77,6 +99,9 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
           const name = path.relative(isDraft ? draftFolder : postFolder, metadata.filePath);
 
           const item = new ClassifyItem(name, this.type, metadata.filePath);
+          item.parent = element;
+
+          this._allItems.set(Uri.parse(metadata.filePath).toString(), item);
           items.push(item);
         });
       }
@@ -89,6 +114,8 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
           undefined,
           TreeItemCollapsibleState.Collapsed,
         );
+
+        this._allItems.set(t.name, item);
         items.push(item);
       });
     }
@@ -98,6 +125,8 @@ export class HexoClassifyProvider implements TreeDataProvider<ClassifyItem> {
 }
 
 export class ClassifyItem extends TreeItem {
+  parent?: ClassifyItem;
+
   constructor(
     label: string,
     type: ClassifyTypes,

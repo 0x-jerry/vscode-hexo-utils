@@ -1,6 +1,6 @@
 import { HexoArticleProvider, ArticleItem } from './hexoArticleProvider';
 import { ArticleTypes, Commands } from '../../commands';
-import { TreeViewOptions, commands } from 'vscode';
+import { TreeViewOptions, commands, window } from 'vscode';
 import { BaseTreeView, ViewTypes } from '../common';
 
 export class ArticleTreeView extends BaseTreeView<ArticleItem> {
@@ -17,6 +17,26 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
     this.provider = provider;
 
     this.onDidChanged();
+
+    this.autoFocus();
+  }
+
+  private autoFocus() {
+    const _dispose = window.onDidChangeActiveTextEditor((editor) => {
+      if (!editor || !this.treeView.visible) {
+        return;
+      }
+
+      const file = editor.document.uri.toString();
+      const item = this.provider.getItem(file);
+      if (!item) {
+        return;
+      }
+
+      this.treeView.reveal(item);
+    });
+
+    this.subscribe(_dispose);
   }
 
   onDidChanged() {
