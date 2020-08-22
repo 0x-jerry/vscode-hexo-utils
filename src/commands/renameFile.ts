@@ -4,6 +4,7 @@ import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { window } from 'vscode';
 import { Command, ICommandParsed, Commands, command } from './common';
 import * as fs from 'fs-extra';
+import { rename } from './utils';
 
 @command()
 export class RenameFile extends Command {
@@ -28,6 +29,6 @@ export class RenameFile extends Command {
       return null;
     }
 
-    await fs.rename(filePath, newPath);
+    await rename(filePath, newPath);
   }
 }

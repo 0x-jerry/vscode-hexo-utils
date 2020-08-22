@@ -1,10 +1,11 @@
 import * as path from 'path';
-import { askForNext, error } from '../utils';
+import { askForNext } from '../utils';
 import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
 import * as fs from 'fs-extra';
 import { configs } from '../configs';
+import { rename } from './utils';
 
 @command()
 export class MoveFile extends Command {
@@ -29,11 +30,7 @@ export class MoveFile extends Command {
       return null;
     }
 
-    try {
-      await fs.rename(filePath, destPath);
-    } catch (err) {
-      error(`Move ${fileName} to ${to} error: ${err}`);
-    }
+    rename(filePath, destPath);
   }
 
   async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {

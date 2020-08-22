@@ -1,5 +1,5 @@
 import { Uri, commands, window, workspace } from 'vscode';
-import { Command, ICommandParsed, command, Commands } from './common';
+import { Command, ICommandParsed, command, Commands, BuiltInCommands } from './common';
 
 @command()
 export class OpenFile extends Command {
@@ -18,7 +18,7 @@ export class OpenFile extends Command {
         preview: false,
       });
     } else {
-      await commands.executeCommand('vscode.open', uri);
+      await commands.executeCommand(BuiltInCommands.Open, uri);
     }
   }
 

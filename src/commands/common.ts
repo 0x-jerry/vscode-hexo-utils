@@ -26,6 +26,10 @@ export enum Commands {
   moveToPost = 'hexo.moveTo[post]',
 }
 
+export enum BuiltInCommands {
+  Open = 'vscode.open',
+}
+
 export interface ICommandParsed {
   cmd: string;
   args: string[];
