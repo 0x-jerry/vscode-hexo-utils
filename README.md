@@ -8,7 +8,7 @@ A sidebar for [Hexo] blog system.
 - Sidebar, include tags, categories, posts and drafts
 - Preview image with assets folder
 - Hexo tag syntax highlight and hexo snippets (Markdown Snippet Prefix Does Not Trigger Snippet)
-- Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks vscode-paste-image project)
+- Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)
 - And more ...
 
 ![feature](docs-images/feature.png)
