@@ -5,7 +5,6 @@ import { spawn } from 'child_process';
 import { window } from 'vscode';
 import { configs } from '../configs';
 import { IHexoMetadata } from '../hexoMetadata';
-import { warn } from './log';
 
 function getPkg() {
   const rootPath = configs.hexoRoot;
@@ -58,9 +57,11 @@ async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
-async function getMDFileMetadata(path: string): Promise<IHexoMetadata | undefined> {
+async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | undefined> {
+  const content = await fs.readFile(filePath, { encoding: 'utf-8' });
+  const stat = await fs.stat(filePath)
+
   try {
-    const content = await fs.readFile(path, { encoding: 'utf-8' });
     // /---(data)---/ => $1 === data
     const yamlReg = /^---((.|\n|\r)+?)---$/m;
 
@@ -70,13 +71,19 @@ async function getMDFileMetadata(path: string): Promise<IHexoMetadata | undefine
 
     return {
       tags: Array.isArray(data.tags) ? data.tags : [],
-      filePath: path,
+      filePath: filePath,
       categories: Array.isArray(data.categories) ? data.categories : [],
       title: data.title || '',
       date: data.date || '',
     };
   } catch (error) {
-    warn(`Parse [ ${path} ] metadata error: ${error}`);
+    return {
+      tags: [],
+      categories: [],
+      filePath: filePath,
+      title: path.parse(filePath).name,
+      date: stat.ctime
+    }
   }
 }
 
