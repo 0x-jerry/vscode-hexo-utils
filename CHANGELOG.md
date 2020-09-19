@@ -1,3 +1,12 @@
+## [0.1.16](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.15...v0.1.16) (2020-09-19)
+
+
+### Performance Improvements
+
+* resolve error when parse metadata failed [#32](https://github.com/cwxyz007/vscode-hexo-utils/issues/32) ([e62b7b1](https://github.com/cwxyz007/vscode-hexo-utils/commit/e62b7b1f20dae71cb0d4f12cbbb9c375b0b8e77d))
+
+
+
 ## [0.1.15](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.14...v0.1.15) (2020-08-22)
 
 
