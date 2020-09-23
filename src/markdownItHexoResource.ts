@@ -142,4 +142,6 @@ class MarkdownHexoPlugin {
   }
 }
 
-export default (md: MarkdownIt) => new MarkdownHexoPlugin(md);
+export default (md: MarkdownIt) => {
+  new MarkdownHexoPlugin(md);
+};

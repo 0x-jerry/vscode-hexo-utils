@@ -78,10 +78,20 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.6.0.tgz#7d4411bf5157339337d7cff864d9ff45f177b499"
   integrity sha1-fUQRv1FXM5M318/4ZNn/RfF3tJk=
 
+"@types/node@^14.6.4":
+  version "14.11.2"
+  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.11.2.tgz?cache=0&sync_timestamp=1600732721615&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.11.2.tgz#2de1ed6670439387da1c9f549a2ade2b0a799256"
+  integrity sha1-LeHtZnBDk4faHJ9UmireKwp5klY=
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
   resolved "https://registry.npm.taobao.org/@types/normalize-package-data/download/@types/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha1-5IbQ2XOW15vu3QpuM/RTT/a0lz4=
+
+"@types/universal-analytics@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.npm.taobao.org/@types/universal-analytics/download/@types/universal-analytics-0.4.4.tgz#496a52b92b599a0112bec7c12414062de6ea8449"
+  integrity sha1-SWpSuStZmgESvsfBJBQGLebqhEk=
 
 "@types/yamljs@^0.2.31":
   version "0.2.31"
@@ -1219,6 +1229,13 @@ debug@^3.1.0:
   dependencies:
     ms "^2.1.1"
 
+debug@^4.1.1:
+  version "4.2.0"
+  resolved "https://registry.npm.taobao.org/debug/download/debug-4.2.0.tgz?cache=0&sync_timestamp=1600502867692&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.2.0.tgz#7f150f93920e94c58f5574c2fd01a3110effe7f1"
+  integrity sha1-fxUPk5IOlMWPVXTC/QGjEQ7/5/E=
+  dependencies:
+    ms "2.1.2"
+
 decamelize-keys@^1.0.0, decamelize-keys@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/decamelize-keys/download/decamelize-keys-1.1.0.tgz#d171a87933252807eb3cb61dc1c1445d078df2d9"
@@ -1715,6 +1732,13 @@ get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npm.taobao.org/get-value/download/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
+
+getmac@^5.16.0:
+  version "5.16.0"
+  resolved "https://registry.npm.taobao.org/getmac/download/getmac-5.16.0.tgz#5e33286b455dbfc01e5590d1fd32c968dd937833"
+  integrity sha1-XjMoa0Vdv8AeVZDR/TLJaN2TeDM=
+  dependencies:
+    "@types/node" "^14.6.4"
 
 getpass@^0.1.1:
   version "0.1.7"
@@ -2787,7 +2811,7 @@ ms@2.0.0:
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
   integrity sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
 
-ms@^2.1.1:
+ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
@@ -3432,7 +3456,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@^2.88.0:
+request@^2.88.0, request@^2.88.2:
   version "2.88.2"
   resolved "https://registry.npm.taobao.org/request/download/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha1-1zyRhzHLWofaBH4gcjQUb2ZNErM=
@@ -4164,6 +4188,15 @@ unique-string@^1.0.0:
   dependencies:
     crypto-random-string "^1.0.0"
 
+universal-analytics@^0.4.23:
+  version "0.4.23"
+  resolved "https://registry.npm.taobao.org/universal-analytics/download/universal-analytics-0.4.23.tgz#d915e676850c25c4156762471bdd7cf2eaaca8ac"
+  integrity sha1-2RXmdoUMJcQVZ2JHG9188uqsqKw=
+  dependencies:
+    debug "^4.1.1"
+    request "^2.88.2"
+    uuid "^3.0.0"
+
 universalify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/universalify/download/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
@@ -4226,7 +4259,7 @@ util@^0.11.0:
   dependencies:
     inherits "2.0.3"
 
-uuid@^3.3.2:
+uuid@^3.0.0, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=

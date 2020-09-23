@@ -3,16 +3,19 @@
 import { ExtensionContext, languages, window } from 'vscode';
 import { registerCommands } from './commands';
 import { HexoCompletionProvider } from './hexoCompletionProvider';
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import plugin from './markdownItHexoResource';
 import { getConfig, ConfigProperties } from './configs';
 import { registerTreeViews } from './treeViews';
+import { visitor } from './track';
 
 export function activate(context: ExtensionContext) {
   const selectors = [
     { language: 'markdown', scheme: 'file' },
     { language: 'markdown', scheme: 'untitled' },
   ];
+
+  visitor.pageview('/start').send();
 
   const completionItemProvider = languages.registerCompletionItemProvider(
     selectors,
