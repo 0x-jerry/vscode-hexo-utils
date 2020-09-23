@@ -356,7 +356,8 @@
     "test:compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "yarn run test:compile && node ./node_modules/vscode/bin/test"
+    "test": "yarn run test:compile && node ./node_modules/vscode/bin/test",
+    "version": "yarn changelog && git add CHANGELOG.md"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
