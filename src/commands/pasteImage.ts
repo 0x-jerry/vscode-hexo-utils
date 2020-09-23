@@ -1,13 +1,13 @@
-import * as path from 'path';
-import * as fs from 'fs-extra';
+import path from 'path';
+import fs from 'fs-extra';
+import os from 'os';
+import dayjs from 'dayjs';
 import { spawn } from 'child_process';
-import * as dayjs from 'dayjs';
 import { window, TextEditor, ProgressLocation } from 'vscode';
 import { warn, error, askForNext } from '../utils';
 import { Command, ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
 import { getConfig, ConfigProperties } from '../configs';
-import * as os from 'os';
 
 @command()
 export class PasteImage extends Command {
@@ -67,10 +67,7 @@ export class PasteImage extends Command {
     const uploadEnabled = getConfig<boolean>(ConfigProperties.upload);
 
     if (uploadEnabled) {
-      const tempFilename =
-        Math.random()
-          .toString()
-          .substr(2) + '.jpg';
+      const tempFilename = Math.random().toString().substr(2) + '.jpg';
       const tempPath = path.join(os.tmpdir(), tempFilename);
 
       const url = await window.withProgress(

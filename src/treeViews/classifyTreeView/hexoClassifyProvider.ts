@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'path';
 import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
 import { Commands } from '../../commands/common';
 import { HexoMetadataUtils, IHexoMetadata } from '../../hexoMetadata';

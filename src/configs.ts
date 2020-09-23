@@ -1,7 +1,7 @@
 import { workspace } from 'vscode';
-import * as path from 'path';
-import * as yamljs from 'yamljs';
-import * as fs from 'fs-extra';
+import path from 'path';
+import yamljs from 'yamljs';
+import fs from 'fs-extra';
 
 enum ConfigProperties {
   SECTION = 'hexo',

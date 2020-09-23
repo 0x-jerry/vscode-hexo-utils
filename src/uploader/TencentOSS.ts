@@ -1,7 +1,7 @@
 // @ts-ignore
-import * as cos from 'cos-nodejs-sdk-v5';
-import * as path from 'path';
-import * as fs from 'fs-extra';
+import cos from 'cos-nodejs-sdk-v5';
+import path from 'path';
+import fs from 'fs-extra';
 
 export interface TencentOSSOption {
   SecretId: string;

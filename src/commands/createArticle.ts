@@ -1,11 +1,11 @@
-import * as path from 'path';
-import * as mustache from 'mustache';
+import path from 'path';
+import mustache from 'mustache';
 import { getDirFiles, askForNext, error } from '../utils';
 import { window } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
 import { configs, getConfig, ConfigProperties } from '../configs';
-import * as fs from 'fs-extra';
-import dayjs = require('dayjs');
+import fs from 'fs-extra';
+import dayjs from 'dayjs';
 
 export enum ArticleTypes {
   post = 'post',

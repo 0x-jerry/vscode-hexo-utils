@@ -1,9 +1,9 @@
-import Token = require('markdown-it/lib/token');
-import StateInline = require('markdown-it/lib/rules_inline/state_inline');
-import * as MarkdownIt from 'markdown-it';
-import * as path from 'path';
+import Token from 'markdown-it/lib/token';
+import StateInline from 'markdown-it/lib/rules_inline/state_inline';
+import MarkdownIt from 'markdown-it';
+import path from 'path';
 import { window } from 'vscode';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { configs } from './configs';
 
 class MarkdownHexoPlugin {

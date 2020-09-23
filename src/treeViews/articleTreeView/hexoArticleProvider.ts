@@ -7,7 +7,7 @@ import {
   Uri,
   ProviderResult,
 } from 'vscode';
-import * as path from 'path';
+import path from 'path';
 import { Commands } from '../../commands/common';
 import { ArticleTypes } from '../../commands/createArticle';
 import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';

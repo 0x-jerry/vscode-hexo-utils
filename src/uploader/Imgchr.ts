@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 import { warn } from '../utils';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import fs from 'fs-extra';
+import path from 'path';
 
 const axios = Axios.create();
 

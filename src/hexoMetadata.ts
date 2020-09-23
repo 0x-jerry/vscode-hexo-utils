@@ -1,5 +1,5 @@
 import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider';
-import * as path from 'path';
+import path from 'path';
 import { ConfigProperties, getConfig, SortBy } from './configs';
 
 export interface IHexoMetadata {

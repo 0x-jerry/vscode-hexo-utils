@@ -1,9 +1,9 @@
-import * as path from 'path';
+import path from 'path';
+import fs from 'fs-extra';
 import { askForNext } from '../utils';
 import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { window } from 'vscode';
 import { Command, ICommandParsed, Commands, command } from './common';
-import * as fs from 'fs-extra';
 import { rename } from './utils';
 
 @command()

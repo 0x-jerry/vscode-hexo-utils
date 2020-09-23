@@ -1,6 +1,6 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import * as yamljs from 'yamljs';
+import fs from 'fs-extra';
+import path from 'path';
+import yamljs from 'yamljs';
 import { spawn } from 'child_process';
 import { window } from 'vscode';
 import { configs } from '../configs';
@@ -59,7 +59,7 @@ async function askForNext(placeHolder: string): Promise<boolean> {
 
 async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | undefined> {
   const content = await fs.readFile(filePath, { encoding: 'utf-8' });
-  const stat = await fs.stat(filePath)
+  const stat = await fs.stat(filePath);
 
   try {
     // /---(data)---/ => $1 === data
@@ -82,8 +82,8 @@ async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | unde
       categories: [],
       filePath: filePath,
       title: path.parse(filePath).name,
-      date: stat.ctime
-    }
+      date: stat.ctime,
+    };
   }
 }
 

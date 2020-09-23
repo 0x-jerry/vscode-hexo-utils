@@ -1,9 +1,9 @@
-import * as path from 'path';
+import path from 'path';
+import fs from 'fs-extra';
 import { askForNext } from '../utils';
 import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
-import * as fs from 'fs-extra';
 import { configs } from '../configs';
 import { rename } from './utils';
 
