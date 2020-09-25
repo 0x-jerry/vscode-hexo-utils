@@ -1,3 +1,12 @@
+## [0.1.18](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.17...v0.1.18) (2020-09-25)
+
+
+### Bug Fixes
+
+* fix track id ([ac3ed8c](https://github.com/cwxyz007/vscode-hexo-utils/commit/ac3ed8c416cd96e8d4827c258535a33cef6e610b))
+
+
+
 ## [0.1.17](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.16...v0.1.17) (2020-09-23)
 
 
