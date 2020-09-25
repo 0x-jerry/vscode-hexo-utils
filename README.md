@@ -20,7 +20,7 @@ A sidebar for [Hexo] blog system.
 - `hexo.hexoProjectRoot`: `Hexo` project path(relative to current workspace root), default is workspace root.
 - `hexo.markdown.resource`: Controls whether resolve image with hexo resource folder, default is `true`.
 - `hexo.upload`: Controls whether upload image when use paste image command.
-- `hexo.uploadType`: Only support 'imgchr'.
+- `hexo.uploadType`: Support `imgchr, tencentoss`.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.
 - `hexo.uploadTencentOSS`: Account settings for tencent OSS service. Only available when `hexo.upload` is `true`.(Thanks [abnernat])
 - `hexo.generateTimeFormat`: The time format when generate new article, default is ISO format. ([time-format-tokens])
