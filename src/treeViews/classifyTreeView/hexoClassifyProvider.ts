@@ -139,8 +139,8 @@ export class ClassifyItem extends TreeItem {
     this.iconPath = uri
       ? ThemeIcon.File
       : {
-          dark: path.join(resourcesFolder, `icon-${type}.svg`),
-          light: path.join(resourcesFolder, `icon-${type}.svg`),
+          dark: path.join(resourcesFolder, 'dark', `icon-${type}.svg`),
+          light: path.join(resourcesFolder, 'light', `icon-${type}.svg`),
         };
 
     if (uri) {
