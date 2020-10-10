@@ -1,3 +1,14 @@
+## [0.1.19](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.18...v0.1.19) (2020-10-10)
+
+
+### Performance Improvements
+
+* fix track id ([a7706c8](https://github.com/cwxyz007/vscode-hexo-utils/commit/a7706c830b8bce4fc2cc644d25dd2d4e80454a78))
+* update icon ([e59c591](https://github.com/cwxyz007/vscode-hexo-utils/commit/e59c591dc6e9d900f85ecddd900b464dff6d8fa5))
+* update icons ([96c9da9](https://github.com/cwxyz007/vscode-hexo-utils/commit/96c9da90d49062c3b321839524533a3ebcd956b4))
+
+
+
 ## [0.1.18](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.17...v0.1.18) (2020-09-25)
 
 
