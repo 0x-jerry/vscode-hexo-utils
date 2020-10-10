@@ -204,8 +204,8 @@
         "title": "Delete",
         "category": "Hexo Utils",
         "icon": {
-          "light": "resources/light/icon-remove.svg",
-          "dark": "resources/dark/icon-remove.svg"
+          "light": "resources/light/icon-trash.svg",
+          "dark": "resources/dark/icon-trash.svg"
         }
       },
       {
