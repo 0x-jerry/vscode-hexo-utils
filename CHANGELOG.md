@@ -1,3 +1,12 @@
+## [0.1.20](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.19...v0.1.20) (2020-11-17)
+
+
+### Bug Fixes
+
+* get correct cookie [#33](https://github.com/cwxyz007/vscode-hexo-utils/issues/33) ([6b6442a](https://github.com/cwxyz007/vscode-hexo-utils/commit/6b6442acffb18b7d93ca7006984bd7eb1ca4e1aa))
+
+
+
 ## [0.1.19](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.18...v0.1.19) (2020-10-10)
 
 
