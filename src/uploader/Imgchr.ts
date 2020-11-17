@@ -30,13 +30,21 @@ export class ImgChr {
   password: string;
 
   token: string;
-  cookie: string;
+  cookies: Set<string>;
+
+  get cookie() {
+    return Array.from(this.cookies).join(';');
+  }
 
   constructor(opt: IImgChrOption) {
     this.username = opt.username;
     this.password = opt.password;
-    this.cookie = '';
     this.token = '';
+    this.cookies = new Set();
+  }
+
+  addCookie(cookie: string) {
+    cookie.split(';').forEach((n) => this.cookies.add(n));
   }
 
   async _updateConfig() {
@@ -45,7 +53,7 @@ export class ImgChr {
 
     this.token = matched[1];
 
-    this.cookie = res.headers['set-cookie'][0];
+    this.addCookie(res.headers['set-cookie'][0]);
   }
 
   async _saveConfig() {
@@ -73,7 +81,7 @@ export class ImgChr {
         return false;
       }
 
-      this.cookie = data.cookie;
+      this.addCookie(data.cookie);
       this.token = data.token;
     } catch (error) {
       return false;
@@ -91,6 +99,8 @@ export class ImgChr {
 
     try {
       await axios.post(apiConfig.root + apiConfig.login, form, {
+        // Get correct cookie: https://github.com/cwxyz007/vscode-hexo-utils/issues/33
+        maxRedirects: 0,
         headers: {
           ...form.getHeaders(),
           'content-length': form.getLengthSync(),
@@ -98,10 +108,19 @@ export class ImgChr {
         },
       });
 
-      await this._saveConfig();
-    } catch (error) {
       warn('Imgchr login failed.', 'Please check username and password');
-      throw new Error(error);
+      throw new Error('Imgchr login failed.');
+    } catch (data) {
+      if (data.response && data.response.status === 301) {
+        const cookie: string = data.response.headers['set-cookie'][0];
+
+        this.addCookie(cookie)
+
+        await this._saveConfig();
+      } else {
+        warn('Imgchr login failed.', 'Please check username and password');
+        throw new Error(data);
+      }
     }
   }
 
