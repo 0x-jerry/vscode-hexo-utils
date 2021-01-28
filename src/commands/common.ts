@@ -72,7 +72,7 @@ export abstract class Command implements Disposable {
     this._disposable = Disposable.from(...registers);
   }
 
-  abstract async execute(cmd: ICommandParsed, ...arg: any[]): Promise<any>;
+  abstract execute(cmd: ICommandParsed, ...arg: any[]): Promise<any>;
 
   private async _execute(command: Commands, ...args: any[]) {
     if (!isHexoProject()) {

@@ -21,7 +21,7 @@ export enum ClassifyTypes {
 }
 
 export class HexoClassifyProvider extends BaseDispose implements TreeDataProvider<ClassifyItem> {
-  private _onDidChangeTreeData = new EventEmitter<ClassifyItem | undefined>();
+  private _onDidChangeTreeData = new EventEmitter<ClassifyItem | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type: ClassifyTypes = ClassifyTypes.category;
@@ -44,7 +44,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
   }
 
   refresh() {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(null);
   }
 
   getTreeItem(element: ClassifyItem): TreeItem | Thenable<TreeItem> {

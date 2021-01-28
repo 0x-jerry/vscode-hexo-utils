@@ -16,7 +16,7 @@ import { IHexoMetadata } from '../../hexoMetadata';
 import { BaseDispose } from '../common';
 
 export class HexoArticleProvider extends BaseDispose implements TreeDataProvider<ArticleItem> {
-  private _onDidChangeTreeData = new EventEmitter<ArticleItem | undefined>();
+  private _onDidChangeTreeData = new EventEmitter<ArticleItem | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   type = ArticleTypes.post;
@@ -40,7 +40,7 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
   }
 
   refresh() {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(null);
   }
 
   getTreeItem(element: ArticleItem): TreeItem {
