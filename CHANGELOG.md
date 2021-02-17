@@ -1,3 +1,12 @@
+## [0.1.21](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.20...v0.1.21) (2021-02-17)
+
+
+### Features
+
+* support hierarchy categroies. close [#36](https://github.com/cwxyz007/vscode-hexo-utils/issues/36) ([cba7f92](https://github.com/cwxyz007/vscode-hexo-utils/commit/cba7f9262263c2357376ebbb5ba1431c771efb24))
+
+
+
 ## [0.1.20](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.19...v0.1.20) (2020-11-17)
 
 
