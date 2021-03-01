@@ -26,7 +26,7 @@ export class MoveFile extends Command {
 
     await fs.ensureDir(path.dirname(destPath));
 
-    if ((await fs.pathExists(destPath)) && !(await askForNext('Whether replace exist file?'))) {
+    if ((await fs.pathExists(destPath)) && !(await askForNext('Whether to replace the exist file?'))) {
       return null;
     }
 
