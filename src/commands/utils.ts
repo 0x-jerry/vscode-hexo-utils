@@ -2,7 +2,7 @@ import { Uri, WorkspaceEdit, workspace } from 'vscode';
 
 function toUri(path: string | Uri) {
   if (typeof path === 'string') {
-    return Uri.parse(path);
+    return Uri.file(path);
   }
 
   return path;
