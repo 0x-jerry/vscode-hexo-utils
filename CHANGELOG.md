@@ -1,3 +1,17 @@
+## [0.1.22](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.21...v0.1.22) (2021-03-09)
+
+
+### Bug Fixes
+
+* can't move file when path has some weird character. ([b873673](https://github.com/cwxyz007/vscode-hexo-utils/commit/b8736734e2abab66b430deca63890ce152d507b0)), closes [#37](https://github.com/cwxyz007/vscode-hexo-utils/issues/37)
+
+
+### Performance Improvements
+
+* update prompt message for replace action ([1645ec6](https://github.com/cwxyz007/vscode-hexo-utils/commit/1645ec658482aa9b4e5f2a5eab71a62e6c473c4b))
+
+
+
 ## [0.1.21](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.20...v0.1.21) (2021-02-17)
 
 
