@@ -5,7 +5,6 @@ import {
   CancellationToken,
   Position,
   CompletionContext,
-  ProviderResult,
   CompletionItem,
   CompletionList,
   MarkdownString,
@@ -16,14 +15,14 @@ import { isHexoProject } from './utils';
 import { configs } from './configs';
 
 export class HexoCompletionProvider implements CompletionItemProvider {
-  provideCompletionItems(
+  async provideCompletionItems(
     document: TextDocument,
     position: Position,
     token: CancellationToken,
     context: CompletionContext,
-  ): ProviderResult<CompletionItem[] | CompletionList> {
+  ): Promise<CompletionItem[] | CompletionList> {
     // Filter md file
-    if (!document.uri.fsPath.endsWith('.md') || !isHexoProject()) {
+    if (!document.uri.fsPath.endsWith('.md') || !(await isHexoProject())) {
       return [];
     }
 
@@ -39,7 +38,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
     const filePath = document.uri.fsPath;
     const isDraft = filePath.includes('_drafts');
     const fileDir = path
-      .relative(isDraft ? configs.paths.draft : configs.paths.post, filePath)
+      .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, filePath)
       .replace(/\.md$/, '');
 
     const resFolder = `source/_posts/${fileDir}/**/*.{png,jpg,jpeg,svg,gif}`;
@@ -48,7 +47,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       return uris.map((imgUri) => {
         const relPath = path.relative(document.uri.fsPath, imgUri.fsPath);
 
-        const resourceDir = path.join(configs.paths.post, fileDir);
+        const resourceDir = path.join(configs.paths.post.fsPath, fileDir);
 
         const itemLabel = imgUri.fsPath.substr(resourceDir.length + 1).replace('\\', '/');
 

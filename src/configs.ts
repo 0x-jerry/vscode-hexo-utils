@@ -1,7 +1,6 @@
-import { workspace } from 'vscode';
+import { Uri, workspace } from 'vscode';
 import path from 'path';
 import yamljs from 'yamljs';
-import fs from 'fs-extra';
 
 enum ConfigProperties {
   SECTION = 'hexo',
@@ -30,25 +29,26 @@ const configs = {
   get hexoRoot() {
     const folders = workspace.workspaceFolders;
     if (folders) {
-      return path.join(folders[0].uri.fsPath, getConfig<string>(ConfigProperties.hexoRoot)!);
+      return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot)!)
     }
 
     return undefined;
   },
   paths: {
     get scaffold() {
-      return path.join(configs.hexoRoot!, 'scaffolds');
+      return Uri.joinPath(configs.hexoRoot!, 'scaffolds')
     },
     get post() {
-      return path.join(configs.hexoRoot!, 'source', `_posts`);
+      return Uri.joinPath(configs.hexoRoot!, 'source', `_posts`);
     },
     get draft() {
-      return path.join(configs.hexoRoot!, 'source', `_drafts`);
+      return Uri.joinPath(configs.hexoRoot!, 'source', `_drafts`);
     },
   },
   async hexoConfig() {
     try {
-      const hexoConf = await fs.readFile(path.join(configs.hexoRoot!, '_config.yml'));
+      const configUri = Uri.joinPath(configs.hexoRoot!, '_config.yml');
+      const hexoConf = await workspace.fs.readFile(configUri)
       return yamljs.parse(hexoConf.toString());
     } catch (error) {
       return null;

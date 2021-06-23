@@ -7,7 +7,6 @@ import {
   Uri,
   ProviderResult,
 } from 'vscode';
-import path from 'path';
 import { Commands } from '../../commands/common';
 import { ArticleTypes } from '../../commands/createArticle';
 import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
@@ -57,7 +56,7 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
 
   async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
     const items: ArticleItem[] = [];
-    if (!isHexoProject()) {
+    if (!(await isHexoProject())) {
       return items;
     }
 
@@ -67,12 +66,11 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
     const paths = await getMDFiles(articleRootPath);
 
     for (const p of paths) {
-      const filePath = path.join(articleRootPath, p);
-      const metadata = (await getMDFileMetadata(filePath))!;
-      const item = new ArticleItem(p, path.join(articleRootPath, p), metadata);
+      const metadata = (await getMDFileMetadata(p))!;
+      const item = new ArticleItem(p.fsPath, p, metadata);
 
       items.push(item);
-      this.allItems.set(Uri.parse(filePath).toString(), item);
+      this.allItems.set(p.fsPath, item);
     }
 
     return items.sort((a, b) => {
@@ -100,14 +98,14 @@ export class ArticleItem extends TreeItem {
 
   constructor(
     label: string,
-    uri: string,
+    uri: Uri,
     metadata: IHexoMetadata,
     collapsibleState?: TreeItemCollapsibleState,
   ) {
     super(label, collapsibleState);
     this.metadata = metadata;
 
-    this.resourceUri = Uri.file(uri);
+    this.resourceUri = uri;
     this.command = {
       title: 'open',
       command: Commands.open,

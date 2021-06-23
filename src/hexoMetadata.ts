@@ -1,13 +1,14 @@
 import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider';
 import path from 'path';
 import { ConfigProperties, getConfig, SortBy } from './configs';
+import { Uri } from 'vscode';
 
 export interface IHexoMetadata {
   tags: string[];
   categories: string[];
   title: string;
   date: Date;
-  filePath: string;
+  filePath: Uri;
 }
 
 type THexoMeta = IHexoMetadata & { name?: string };
@@ -23,7 +24,7 @@ export class HexoMetadataUtils {
 
   constructor(metadatas: THexoMeta[]) {
     metadatas.forEach((metadata) => {
-      metadata.name = path.parse(metadata.filePath).name;
+      metadata.name = path.parse(metadata.filePath.fsPath).name;
 
       if (metadata.tags) {
         metadata.tags.forEach((t) => {

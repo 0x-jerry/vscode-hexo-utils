@@ -1,29 +1,33 @@
-import fs from 'fs-extra';
-import path from 'path';
+import { FileType, Uri, workspace } from 'vscode';
 
-async function getDirFiles(dir: string): Promise<string[]> {
-  const exist = (await fs.pathExists(dir)) && (await fs.stat(dir)).isDirectory();
+export async function getDirFiles(dir: Uri) {
+  const exist = (await isExist(dir))?.type === FileType.Directory;
 
   if (!exist) {
     return [];
   }
 
-  return await fs.readdir(dir);
+  return workspace.fs.readDirectory(dir)
 }
 
-async function getMDFiles(dir: string): Promise<string[]> {
-  const files = await getDirFiles(dir);
-  let mds: string[] = [];
+export async function getMDFiles(dir: Uri) {
 
-  for (const sub of files) {
-    const fPath = path.join(dir, sub);
-    if ((await fs.stat(fPath)).isDirectory()) {
-      const subFiles = await getMDFiles(fPath);
-      mds = mds.concat(subFiles.map((f) => sub + '/' + f));
-    }
+  const glob = Uri.joinPath(dir, '/**/*.md').fsPath
+
+  // todo
+  const mds = await workspace.findFiles(glob)
+
+  // const prefix = dir.fsPath
+
+  // return mds.map(u => u.fsPath.slice(prefix.length))
+  return mds
+}
+
+
+export async function isExist(uri: Uri) {
+  try {
+    return workspace.fs.stat(uri)
+  } catch {
+    return null
   }
-
-  return mds.concat(files).filter((f) => f.endsWith('.md'));
 }
-
-export { getDirFiles, getMDFiles };

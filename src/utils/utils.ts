@@ -1,55 +1,39 @@
-import fs from 'fs-extra';
 import path from 'path';
 import yamljs from 'yamljs';
-import { spawn } from 'child_process';
-import { window } from 'vscode';
+import { Uri, window, workspace } from 'vscode';
 import { configs } from '../configs';
 import { IHexoMetadata } from '../hexoMetadata';
+import { isExist } from './fs';
 
-function getPkg() {
+async function getPkg() {
   const rootPath = configs.hexoRoot;
   if (!rootPath) {
     return null;
   }
 
-  const pkgPath = path.join(rootPath, 'package.json');
+  const pkgPath = Uri.joinPath(rootPath, 'package.json');
 
-  if (!fs.existsSync(pkgPath)) {
+
+  if (!isExist(pkgPath)) {
     return null;
   }
 
-  const pkg = fs.readFileSync(pkgPath, { encoding: 'utf-8' });
+  const pkg = await workspace.fs.readFile(pkgPath);
 
-  return JSON.parse(pkg);
+  return JSON.parse(pkg.toString());
 }
 
-function isHexoProject(): boolean {
-  const pkg = getPkg();
+export async function isHexoProject() {
+  const pkg = await getPkg();
   return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
 }
 
-function exec(cmd: string, args: string[]): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const proc = spawn(cmd, args, {
-      cwd: configs.hexoRoot,
-      shell: true,
-    });
-
-    proc.on('exit', () => {
-      resolve();
-    });
-
-    proc.on('error', (err) => {
-      reject(err);
-    });
-  });
-}
 
 /**
  * true if yse
  * @param placeHolder msg
  */
-async function askForNext(placeHolder: string): Promise<boolean> {
+export async function askForNext(placeHolder: string): Promise<boolean> {
   const replace = await window.showQuickPick(['yes', 'no'], {
     placeHolder,
   });
@@ -57,15 +41,15 @@ async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
-async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | undefined> {
-  const content = await fs.readFile(filePath, { encoding: 'utf-8' });
-  const stat = await fs.stat(filePath);
+export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata | undefined> {
+  const content = await workspace.fs.readFile(uri);
+  const stat = await workspace.fs.stat(uri);
 
   try {
     // /---(data)---/ => $1 === data
     const yamlReg = /^---((.|\n|\r)+?)---$/m;
 
-    const yamlData = yamlReg.exec(content);
+    const yamlData = yamlReg.exec(content.toString());
 
     const data = yamljs.parse(yamlData![1]) || {};
 
@@ -73,7 +57,7 @@ async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | unde
 
     return {
       tags: Array.isArray(data.tags) ? data.tags : [],
-      filePath: filePath,
+      filePath: uri,
       // →  · /
       categories: categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c)),
       title: data.title || '',
@@ -83,11 +67,9 @@ async function getMDFileMetadata(filePath: string): Promise<IHexoMetadata | unde
     return {
       tags: [],
       categories: [],
-      filePath: filePath,
-      title: path.parse(filePath).name,
-      date: stat.ctime,
+      filePath: uri,
+      title: path.parse(uri.fsPath).name,
+      date: new Date(stat.ctime),
     };
   }
 }
-
-export { isHexoProject, askForNext, exec, getMDFileMetadata };

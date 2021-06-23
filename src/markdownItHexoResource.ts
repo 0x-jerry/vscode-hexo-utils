@@ -2,8 +2,7 @@ import Token from 'markdown-it/lib/token';
 import StateInline from 'markdown-it/lib/rules_inline/state_inline';
 import MarkdownIt from 'markdown-it';
 import path from 'path';
-import { window } from 'vscode';
-import fs from 'fs-extra';
+import { Uri, window, workspace } from 'vscode';
 import { configs } from './configs';
 
 class MarkdownHexoPlugin {
@@ -66,7 +65,7 @@ class MarkdownHexoPlugin {
   private hexoLinkTagRule(status: StateInline, href: string, text: string) {
     const token = status.push('link', 'a', 1);
 
-    const src = this.getImgCorrectPath(href);
+    const src = this.getCorrectImagePath(href);
     token.attrs = [
       ['href', src],
       ['alt', text],
@@ -82,7 +81,7 @@ class MarkdownHexoPlugin {
 
   private hexoImageTagRule(status: StateInline, src: string, alt: string) {
     const token = status.push('image', 'img', 0);
-    this.createHexoImg(token, this.getImgCorrectPath(src), alt);
+    this.createHexoImg(token, this.getCorrectImagePath(src), alt);
   }
 
   private hexoImageRenderRule() {
@@ -92,7 +91,7 @@ class MarkdownHexoPlugin {
       const token = tokens[idx];
 
       // relative path
-      const src = this.getImgCorrectPath(token.attrGet('src') || '');
+      const src = this.getCorrectImagePath(token.attrGet('src') || '');
 
       token.attrSet('src', src);
 
@@ -115,29 +114,35 @@ class MarkdownHexoPlugin {
     token.children = [textToken];
   }
 
-  private getImgCorrectPath(imgNameWidthExt: string): string {
+  private getCorrectImagePath(imgNameWidthExt: string): string {
     let resultPath = imgNameWidthExt;
 
-    if (window.activeTextEditor) {
-      const filePath = window.activeTextEditor.document.uri.fsPath;
-      const resourceDir = this.getResDir(filePath);
-
-      const imgPath = path.join(resourceDir, imgNameWidthExt);
-      const relativePath = path.relative(path.parse(filePath).dir, imgPath);
-
-      resultPath = fs.pathExistsSync(imgPath) ? relativePath : imgNameWidthExt;
+    if (!window.activeTextEditor) {
+      return resultPath
     }
 
-    return resultPath;
+    const activeUri = window.activeTextEditor.document.uri
+    const resourceDir = this.getResDir(activeUri);
+
+    const imgUri = Uri.joinPath(resourceDir, imgNameWidthExt);
+    const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath);
+
+    try {
+      return workspace.fs.stat(imgUri) ? relativePath : imgNameWidthExt;
+    } catch (error) {
+      // todo
+      console.log('get img failed', imgNameWidthExt, error)
+      return ''
+    }
   }
 
-  private getResDir(filePath: string) {
-    const isDraft = filePath.indexOf('_drafts') !== -1;
+  private getResDir(fileUri: Uri) {
+    const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1;
     const fileDir = path
-      .relative(isDraft ? configs.paths.draft : configs.paths.post, filePath)
+      .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
       .replace(/\.md$/, '');
 
-    const resourceDir = path.join(configs.paths.post, fileDir);
+    const resourceDir = Uri.joinPath(configs.paths.post, fileDir);
     return resourceDir;
   }
 }

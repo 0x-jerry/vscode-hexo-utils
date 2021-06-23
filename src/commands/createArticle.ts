@@ -1,10 +1,9 @@
 import path from 'path';
 import mustache from 'mustache';
-import { getDirFiles, askForNext, error } from '../utils';
-import { window } from 'vscode';
+import { getDirFiles, askForNext, error, isExist } from '../utils';
+import { Uri, window, workspace } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
 import { configs, getConfig, ConfigProperties } from '../configs';
-import fs from 'fs-extra';
 import dayjs from 'dayjs';
 
 export enum ArticleTypes {
@@ -33,48 +32,48 @@ export class CreateArticle extends Command {
 
     try {
       const filePath = title.split('.').pop()!;
-      await this.createTplFile(filePath, type, template);
+      await this.createWithTpl(filePath, type, template);
     } catch (err) {
       error(`Create failed on [${template}], ${err}`);
     }
   }
 
-  private async createTplFile(filePath: string, type: ArticleTypes, template: string) {
+  private async createWithTpl(filePath: string, type: ArticleTypes, template: string) {
     const filePathInfo = path.parse(filePath + '.md');
 
     const typeFolder = configs.paths[type];
 
-    await fs.ensureDir(typeFolder);
+    await workspace.fs.createDirectory(typeFolder)
 
-    const createFilePath = path.join(typeFolder, filePathInfo.dir, filePathInfo.base);
+    const createFilePath = Uri.joinPath(typeFolder, filePathInfo.dir, filePathInfo.base);
 
     if (
-      (await fs.pathExists(createFilePath)) &&
+      (await isExist(createFilePath)) &&
       !(await askForNext('Whether replace exist file?'))
     ) {
       return null;
     }
 
-    const tplPath = path.join(configs.paths.scaffold, template + '.md');
-    const tpl = await fs.readFile(tplPath, { encoding: 'utf-8' });
+    const tplPath = Uri.joinPath(configs.paths.scaffold, template + '.md');
+    const tpl = await workspace.fs.readFile(tplPath);
 
-    const result = mustache.render(tpl, {
+    const result = mustache.render(tpl.toString(), {
       title: filePathInfo.name,
       date: dayjs().format(getConfig(ConfigProperties.generateTimeFormat)),
     });
 
-    // ensure file dir
-    await fs.ensureDir(path.join(typeFolder, filePathInfo.dir));
 
-    await fs.writeFile(createFilePath, result, { encoding: 'utf-8' });
+    await workspace.fs.writeFile(createFilePath, Buffer.from(result))
 
-    await this.createResourceDir(path.join(typeFolder, filePathInfo.dir, filePathInfo.name));
+    const resourceDir = Uri.joinPath(typeFolder, filePathInfo.dir , filePathInfo.name)
+
+    await this.createResourceDir(resourceDir);
   }
 
-  private async createResourceDir(fileAssetPath: string) {
+  private async createResourceDir(fileAssetPath: Uri) {
     const hexoConf = await configs.hexoConfig();
-    if (hexoConf && hexoConf.post_asset_folder && !(await fs.pathExists(fileAssetPath))) {
-      await fs.mkdir(fileAssetPath);
+    if (hexoConf && hexoConf.post_asset_folder && !(await isExist(fileAssetPath))) {
+      await workspace.fs.createDirectory(fileAssetPath);
     }
   }
 
@@ -83,7 +82,7 @@ export class CreateArticle extends Command {
     if (!cmd.args[0]) {
       const items = await getDirFiles(configs.paths.scaffold);
 
-      const file = await window.showQuickPick(items.map((i) => i.substr(0, i.length - 3)));
+      const file = await window.showQuickPick(items.map(([name]) => name));
 
       if (file) {
         const isDraft = file === 'draft';

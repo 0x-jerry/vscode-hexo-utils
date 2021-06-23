@@ -70,12 +70,12 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
     const include = getConfig<boolean>(ConfigProperties.includeDraft);
 
-    const postsPath = (await getMDFiles(postFolder)).map((p) => path.join(postFolder, p));
+    const postsPath = await getMDFiles(postFolder)
 
-    let draftsPath: string[] = [];
+    let draftsPath: Uri[] = [];
 
     if (include) {
-      draftsPath = (await getMDFiles(draftFolder)).map((p) => path.join(draftFolder, p));
+      draftsPath = await getMDFiles(draftFolder)
     }
 
     const filesPath = postsPath.concat(include ? draftsPath : []);
@@ -94,14 +94,14 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
       if (classify) {
         classify.files.forEach((metadata) => {
-          const isDraft = include && draftsPath.findIndex((p) => p === metadata.filePath) !== -1;
+          const isDraft = include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1;
 
-          const name = path.relative(isDraft ? draftFolder : postFolder, metadata.filePath);
+          const name = path.relative(isDraft ? draftFolder.fsPath : postFolder.fsPath, metadata.filePath.fsPath);
 
           const item = new ClassifyItem(name, this.type, metadata.filePath);
           item.parent = element;
 
-          this._allItems.set(Uri.parse(metadata.filePath).toString(), item);
+          this._allItems.set(metadata.filePath.fsPath, item);
           items.push(item);
         });
       }
@@ -130,7 +130,7 @@ export class ClassifyItem extends TreeItem {
   constructor(
     label: string,
     type: ClassifyTypes,
-    uri?: string,
+    uri?: Uri,
     collapsibleState?: TreeItemCollapsibleState,
   ) {
     super(label, collapsibleState);
@@ -144,7 +144,7 @@ export class ClassifyItem extends TreeItem {
         };
 
     if (uri) {
-      this.resourceUri = Uri.file(uri);
+      this.resourceUri = uri;
 
       this.command = {
         title: 'open',

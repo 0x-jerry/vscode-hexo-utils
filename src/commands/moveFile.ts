@@ -1,11 +1,11 @@
 import path from 'path';
-import fs from 'fs-extra';
-import { askForNext } from '../utils';
+import { askForNext, isExist } from '../utils';
 import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
 import { ArticleTypes } from './createArticle';
 import { Command, command, ICommandParsed, Commands } from './common';
 import { configs } from '../configs';
 import { rename } from './utils';
+import { Uri } from 'vscode';
 
 @command()
 export class MoveFile extends Command {
@@ -18,15 +18,13 @@ export class MoveFile extends Command {
     const filePath = item.resourceUri!.fsPath;
 
     const fileName = path.relative(
-      to === ArticleTypes.draft ? configs.paths.post : configs.paths.draft,
+      to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
       filePath,
     );
 
-    const destPath = path.join(toPath, fileName);
+    const destPath = Uri.joinPath(toPath, fileName);
 
-    await fs.ensureDir(path.dirname(destPath));
-
-    if ((await fs.pathExists(destPath)) && !(await askForNext('Whether to replace the exist file?'))) {
+    if ((await isExist(destPath)) && !(await askForNext('Whether to replace the exist file?'))) {
       return null;
     }
 
