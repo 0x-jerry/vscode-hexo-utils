@@ -2,7 +2,7 @@ import { Uri, workspace } from 'vscode';
 import path from 'path';
 import yamljs from 'yamljs';
 
-enum ConfigProperties {
+export enum ConfigProperties {
   SECTION = 'hexo',
   includeDraft = 'includeDraft',
   resolveMarkdownResource = 'markdown.resource',
@@ -20,23 +20,23 @@ export enum SortBy {
   date = 'date',
 }
 
-function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
+export function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
   const configs = workspace.getConfiguration(section);
   return configs.get<T>(propName)!;
 }
 
-const configs = {
+export const configs = {
   get hexoRoot() {
     const folders = workspace.workspaceFolders;
     if (folders) {
-      return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot)!)
+      return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot)!);
     }
 
     return undefined;
   },
   paths: {
     get scaffold() {
-      return Uri.joinPath(configs.hexoRoot!, 'scaffolds')
+      return Uri.joinPath(configs.hexoRoot!, 'scaffolds');
     },
     get post() {
       return Uri.joinPath(configs.hexoRoot!, 'source', `_posts`);
@@ -48,7 +48,7 @@ const configs = {
   async hexoConfig() {
     try {
       const configUri = Uri.joinPath(configs.hexoRoot!, '_config.yml');
-      const hexoConf = await workspace.fs.readFile(configUri)
+      const hexoConf = await workspace.fs.readFile(configUri);
       return yamljs.parse(hexoConf.toString());
     } catch (error) {
       return null;
@@ -59,4 +59,4 @@ const configs = {
   },
 };
 
-export { getConfig, ConfigProperties, configs };
+export const isDev = process.env.NODE_ENV === 'development';

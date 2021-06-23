@@ -12,7 +12,11 @@
       "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "npm: webpack"
+      "preLaunchTask": "npm: webpack",
+      "env": {
+        "DEBUG": "vscode-hexo-utils:*",
+        "NODE_ENV": "development"
+      }
     },
     {
       "name": "Extension Tests",

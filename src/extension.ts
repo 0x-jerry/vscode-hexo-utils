@@ -5,7 +5,7 @@ import { registerCommands } from './commands';
 import { HexoCompletionProvider } from './hexoCompletionProvider';
 import MarkdownIt from 'markdown-it';
 import plugin from './markdownItHexoResource';
-import { getConfig, ConfigProperties } from './configs';
+import { getConfig, ConfigProperties, isDev } from './configs';
 import { registerTreeViews } from './treeViews';
 import { visitor } from './track';
 
@@ -15,7 +15,9 @@ export function activate(context: ExtensionContext) {
     { language: 'markdown', scheme: 'untitled' },
   ];
 
-  visitor.pageview('/start').send();
+  if (!isDev) {
+    visitor.pageview('/start').send();
+  }
 
   const completionItemProvider = languages.registerCompletionItemProvider(
     selectors,

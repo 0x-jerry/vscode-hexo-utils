@@ -67,7 +67,10 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
 
     for (const p of paths) {
       const metadata = (await getMDFileMetadata(p))!;
-      const item = new ArticleItem(p.fsPath, p, metadata);
+
+      const name = p.fsPath.slice(articleRootPath.fsPath.length + 1);
+
+      const item = new ArticleItem(name, p, metadata);
 
       items.push(item);
       this.allItems.set(p.fsPath, item);
