@@ -46,6 +46,11 @@ export class PasteImage extends Command {
     return path.join(imageFolder, name);
   }
 
+  /**
+   * todo: support remote workspace
+   * @param cmd
+   * @returns
+   */
   async execute(cmd: ICommandParsed): Promise<any> {
     const editor = window.activeTextEditor;
     if (!editor) {

@@ -1,8 +1,7 @@
 import path from 'path';
-import fs from 'fs-extra';
-import { askForNext } from '../utils';
+import { askForNext, isExist } from '../utils';
 import { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider';
-import { window } from 'vscode';
+import { Uri, window } from 'vscode';
 import { Command, ICommandParsed, Commands, command } from './common';
 import { rename } from './utils';
 
@@ -13,19 +12,19 @@ export class RenameFile extends Command {
   }
 
   async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {
-    const filePath = item.resourceUri!.fsPath;
-    const oldPath = path.parse(filePath);
+    const filePath = item.resourceUri!;
+    const oldPath = filePath;
 
     const newName = await window.showInputBox({
-      value: oldPath.name,
+      value: path.parse(oldPath.fsPath).name,
       prompt: 'Input a new name',
     });
     if (!newName) {
       return null;
     }
 
-    const newPath = path.join(oldPath.dir, newName + '.md');
-    if ((await fs.pathExists(newPath)) && !(await askForNext('Whether replace exist file?'))) {
+    const newPath = Uri.joinPath(oldPath, newName + '.md');
+    if ((await isExist(newPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;
     }
 
