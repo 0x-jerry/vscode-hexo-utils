@@ -18,7 +18,8 @@ export async function getMDFiles(dir: Uri) {
 
 export async function isExist(uri: Uri) {
   try {
-    return workspace.fs.stat(uri);
+    const stat = await workspace.fs.stat(uri);
+    return stat;
   } catch {
     return null;
   }

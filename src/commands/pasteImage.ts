@@ -1,10 +1,9 @@
 import path from 'path';
-import fs from 'fs-extra';
 import os from 'os';
 import dayjs from 'dayjs';
 import { spawn } from 'child_process';
-import { window, TextEditor, ProgressLocation } from 'vscode';
-import { warn, error, askForNext } from '../utils';
+import { window, TextEditor, ProgressLocation, workspace, Uri } from 'vscode';
+import { warn, error, askForNext, isExist } from '../utils';
 import { Command, ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
 import { getConfig, ConfigProperties } from '../configs';
@@ -22,7 +21,7 @@ export class PasteImage extends Command {
       return false;
     }
 
-    return uri.fsPath;
+    return uri;
   }
 
   async getImageFilePath(editor: TextEditor) {
@@ -31,8 +30,8 @@ export class PasteImage extends Command {
       return false;
     }
 
-    const uri = path.parse(filePath);
-    const imageFolder = path.join(uri.dir, uri.name);
+    const parsed = path.parse(filePath.fsPath);
+    const imageFolder = Uri.joinPath(filePath, '..', parsed.name);
 
     const selectText = editor.document.getText(editor.selection);
 
@@ -42,12 +41,11 @@ export class PasteImage extends Command {
       name = selectText + '.png';
     }
 
-    await fs.ensureDir(imageFolder);
-    return path.join(imageFolder, name);
+    await workspace.fs.createDirectory(imageFolder);
+    return Uri.joinPath(imageFolder, name);
   }
 
   /**
-   * todo: support remote workspace
    * @param cmd
    * @returns
    */
@@ -71,10 +69,11 @@ export class PasteImage extends Command {
   async saveImage(editor: TextEditor): Promise<string | false> {
     const uploadEnabled = getConfig<boolean>(ConfigProperties.upload);
 
-    if (uploadEnabled) {
-      const tempFilename = Math.random().toString().substr(2) + '.jpg';
-      const tempPath = path.join(os.tmpdir(), tempFilename);
+    const tempFilename = Math.random().toString().substr(2) + '.jpg';
+    const tempPath = path.join(os.tmpdir(), tempFilename);
+    await this.pasteImage(tempPath);
 
+    if (uploadEnabled) {
       const url = await window.withProgress(
         {
           cancellable: true,
@@ -82,7 +81,6 @@ export class PasteImage extends Command {
           title: 'Upload image',
         },
         async () => {
-          await this.pasteImage(tempPath);
           return await upload(tempPath);
         },
       );
@@ -95,14 +93,15 @@ export class PasteImage extends Command {
       }
 
       if (
-        (await fs.pathExists(imagePath)) &&
+        (await isExist(imagePath)) &&
         !(await askForNext(`${imagePath} existed, would you want to replace ?`))
       ) {
         return false;
       }
+      const tempUri = Uri.file(tempPath);
 
-      await this.pasteImage(imagePath);
-      return imagePath;
+      await workspace.fs.copy(tempUri, imagePath);
+      return imagePath.fsPath;
     }
   }
 
