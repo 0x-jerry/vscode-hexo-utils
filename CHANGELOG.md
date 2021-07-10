@@ -1,3 +1,25 @@
+## [0.1.23](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.21...v0.1.23) (2021-07-10)
+
+
+### Bug Fixes
+
+* rename file ([b5472b0](https://github.com/cwxyz007/vscode-hexo-utils/commit/b5472b0a90f02b3cdee42311a94c5cba19179803))
+* **remote:** rename with remote workspace ([fac048a](https://github.com/cwxyz007/vscode-hexo-utils/commit/fac048abc72aaa95c0aac81cae7a81fe17b22552))
+* **remote:** view items did not show ([dcf127b](https://github.com/cwxyz007/vscode-hexo-utils/commit/dcf127bcd49b5f25de31da8c18b7a0a320c925ed))
+* can't move file when path has some weird character. ([b873673](https://github.com/cwxyz007/vscode-hexo-utils/commit/b8736734e2abab66b430deca63890ce152d507b0)), closes [#37](https://github.com/cwxyz007/vscode-hexo-utils/issues/37)
+
+
+### Features
+
+* support remote development when paste image ([3a80cd2](https://github.com/cwxyz007/vscode-hexo-utils/commit/3a80cd2659a0561b95c343faefaab562b45a2321))
+
+
+### Performance Improvements
+
+* update prompt message for replace action ([1645ec6](https://github.com/cwxyz007/vscode-hexo-utils/commit/1645ec658482aa9b4e5f2a5eab71a62e6c473c4b))
+
+
+
 ## [0.1.22](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.21...v0.1.22) (2021-03-09)
 
 
