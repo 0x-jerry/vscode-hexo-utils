@@ -9,6 +9,7 @@ A sidebar for [Hexo] blog system.
 - Preview image with assets folder
 - Hexo tag syntax highlight and hexo snippets ([Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235))
 - Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)
+- Support remote development
 - And more ...
 
 ![feature](docs-images/feature.png)
@@ -40,6 +41,6 @@ See [CHANGELOG](CHANGELOG.md)
 [time-format-tokens]: https://day.js.org/docs/en/plugin/custom-parse-format#list-of-all-available-format-tokens
 [abnernat]: https://github.com/abnernat
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils?ref=badge_large)
