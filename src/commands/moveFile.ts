@@ -15,11 +15,11 @@ export class MoveFile extends Command {
 
   private async _move(item: ArticleItem, to: ArticleTypes) {
     const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
-    const filePath = item.resourceUri!.fsPath;
+    const sourceUri = item.resourceUri!;
 
     const fileName = path.relative(
       to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
-      filePath,
+      sourceUri.fsPath,
     );
 
     const destPath = Uri.joinPath(toPath, fileName);
@@ -28,7 +28,7 @@ export class MoveFile extends Command {
       return null;
     }
 
-    rename(filePath, destPath);
+    rename(sourceUri, destPath);
   }
 
   async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {

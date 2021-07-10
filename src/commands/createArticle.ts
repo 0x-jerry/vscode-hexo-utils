@@ -43,14 +43,11 @@ export class CreateArticle extends Command {
 
     const typeFolder = configs.paths[type];
 
-    await workspace.fs.createDirectory(typeFolder)
+    await workspace.fs.createDirectory(typeFolder);
 
     const createFilePath = Uri.joinPath(typeFolder, filePathInfo.dir, filePathInfo.base);
 
-    if (
-      (await isExist(createFilePath)) &&
-      !(await askForNext('Whether replace exist file?'))
-    ) {
+    if ((await isExist(createFilePath)) && !(await askForNext('Whether replace exist file?'))) {
       return null;
     }
 
@@ -62,10 +59,9 @@ export class CreateArticle extends Command {
       date: dayjs().format(getConfig(ConfigProperties.generateTimeFormat)),
     });
 
+    await workspace.fs.writeFile(createFilePath, Buffer.from(result));
 
-    await workspace.fs.writeFile(createFilePath, Buffer.from(result))
-
-    const resourceDir = Uri.joinPath(typeFolder, filePathInfo.dir , filePathInfo.name)
+    const resourceDir = Uri.joinPath(typeFolder, filePathInfo.dir, filePathInfo.name);
 
     await this.createResourceDir(resourceDir);
   }
@@ -82,7 +78,7 @@ export class CreateArticle extends Command {
     if (!cmd.args[0]) {
       const items = await getDirFiles(configs.paths.scaffold);
 
-      const file = await window.showQuickPick(items.map(([name]) => name));
+      const file = await window.showQuickPick(items.map(([name]) => name.slice(0, -'.md'.length)));
 
       if (file) {
         const isDraft = file === 'draft';
