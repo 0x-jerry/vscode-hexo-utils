@@ -1,3 +1,12 @@
+## [0.1.25](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.24...v0.1.25) (2021-08-15)
+
+
+### Performance Improvements
+
+* improve some performence ([f3d64d7](https://github.com/cwxyz007/vscode-hexo-utils/commit/f3d64d7f938fa225ec79b147257486fd90ae2f99))
+
+
+
 ## [0.1.24](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.23...v0.1.24) (2021-08-15)
 
 
