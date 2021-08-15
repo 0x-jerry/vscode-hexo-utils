@@ -9,6 +9,10 @@ export interface IHexoMetadata {
   title: string;
   date: Date;
   filePath: Uri;
+  /**
+   * For cache, latest modification time.
+   */
+  mtime: number;
 }
 
 type THexoMeta = IHexoMetadata & { name?: string };

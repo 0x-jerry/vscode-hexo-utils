@@ -39,11 +39,20 @@ export async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
+const metaCache: Record<string, IHexoMetadata> = {};
+
 export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
-  const content = await workspace.fs.readFile(uri);
   const stat = await workspace.fs.stat(uri);
 
+  const cacheId = uri.toString();
+  const hit = metaCache[cacheId];
+
+  if (hit && stat.mtime === hit.mtime) {
+    return hit;
+  }
+
   try {
+    const content = await workspace.fs.readFile(uri);
     // /---(data)---/ => $1 === data
     const yamlReg = /^---((.|\n|\r)+?)---$/m;
 
@@ -53,21 +62,31 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
 
     const categories: (string | string[])[] = Array.isArray(data.categories) ? data.categories : [];
 
-    return {
+    const metadata = {
       tags: Array.isArray(data.tags) ? data.tags : [],
       filePath: uri,
       // →  · /
       categories: categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c)),
       title: data.title || '',
       date: data.date || '',
+      mtime: stat.mtime,
     };
+
+    metaCache[cacheId] = metadata;
+
+    return metadata;
   } catch (error) {
-    return {
+    const metadata = {
       tags: [],
       categories: [],
       filePath: uri,
       title: path.parse(uri.fsPath).name,
       date: new Date(stat.ctime),
+      mtime: 0,
     };
+
+    metaCache[cacheId] = metadata;
+
+    return metadata;
   }
 }
