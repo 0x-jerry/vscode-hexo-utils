@@ -13,7 +13,6 @@ async function getPkg() {
 
   const pkgPath = Uri.joinPath(rootPath, 'package.json');
 
-
   if (!isExist(pkgPath)) {
     return null;
   }
@@ -28,7 +27,6 @@ export async function isHexoProject() {
   return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
 }
 
-
 /**
  * true if yse
  * @param placeHolder msg
@@ -41,7 +39,7 @@ export async function askForNext(placeHolder: string): Promise<boolean> {
   return replace === 'yes';
 }
 
-export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata | undefined> {
+export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
   const content = await workspace.fs.readFile(uri);
   const stat = await workspace.fs.stat(uri);
 

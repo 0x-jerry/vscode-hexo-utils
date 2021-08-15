@@ -70,23 +70,19 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
     const include = getConfig<boolean>(ConfigProperties.includeDraft);
 
-    const postsPath = await getMDFiles(postFolder)
+    const postsPath = await getMDFiles(postFolder);
 
     let draftsPath: Uri[] = [];
 
     if (include) {
-      draftsPath = await getMDFiles(draftFolder)
+      draftsPath = await getMDFiles(draftFolder);
     }
 
     const filesPath = postsPath.concat(include ? draftsPath : []);
 
-    const filesData: IHexoMetadata[] = [];
-
-    for (const filePath of filesPath) {
-      const metadata = (await getMDFileMetadata(filePath))!;
-
-      filesData.push(metadata);
-    }
+    const filesData: IHexoMetadata[] = await Promise.all(
+      filesPath.map((filePath) => getMDFileMetadata(filePath)),
+    );
 
     const items: ClassifyItem[] = [];
     if (element && this._hexoMetadataUtils) {
@@ -94,9 +90,13 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
       if (classify) {
         classify.files.forEach((metadata) => {
-          const isDraft = include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1;
+          const isDraft =
+            include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1;
 
-          const name = path.relative(isDraft ? draftFolder.fsPath : postFolder.fsPath, metadata.filePath.fsPath);
+          const name = path.relative(
+            isDraft ? draftFolder.fsPath : postFolder.fsPath,
+            metadata.filePath.fsPath,
+          );
 
           const item = new ClassifyItem(name, this.type, metadata.filePath);
           item.parent = element;
