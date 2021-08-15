@@ -1,3 +1,13 @@
+## [0.1.24](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.23...v0.1.24) (2021-08-15)
+
+
+### Performance Improvements
+
+* enhance file parsing parallelism ([2c83d58](https://github.com/cwxyz007/vscode-hexo-utils/commit/2c83d58398c2fbd27e112c929343d0a07613dee4))
+* improve some performance ([4c19712](https://github.com/cwxyz007/vscode-hexo-utils/commit/4c197121fe4dab5304c8a48d0125ddff09b46122))
+
+
+
 ## [0.1.23](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.21...v0.1.23) (2021-07-10)
 
 
