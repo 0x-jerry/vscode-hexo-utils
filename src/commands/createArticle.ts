@@ -1,7 +1,7 @@
 import path from 'path';
 import mustache from 'mustache';
 import { getDirFiles, askForNext, error, isExist } from '../utils';
-import { Uri, window, workspace } from 'vscode';
+import { commands, Uri, window, workspace } from 'vscode';
 import { Command, Commands, command, ICommandParsed } from './common';
 import { configs, getConfig, ConfigProperties } from '../configs';
 import dayjs from 'dayjs';
@@ -32,7 +32,8 @@ export class CreateArticle extends Command {
 
     try {
       const filePath = title.split('.').pop()!;
-      await this.createWithTpl(filePath, type, template);
+      const file = await this.createWithTpl(filePath, type, template);
+      await commands.executeCommand(Commands.open, file);
     } catch (err) {
       error(`Create failed on [${template}], ${err}`);
     }
@@ -64,6 +65,8 @@ export class CreateArticle extends Command {
     const resourceDir = Uri.joinPath(typeFolder, filePathInfo.dir, filePathInfo.name);
 
     await this.createResourceDir(resourceDir);
+
+    return createFilePath;
   }
 
   private async createResourceDir(fileAssetPath: Uri) {
