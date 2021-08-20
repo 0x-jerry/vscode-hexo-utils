@@ -22,13 +22,20 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
   }
 
   private autoFocus() {
-    const _dispose = window.onDidChangeActiveTextEditor((editor) => {
+    const _dispose = window.onDidChangeActiveTextEditor(async (editor) => {
       if (!editor || !this.treeView.visible) {
         return;
       }
 
-      const file = editor.document.uri.toString();
-      const item = this.provider.getItem(file);
+      const file = editor.document.uri;
+
+      const fsPath =
+        file.scheme === 'git'
+          ? // remove `.git` suffix
+            file.fsPath.slice(0, -3)
+          : file.fsPath;
+
+      const item = this.provider.getItem(fsPath);
       if (!item) {
         return;
       }
