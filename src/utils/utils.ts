@@ -60,13 +60,25 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
 
     const data = yamljs.parse(yamlData![1]) || {};
 
-    const categories: (string | string[])[] = Array.isArray(data.categories) ? data.categories : [];
+    const categories: (string | string[])[] = Array.isArray(data.categories)
+      ? data.categories
+      : typeof data.categories === 'string'
+      ? [data.categories]
+      : [];
+
+    const hasSubCategory = categories.find((n) => Array.isArray(n));
+
+    const normalizedCategories = hasSubCategory
+      ? categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c))
+      : categories.length
+      ? [categories.join(' / ')]
+      : [];
 
     const metadata = {
       tags: Array.isArray(data.tags) ? data.tags : [],
       filePath: uri,
       // →  · /
-      categories: categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c)),
+      categories: normalizedCategories,
       title: data.title || '',
       date: data.date || '',
       mtime: stat.mtime,
