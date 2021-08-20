@@ -9,7 +9,8 @@
     "rootDir": "src",
     "strict": true,
     "noUnusedLocals": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", ".vscode-test"],
   "include": ["src", "typings"]

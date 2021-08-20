@@ -102,3 +102,7 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
     return metadata;
   }
 }
+
+export function sleep(ts = 1000) {
+  return new Promise((resolve) => setTimeout(resolve, ts));
+}
