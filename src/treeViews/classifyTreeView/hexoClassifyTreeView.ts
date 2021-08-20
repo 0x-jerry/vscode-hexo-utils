@@ -27,8 +27,14 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
         return;
       }
 
-      const file = editor.document.uri.toString();
-      const item = this.provider.getItem(file);
+      const file = editor.document.uri;
+      const fsPath =
+        file.scheme === 'git'
+          ? // remove `.git` suffix
+            file.fsPath.slice(0, -3)
+          : file.fsPath;
+
+      const item = this.provider.getItem(fsPath);
 
       if (!item) {
         return;
