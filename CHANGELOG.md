@@ -1,3 +1,26 @@
+## [0.1.26](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.25...v0.1.26) (2021-08-21)
+
+
+### Bug Fixes
+
+* auto focus when change active text editor ([3cc3478](https://github.com/cwxyz007/vscode-hexo-utils/commit/3cc3478cdc9274bc19851a29a450b3e1fed1168e))
+* auto focus when change active text editor ([d5ac8df](https://github.com/cwxyz007/vscode-hexo-utils/commit/d5ac8df5c18d86f9b1126719f498405e78ecd1f3))
+* close [#42](https://github.com/cwxyz007/vscode-hexo-utils/issues/42) ([28fe4bd](https://github.com/cwxyz007/vscode-hexo-utils/commit/28fe4bd599f1c40778a826ca1d3a502d65236ffe))
+* reveal tree view item of articles ([6e0d891](https://github.com/cwxyz007/vscode-hexo-utils/commit/6e0d89126de151cc8aa1ca358e1459b18c5ceb05))
+
+
+### Features
+
+* open file after create, [#43](https://github.com/cwxyz007/vscode-hexo-utils/issues/43) ([c6cdb3d](https://github.com/cwxyz007/vscode-hexo-utils/commit/c6cdb3de3346ff8ee2aeb463b1d0454654b7c974))
+* support select multiple files ([8d912cf](https://github.com/cwxyz007/vscode-hexo-utils/commit/8d912cfbec47b46d4b018005a0cac9f9134bf58a))
+
+
+### Performance Improvements
+
+* reveal article item when file was opened. close [#43](https://github.com/cwxyz007/vscode-hexo-utils/issues/43) ([dbcec57](https://github.com/cwxyz007/vscode-hexo-utils/commit/dbcec57526a4d3b770b4432dfc7dc198e611e6ae))
+
+
+
 ## [0.1.25](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.24...v0.1.25) (2021-08-15)
 
 
