@@ -32,18 +32,12 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
   constructor(type: ClassifyTypes) {
     super();
     this.type = type;
-    this.subscribe(this._onDidChangeTreeData);
-    this.recalculateItems();
-  }
 
-  private recalculateItems() {
-    const dispose = this.onDidChangeTreeData(() => {
-      this._allItems = new Map();
-    });
-    this.subscribe(dispose);
+    this.subscribe(this._onDidChangeTreeData);
   }
 
   refresh() {
+    this._allItems = new Map();
     this._onDidChangeTreeData.fire(null);
   }
 

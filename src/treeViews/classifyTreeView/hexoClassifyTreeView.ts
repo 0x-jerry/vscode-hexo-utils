@@ -2,6 +2,7 @@ import { Commands } from '../../commands';
 import { TreeViewOptions, commands, window } from 'vscode';
 import { BaseTreeView, ViewTypes } from '../common';
 import { ClassifyItem, HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
+import { sleep } from '../../utils';
 
 export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
   provider: HexoClassifyProvider;
@@ -21,29 +22,34 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
     this.autoFocus();
   }
 
+  private focus(editor = window.activeTextEditor) {
+    if (!editor || !this.treeView.visible) {
+      return;
+    }
+
+    const file = editor.document.uri;
+    const fsPath =
+      file.scheme === 'git'
+        ? // remove `.git` suffix
+          file.fsPath.slice(0, -3)
+        : file.fsPath;
+
+    const item = this.provider.getItem(fsPath);
+
+    if (!item) {
+      return;
+    }
+
+    this.treeView.reveal(item);
+  }
+
   private autoFocus() {
-    const _dispose = window.onDidChangeActiveTextEditor((editor) => {
-      if (!editor || !this.treeView.visible) {
-        return;
-      }
-
-      const file = editor.document.uri;
-      const fsPath =
-        file.scheme === 'git'
-          ? // remove `.git` suffix
-            file.fsPath.slice(0, -3)
-          : file.fsPath;
-
-      const item = this.provider.getItem(fsPath);
-
-      if (!item) {
-        return;
-      }
-
-      this.treeView.reveal(item);
-    });
-
-    this.subscribe(_dispose);
+    this.subscribe(
+      window.onDidChangeActiveTextEditor(async (editor) => {
+        await sleep(300);
+        this.focus(editor);
+      }),
+    );
   }
 
   onDidChanged() {
