@@ -11,21 +11,33 @@ export class DeleteFile extends Command {
     super(Commands.delete);
   }
 
-  async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {
-    const fileUri = item.resourceUri!;
-    const filename = path.parse(fileUri.fsPath).name;
-    if (await isExist(fileUri)) {
-      await workspace.fs.delete(fileUri)
-      await this.deleteAssetFolder(filename);
-    } else {
-      error(`${fileUri} is not exist`);
+  async execute(_: ICommandParsed, _file: ArticleItem, list: ArticleItem[] = []): Promise<any> {
+    if (list.length === 0) {
+      list.push(_file);
     }
+
+    const p = list.map(async (item) => {
+      const fileUri = item.resourceUri!;
+      const filename = path.parse(fileUri.fsPath).name;
+
+      if (await isExist(fileUri)) {
+        await workspace.fs.delete(fileUri);
+        await this.deleteAssetFolder(filename);
+      } else {
+        error(`${fileUri} is not exist`);
+      }
+    });
+
+    await Promise.all(p);
   }
 
   async deleteAssetFolder(filename: string) {
     const assetsFolder = Uri.joinPath(configs.paths.post, filename);
-    if ((await isExist(assetsFolder)) && (await workspace.fs.readDirectory(assetsFolder)).length === 0) {
-      await workspace.fs.delete(assetsFolder)
+    if (
+      (await isExist(assetsFolder)) &&
+      (await workspace.fs.readDirectory(assetsFolder)).length === 0
+    ) {
+      await workspace.fs.delete(assetsFolder);
     }
   }
 }

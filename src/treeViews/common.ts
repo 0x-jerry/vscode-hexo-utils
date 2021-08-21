@@ -38,6 +38,7 @@ export abstract class BaseTreeView<T> extends BaseDispose {
   constructor(id: string, provider: TreeDataProvider<T>, opts: Partial<TreeViewOptions<T>>) {
     super();
     this.treeView = window.createTreeView(id, {
+      canSelectMany: true,
       treeDataProvider: provider,
       ...opts,
     });

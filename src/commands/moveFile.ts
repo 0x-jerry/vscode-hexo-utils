@@ -13,28 +13,35 @@ export class MoveFile extends Command {
     super(Commands.moveToDraft, Commands.moveToPost);
   }
 
-  private async _move(item: ArticleItem, to: ArticleTypes) {
-    const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
-    const sourceUri = item.resourceUri!;
+  private async _move(to: ArticleTypes, items: ArticleItem[]) {
+    const p = items.map(async (item) => {
+      const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
+      const sourceUri = item.resourceUri!;
 
-    const fileName = path.relative(
-      to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
-      sourceUri.fsPath,
-    );
+      const fileName = path.relative(
+        to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
+        sourceUri.fsPath,
+      );
 
-    const destPath = Uri.joinPath(toPath, fileName);
+      const destPath = Uri.joinPath(toPath, fileName);
 
-    if ((await isExist(destPath)) && !(await askForNext('Whether to replace the exist file?'))) {
-      return null;
-    }
+      if ((await isExist(destPath)) && !(await askForNext('Whether to replace the exist file?'))) {
+        return null;
+      }
 
-    rename(sourceUri, destPath);
+      await rename(sourceUri, destPath);
+    });
+
+    await Promise.all(p);
   }
 
-  async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {
+  async execute(cmd: ICommandParsed, item: ArticleItem, list: ArticleItem[] = []): Promise<any> {
+    if (list.length === 0) {
+      list.push(item);
+    }
     // hexo.moveTo[post]
     // hexo.moveTo[draft]
     const to = cmd.args[0] as ArticleTypes;
-    this._move(item, to);
+    this._move(to, list);
   }
 }
