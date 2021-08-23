@@ -13,7 +13,7 @@ axios.defaults.headers = {
 };
 
 const apiConfig = {
-  root: 'https://imgchr.com',
+  root: 'https://imgtu.com',
   login: '/login',
   json: '/json',
 };
@@ -114,7 +114,7 @@ export class ImgChr {
       if (data.response && data.response.status === 301) {
         const cookie: string = data.response.headers['set-cookie'][0];
 
-        this.addCookie(cookie)
+        this.addCookie(cookie);
 
         await this._saveConfig();
       } else {
