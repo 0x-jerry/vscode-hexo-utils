@@ -1,3 +1,12 @@
+## [0.1.27](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.26...v0.1.27) (2021-08-23)
+
+
+### Bug Fixes
+
+* change `imgchr.com` to `imgtu.com`, close [#44](https://github.com/cwxyz007/vscode-hexo-utils/issues/44) ([0b1dd7f](https://github.com/cwxyz007/vscode-hexo-utils/commit/0b1dd7fe691be402979287d6a6fd63818bbd25b0))
+
+
+
 ## [0.1.26](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.25...v0.1.26) (2021-08-21)
 
 
