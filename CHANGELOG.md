@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.2.0...v0.2.1) (2022-01-21)
+
+
+### Bug Fixes
+
+* bundle with tsup ([6cb3339](https://github.com/cwxyz007/vscode-hexo-utils/commit/6cb33393ee22b1d5e461de22f6c1e50aa183c7b3))
+
+
+
 # [0.2.0](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.28...v0.2.0) (2022-01-21)
 
 
