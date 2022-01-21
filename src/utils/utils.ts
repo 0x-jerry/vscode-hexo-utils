@@ -106,3 +106,10 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
 export function sleep(ts = 1000) {
   return new Promise((resolve) => setTimeout(resolve, ts));
 }
+
+export function isVirtualWorkspace() {
+  const isVirtualWorkspace =
+    workspace.workspaceFolders && workspace.workspaceFolders.every((f) => f.uri.scheme !== 'file');
+
+  return isVirtualWorkspace;
+}

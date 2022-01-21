@@ -2,8 +2,9 @@ import Token from 'markdown-it/lib/token';
 import StateInline from 'markdown-it/lib/rules_inline/state_inline';
 import MarkdownIt from 'markdown-it';
 import path from 'path';
-import { Uri, window, workspace } from 'vscode';
+import { Uri, window } from 'vscode';
 import { configs } from './configs';
+import { isVirtualWorkspace } from './utils';
 
 class MarkdownHexoPlugin {
   md: MarkdownIt;
@@ -114,25 +115,33 @@ class MarkdownHexoPlugin {
     token.children = [textToken];
   }
 
-  private getCorrectImagePath(imgNameWidthExt: string): string {
-    let resultPath = imgNameWidthExt;
+  private getCorrectImagePath(imgNameWithExt: string): string {
+    let resultPath = imgNameWithExt;
 
     if (!window.activeTextEditor) {
-      return resultPath
+      return resultPath;
     }
 
-    const activeUri = window.activeTextEditor.document.uri
+    const activeUri = window.activeTextEditor.document.uri;
     const resourceDir = this.getResDir(activeUri);
 
-    const imgUri = Uri.joinPath(resourceDir, imgNameWidthExt);
+    const imgUri = Uri.joinPath(resourceDir, imgNameWithExt);
     const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath);
 
     try {
-      return workspace.fs.stat(imgUri) ? relativePath : imgNameWidthExt;
+      if (isVirtualWorkspace()) {
+        return imgNameWithExt;
+      }
+
+      // drawback: not support virtual workspace.
+      const fs = require('fs') as typeof import('fs');
+
+      const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt;
+
+      return imagePath;
     } catch (error) {
-      // todo
-      console.log('get img failed', imgNameWidthExt, error)
-      return ''
+      console.log('get img failed', imgNameWithExt, error);
+      return imgNameWithExt;
     }
   }
 
