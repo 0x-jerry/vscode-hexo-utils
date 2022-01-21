@@ -31,7 +31,7 @@ export function activate(context: ExtensionContext) {
     registerTreeViews(context);
     registerCommands(context);
   } catch (err) {
-    window.showErrorMessage(err);
+    window.showErrorMessage(String(err));
   }
 
   return {
