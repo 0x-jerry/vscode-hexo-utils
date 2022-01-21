@@ -41,6 +41,6 @@ See [CHANGELOG](CHANGELOG.md)
 
 ## License
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils?ref=badge_large)
+<!-- [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils?ref=badge_large) -->
 
 **Enjoy!**

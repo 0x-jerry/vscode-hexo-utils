@@ -372,12 +372,8 @@
     "@types/universal-analytics": "^0.4.5",
     "@types/vscode": "^1.41.1",
     "@types/yamljs": "^0.2.31",
-    "conventional-changelog-cli": "^2.2.2",
-    "tsup": "^5.11.11",
-    "typescript": "^4.5.5"
-  },
-  "dependencies": {
     "axios": "^0.21.4",
+    "conventional-changelog-cli": "^2.2.2",
     "cos-nodejs-sdk-v5": "^2.11.6",
     "dayjs": "^1.10.7",
     "debounce": "^1.2.1",
@@ -387,6 +383,8 @@
     "getmac": "^5.20.0",
     "markdown-it": "^12.3.2",
     "mustache": "^4.2.0",
+    "tsup": "^5.11.11",
+    "typescript": "^4.5.5",
     "universal-analytics": "^0.4.23",
     "yamljs": "^0.3.0"
   }
