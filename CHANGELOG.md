@@ -1,3 +1,12 @@
+## [0.1.28](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.27...v0.1.28) (2022-01-21)
+
+
+### Bug Fixes
+
+* close [#46](https://github.com/cwxyz007/vscode-hexo-utils/issues/46) ([8056d76](https://github.com/cwxyz007/vscode-hexo-utils/commit/8056d7606b29324bb5f48b86b7af0f45767e15ff))
+
+
+
 ## [0.1.27](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.26...v0.1.27) (2021-08-23)
 
 
