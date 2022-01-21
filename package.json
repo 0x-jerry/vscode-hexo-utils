@@ -27,7 +27,7 @@
   ],
   "icon": "resources/hexo.png",
   "activationEvents": [
-    "*"
+    "workspaceContains:**/_config.yml"
   ],
   "main": "./dist/extension.js",
   "extensionKind": [

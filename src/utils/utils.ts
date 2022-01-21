@@ -23,8 +23,11 @@ async function getPkg() {
 }
 
 export async function isHexoProject() {
-  const pkg = await getPkg();
-  return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
+  // const pkg = await getPkg();
+  // return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
+
+  // no need to check dependency.
+  return true
 }
 
 /**
