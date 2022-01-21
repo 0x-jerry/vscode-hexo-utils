@@ -1,3 +1,12 @@
+# [0.2.0](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.28...v0.2.0) (2022-01-21)
+
+
+### Performance Improvements
+
+* specify activation events ([5572bfe](https://github.com/cwxyz007/vscode-hexo-utils/commit/5572bfecde13fb3674f8396a1b31745b90e10232))
+
+
+
 ## [0.1.28](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.1.27...v0.1.28) (2022-01-21)
 
 
