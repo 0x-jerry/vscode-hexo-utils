@@ -1,6 +1,6 @@
 {
   "name": "vscode-hexo-utils",
-  "displayName": "vscode-hexo-utils",
+  "displayName": "Vscode Hexo Utils",
   "description": "vscode extension for hexo",
   "version": "0.2.1",
   "license": "MIT",
