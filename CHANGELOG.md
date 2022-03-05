@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.2.1...v0.2.2) (2022-03-05)
+
+
+### Features
+
+* support asset_path tag, close [#47](https://github.com/cwxyz007/vscode-hexo-utils/issues/47) ([682792c](https://github.com/cwxyz007/vscode-hexo-utils/commit/682792cf8409597e1885e65ebf4d2c4e0df511e5))
+
+
+
 ## [0.2.1](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.2.0...v0.2.1) (2022-01-21)
 
 
