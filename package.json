@@ -357,7 +357,8 @@
     "vscode:prepublish": "tsup src/extension.ts --sourcemap",
     "build": "tsup src/extension.ts --sourcemap",
     "dev": "tsup src/extension.ts --sourcemap --watch",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "version": "npm run changelog && git add CHANGELOG.md",
+    "publish": "vsce publish --no-dependencies"
   },
   "peerDependencies": {
     "vscode": "*"
@@ -387,6 +388,7 @@
     "tsup": "^5.11.11",
     "typescript": "^4.5.5",
     "universal-analytics": "^0.4.23",
+    "vsce": "^2.6.7",
     "yamljs": "^0.3.0"
   }
 }
