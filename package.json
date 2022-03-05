@@ -381,6 +381,7 @@
     "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "getmac": "^5.20.0",
+    "hexo-cli": "^4.3.0",
     "markdown-it": "^12.3.2",
     "mustache": "^4.2.0",
     "tsup": "^5.11.11",
