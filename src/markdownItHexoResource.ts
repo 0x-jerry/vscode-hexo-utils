@@ -6,156 +6,166 @@ import { Uri, window } from 'vscode';
 import { configs } from './configs';
 import { isVirtualWorkspace } from './utils';
 
-class MarkdownHexoPlugin {
-  md: MarkdownIt;
+interface ResolveHexoTag {
+  (status: StateInline, ...attrs: string[]): any;
+}
 
-  constructor(md: MarkdownIt) {
-    this.md = md;
+/**
+ *
+ * ref: https://hexo.io/docs/tag-plugins#Include-Assets
+ *
+ * {% asset_link filename [title] [escape] %}
+ *
+ * @param status
+ * @param attrs
+ */
+const hexoAssetLinkTag: ResolveHexoTag = (status, ...attrs) => {
+  const [href, title] = attrs;
+  const token = status.push('link', 'a', 1);
 
-    // install rules
-    this.hexoImageRenderRule();
-    this.hexoTagRules();
-  }
+  const src = getCorrectImagePath(href);
+  token.attrs = [
+    ['href', src],
+    ['alt', title],
+  ];
 
-  hexoTagRules() {
-    this.md.inline.ruler.after('text', 'hexo', (status) => {
-      const text = status.src.slice(status.pos);
+  token.content = `[${title}](${src})`;
 
-      const hexoTagReg = /^{%(.+)?%}/.exec(text);
-      if (!(hexoTagReg && hexoTagReg[1])) {
-        return false;
-      }
+  const textToken = status.push('text', '', 0);
+  textToken.content = title || '';
 
-      const attrs = hexoTagReg[1].split(/\s+/).filter((s) => !!s);
-      if (attrs.length < 2) {
-        return false;
-      }
+  status.push('link', 'a', -1);
+};
 
-      const [tag, src, ...alts] = attrs;
+/**
+ *
+ * ref: https://hexo.io/docs/tag-plugins#Image
+ *
+ * {% img [class names] /path/to/image [width] [height] '"title text" "alt text"' %}
+ *
+ * ref: https://hexo.io/docs/tag-plugins#Include-Assets
+ *
+ * {% asset_img [class names] slug [width] [height] [title text [alt text]] %}
+ *
+ * @param status
+ * @param attrs
+ */
+const hexoAssetImgTag: ResolveHexoTag = (status, ...attrs) => {
+  const isImageReg = /\.(jpg|png|jpeg|webp|av)$/;
 
-      const hexoTags = [
-        'img',
-        'asset_img',
-        'asset_link',
-        //   'asset_path'
-      ];
+  const src = isImageReg.test(attrs[0]) ? attrs[0] : attrs[1];
 
-      if (!hexoTags.find((t) => t === tag)) {
-        return false;
-      }
+  const token = status.push('image', 'img', 0);
+  createHexoImgToken(token, getCorrectImagePath(src), '');
+};
 
-      if (tag === 'asset_img') {
-        this.hexoImageTagRule(status, src, alts.join(' '));
-      }
+function hexoTagRules(md: MarkdownIt) {
+  const supportedTagMap: Record<string, ResolveHexoTag> = {
+    img: hexoAssetImgTag,
+    asset_img: hexoAssetImgTag,
+    asset_link: hexoAssetLinkTag,
+  };
 
-      if (tag === 'img') {
-        const token = status.push('image', 'img', 0);
-        this.createHexoImg(token, src, alts.join(' '));
-      }
+  md.inline.ruler.after('text', 'hexo', (status) => {
+    const text = status.src.slice(status.pos);
 
-      if (tag === 'asset_link') {
-        this.hexoLinkTagRule(status, src, alts.join(' '));
-      }
-
-      status.pos += hexoTagReg[0].length;
-
-      return true;
-    });
-  }
-
-  private hexoLinkTagRule(status: StateInline, href: string, text: string) {
-    const token = status.push('link', 'a', 1);
-
-    const src = this.getCorrectImagePath(href);
-    token.attrs = [
-      ['href', src],
-      ['alt', text],
-    ];
-
-    token.content = `[${text}](${src})`;
-
-    const textToken = status.push('text', '', 0);
-    textToken.content = text || '';
-
-    status.push('link', 'a', -1);
-  }
-
-  private hexoImageTagRule(status: StateInline, src: string, alt: string) {
-    const token = status.push('image', 'img', 0);
-    this.createHexoImg(token, this.getCorrectImagePath(src), alt);
-  }
-
-  private hexoImageRenderRule() {
-    const defaultRender = this.md.renderer.rules.image!;
-
-    this.md.renderer.rules.image = (tokens, idx, opts, env, self) => {
-      const token = tokens[idx];
-
-      // relative path
-      const src = this.getCorrectImagePath(token.attrGet('src') || '');
-
-      token.attrSet('src', src);
-
-      return defaultRender(tokens, idx, opts, env, self);
-    };
-  }
-
-  private createHexoImg(token: Token, src: string, alt: string) {
-    token.type = 'image';
-    token.tag = 'img';
-    token.attrs = [
-      ['src', src],
-      ['alt', alt],
-    ];
-    token.content = `![${alt}](${src})`;
-
-    const textToken = new Token('text', '', 0);
-    textToken.content = alt;
-
-    token.children = [textToken];
-  }
-
-  private getCorrectImagePath(imgNameWithExt: string): string {
-    let resultPath = imgNameWithExt;
-
-    if (!window.activeTextEditor) {
-      return resultPath;
+    const hexoTagMatched = /^{%(.+)?%}/.exec(text);
+    if (!hexoTagMatched?.[1]) {
+      return false;
     }
 
-    const activeUri = window.activeTextEditor.document.uri;
-    const resourceDir = this.getResDir(activeUri);
+    const matchStringReg = /(['"])(\\\1|.)*?\1|[^\s]+/g;
 
-    const imgUri = Uri.joinPath(resourceDir, imgNameWithExt);
-    const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath);
+    const [tag, ...attrs] = hexoTagMatched[1].trim().match(matchStringReg) || [];
 
-    try {
-      if (isVirtualWorkspace()) {
-        return imgNameWithExt;
-      }
+    const supportedHexoTags = Object.keys(supportedTagMap);
 
-      // drawback: not support virtual workspace.
-      const fs = require('fs') as typeof import('fs');
+    if (!supportedHexoTags.includes(tag)) {
+      return false;
+    }
 
-      const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt;
+    supportedTagMap[tag](status, ...attrs);
 
-      return imagePath;
-    } catch (error) {
-      console.log('get img failed', imgNameWithExt, error);
+    status.pos += hexoTagMatched[0].length;
+
+    return true;
+  });
+}
+
+function createHexoImgToken(token: Token, src: string, alt: string) {
+  token.type = 'image';
+  token.tag = 'img';
+  token.attrs = [
+    ['src', src],
+    ['alt', alt],
+  ];
+
+  token.content = `![${alt}](${src})`;
+
+  const textToken = new Token('text', '', 0);
+  textToken.content = alt;
+
+  token.children = [textToken];
+}
+
+function getResDir(fileUri: Uri) {
+  const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1;
+  const fileDir = path
+    .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
+    .replace(/\.md$/, '');
+
+  const resourceDir = Uri.joinPath(configs.paths.post, fileDir);
+  return resourceDir;
+}
+
+function getCorrectImagePath(imgNameWithExt: string): string {
+  let resultPath = imgNameWithExt;
+
+  if (!window.activeTextEditor) {
+    return resultPath;
+  }
+
+  const activeUri = window.activeTextEditor.document.uri;
+  const resourceDir = getResDir(activeUri);
+
+  const imgUri = Uri.joinPath(resourceDir, imgNameWithExt);
+  const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath);
+
+  try {
+    if (isVirtualWorkspace()) {
       return imgNameWithExt;
     }
-  }
 
-  private getResDir(fileUri: Uri) {
-    const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1;
-    const fileDir = path
-      .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
-      .replace(/\.md$/, '');
+    // drawback: not support virtual workspace.
+    const fs = require('fs') as typeof import('fs');
 
-    const resourceDir = Uri.joinPath(configs.paths.post, fileDir);
-    return resourceDir;
+    const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt;
+
+    return imagePath;
+  } catch (error) {
+    console.log('get img failed', imgNameWithExt, error);
+    return imgNameWithExt;
   }
 }
 
+function rewriteMarkdownItImageRule(md: MarkdownIt) {
+  const defaultRender = md.renderer.rules.image!;
+
+  md.renderer.rules.image = (tokens, idx, opts, env, self) => {
+    const token = tokens[idx];
+
+    // relative path
+    const src = getCorrectImagePath(token.attrGet('src') || '');
+
+    token.attrSet('src', src);
+
+    return defaultRender(tokens, idx, opts, env, self);
+  };
+}
+
 export default (md: MarkdownIt) => {
-  new MarkdownHexoPlugin(md);
+  rewriteMarkdownItImageRule(md);
+  hexoTagRules(md);
+
+  return md;
 };

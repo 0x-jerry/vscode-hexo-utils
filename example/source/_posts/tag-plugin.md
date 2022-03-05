@@ -4,6 +4,8 @@ tags: [hexo]
 categories: [test]
 ---
 
+reference: https://hexo.io/docs/tag-plugins
+
 ## Markdown syntax
 
 1. normal image
@@ -22,11 +24,11 @@ categories: [test]
 
 2. asset_img tag
 
-{% asset_img "test class" 11.png 600 300 '"title text" "alt text"' %}
+{% asset_img "test class" 11.png 600 300 "title text" "alt text" %}
 
 3. img tag
 
-{% img "test class" 11.png 600 300 '"title text" "alt text"' %}
+{% img "test class" 11.png 600 300 "title text" "alt text" %}
 
 4. asset_link tag
 
