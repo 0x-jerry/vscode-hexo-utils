@@ -69,14 +69,16 @@ function hexoTagRules(md: MarkdownIt) {
   md.inline.ruler.after('text', 'hexo', (status) => {
     const text = status.src.slice(status.pos);
 
-    const hexoTagMatched = /^{%(.+)?%}/.exec(text);
-    if (!hexoTagMatched?.[1]) {
+    const hexoTagReg = /^{%(.+)?%}/;
+    const hexoTagMatches = hexoTagReg.exec(text);
+
+    if (!hexoTagMatches?.[1]) {
       return false;
     }
 
     const matchStringReg = /(['"])(\\\1|.)*?\1|[^\s]+/g;
 
-    const [tag, ...attrs] = hexoTagMatched[1].trim().match(matchStringReg) || [];
+    const [tag, ...attrs] = hexoTagMatches[1].trim().match(matchStringReg) || [];
 
     const supportedHexoTags = Object.keys(supportedTagMap);
 
@@ -86,7 +88,7 @@ function hexoTagRules(md: MarkdownIt) {
 
     supportedTagMap[tag](status, ...attrs);
 
-    status.pos += hexoTagMatched[0].length;
+    status.pos += hexoTagMatches[0].length;
 
     return true;
   });
@@ -148,8 +150,8 @@ function getCorrectImagePath(imgNameWithExt: string): string {
   }
 }
 
-function rewriteMarkdownItImageRule(md: MarkdownIt) {
-  const defaultRender = md.renderer.rules.image!;
+function rewriteMarkdownItRenderRule(md: MarkdownIt) {
+  const defaultImageRender = md.renderer.rules.image!;
 
   md.renderer.rules.image = (tokens, idx, opts, env, self) => {
     const token = tokens[idx];
@@ -159,12 +161,35 @@ function rewriteMarkdownItImageRule(md: MarkdownIt) {
 
     token.attrSet('src', src);
 
-    return defaultRender(tokens, idx, opts, env, self);
+    return defaultImageRender(tokens, idx, opts, env, self);
+  };
+
+  const defaultCodeInlineRender = md.renderer.rules.html_block!;
+
+  md.renderer.rules.html_block = (tokens, idx, opts, env, self) => {
+    const token = tokens[idx];
+
+    const hexoTagReg = /{%(.+)?%}/gm;
+
+    /**
+     * support asset_path tag
+     *
+     * {% asset_path filename %}
+     */
+    token.content = token.content.replace(hexoTagReg, (value) => {
+      const [tag, imgPath] = value.slice(2, -2).trim().split(/\s+/);
+
+      if (tag !== 'asset_path') return value;
+
+      return getCorrectImagePath(imgPath);
+    });
+
+    return defaultCodeInlineRender(tokens, idx, opts, env, self);
   };
 }
 
 export default (md: MarkdownIt) => {
-  rewriteMarkdownItImageRule(md);
+  rewriteMarkdownItRenderRule(md);
   hexoTagRules(md);
 
   return md;
