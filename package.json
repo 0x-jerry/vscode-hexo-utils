@@ -357,13 +357,14 @@
     "vscode:prepublish": "tsup src/extension.ts --sourcemap",
     "build": "tsup src/extension.ts --sourcemap",
     "dev": "tsup src/extension.ts --sourcemap --watch",
-    "version": "npm run changelog && git add CHANGELOG.md",
-    "publish": "vsce publish --no-dependencies"
+    "publish": "vsce publish --no-dependencies",
+    "release": "x-release"
   },
   "peerDependencies": {
     "vscode": "*"
   },
   "devDependencies": {
+    "@0x-jerry/x-release": "^0.3.4",
     "@types/debounce": "^1.2.1",
     "@types/debug": "^4.1.7",
     "@types/fs-extra": "^9.0.13",
