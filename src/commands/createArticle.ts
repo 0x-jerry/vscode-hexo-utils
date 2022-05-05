@@ -55,10 +55,18 @@ export class CreateArticle extends Command {
     const tplPath = Uri.joinPath(configs.paths.scaffold, template + '.md');
     const tpl = await workspace.fs.readFile(tplPath);
 
-    const result = mustache.render(tpl.toString(), {
-      title: filePathInfo.name,
-      date: dayjs().format(getConfig(ConfigProperties.generateTimeFormat)),
-    });
+    const result = mustache.render(
+      tpl.toString(),
+      {
+        title: filePathInfo.name,
+        date: dayjs().format(getConfig(ConfigProperties.generateTimeFormat)),
+      },
+      undefined,
+      {
+        // No need to escape, #49.
+        escape: (str) => str,
+      },
+    );
 
     await workspace.fs.writeFile(createFilePath, Buffer.from(result));
 
