@@ -37,7 +37,7 @@ export class DeleteFile extends Command {
       (await isExist(assetsFolder)) &&
       (await workspace.fs.readDirectory(assetsFolder)).length === 0
     ) {
-      await workspace.fs.delete(assetsFolder);
+      await workspace.fs.delete(assetsFolder, { recursive: true, useTrash: true });
     }
   }
 }
