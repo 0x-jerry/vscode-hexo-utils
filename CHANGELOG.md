@@ -1,3 +1,13 @@
+## [0.2.3](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.2.2...v0.2.3) (2022-05-05)
+
+
+### Bug Fixes
+
+* delete assets folder when it's empty ([e1e8917](https://github.com/cwxyz007/vscode-hexo-utils/commit/e1e891739204804636764ea0f20638ba87ca7871))
+* generate non-escaped result, close [#49](https://github.com/cwxyz007/vscode-hexo-utils/issues/49) ([f83bd0c](https://github.com/cwxyz007/vscode-hexo-utils/commit/f83bd0c32a84af69fd8c91362493e0b391a4421f))
+
+
+
 ## [0.2.2](https://github.com/cwxyz007/vscode-hexo-utils/compare/v0.2.1...v0.2.2) (2022-03-05)
 
 
