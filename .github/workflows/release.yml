@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: https://registry.npm.taobao.org
+
+      - name: Install Changelog Tool
+        run: npm install -g conventional-changelog-cli
+
+      - name: Generate Release Note
+        run: conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 2
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: RELEASE-NOTE.md
