@@ -6,6 +6,10 @@ import {
   TreeItemCollapsibleState,
   Uri,
   ProviderResult,
+  TreeDragAndDropController,
+  CancellationToken,
+  DataTransfer,
+  DataTransferItem,
 } from 'vscode';
 import { Commands } from '../../commands/common';
 import { ArticleTypes } from '../../commands/createArticle';
@@ -13,8 +17,21 @@ import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
 import { configs, getConfig, ConfigProperties, SortBy } from '../../configs';
 import { IHexoMetadata } from '../../hexoMetadata';
 import { BaseDispose } from '../common';
+import { MoveFile } from '../../commands';
+import { mineTypePrefix } from './const';
 
-export class HexoArticleProvider extends BaseDispose implements TreeDataProvider<ArticleItem> {
+
+export interface HexoArticleOption {
+  dropMimeType: string;
+}
+
+export class HexoArticleProvider
+  extends BaseDispose
+  implements TreeDataProvider<ArticleItem>, TreeDragAndDropController<ArticleItem>
+{
+  dropMimeTypes: string[] = [];
+  dragMimeTypes: string[] = [];
+
   private _onDidChangeTreeData = new EventEmitter<ArticleItem | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
@@ -22,12 +39,19 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
 
   private allItems: Map<string, ArticleItem> = new Map();
 
-  constructor(type: ArticleTypes) {
+  constructor(type: ArticleTypes, option: HexoArticleOption) {
     super();
     this.type = type;
     this.subscribe(this._onDidChangeTreeData);
 
+    this.dragMimeTypes.push(this.mimeType);
+    this.dropMimeTypes.push(option.dropMimeType);
+
     this.recalculateItems();
+  }
+
+  private get mimeType() {
+    return mineTypePrefix + this.type;
   }
 
   private recalculateItems() {
@@ -36,6 +60,33 @@ export class HexoArticleProvider extends BaseDispose implements TreeDataProvider
     });
 
     this.subscribe(_dispose);
+  }
+
+  handleDrag(
+    source: readonly ArticleItem[],
+    dataTransfer: DataTransfer,
+    token: CancellationToken,
+  ): void {
+    dataTransfer.set(this.mimeType, new DataTransferItem(source));
+  }
+
+  async handleDrop(
+    target: ArticleItem | undefined,
+    dataTransfer: DataTransfer,
+    token: CancellationToken,
+  ) {
+    const transferItem = dataTransfer.get(this.dropMimeTypes[0]);
+
+    if (!transferItem) {
+      return;
+    }
+
+    try {
+      const treeItems: ArticleItem[] = JSON.parse(await transferItem.asString());
+      await MoveFile.move(this.type, treeItems)
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   refresh() {

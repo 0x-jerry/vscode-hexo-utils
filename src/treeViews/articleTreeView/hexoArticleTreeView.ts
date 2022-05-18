@@ -1,4 +1,4 @@
-import { HexoArticleProvider, ArticleItem } from './hexoArticleProvider';
+import { HexoArticleProvider, ArticleItem, HexoArticleOption } from './hexoArticleProvider';
 import { ArticleTypes, Commands } from '../../commands';
 import { TreeViewOptions, commands, window } from 'vscode';
 import { BaseTreeView, ViewTypes } from '../common';
@@ -10,10 +10,14 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
   constructor(
     viewId: ViewTypes,
     type: ArticleTypes,
+    providerOpt: HexoArticleOption,
     opts: Partial<TreeViewOptions<ArticleItem>> = {},
   ) {
-    const provider = new HexoArticleProvider(type);
-    super(viewId, provider, opts);
+    const provider = new HexoArticleProvider(type, providerOpt);
+    super(viewId, provider, {
+      ...opts,
+      dragAndDropController: provider,
+    });
 
     this.provider = provider;
 

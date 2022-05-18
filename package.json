@@ -17,7 +17,7 @@
   },
   "publisher": "fantasy",
   "engines": {
-    "vscode": "^1.41.1"
+    "vscode": "^1.67.0"
   },
   "categories": [
     "Other"
@@ -364,7 +364,7 @@
     "vscode": "*"
   },
   "devDependencies": {
-    "@0x-jerry/x-release": "^0.3.4",
+    "@0x-jerry/x-release": "^0.3.6",
     "@types/debounce": "^1.2.1",
     "@types/debug": "^4.1.7",
     "@types/fs-extra": "^9.0.13",
@@ -372,12 +372,12 @@
     "@types/mustache": "^4.1.2",
     "@types/node": "^15.14.9",
     "@types/universal-analytics": "^0.4.5",
-    "@types/vscode": "^1.41.1",
+    "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.31",
     "axios": "^0.27.2",
     "conventional-changelog-cli": "^2.2.2",
-    "cos-nodejs-sdk-v5": "^2.11.7",
-    "dayjs": "^1.11.1",
+    "cos-nodejs-sdk-v5": "^2.11.9",
+    "dayjs": "^1.11.2",
     "debounce": "^1.2.1",
     "debug": "^4.3.4",
     "form-data": "^4.0.0",
@@ -386,7 +386,7 @@
     "hexo-cli": "^4.3.0",
     "markdown-it": "^13.0.1",
     "mustache": "^4.2.0",
-    "tsup": "^5.12.7",
+    "tsup": "^5.12.8",
     "typescript": "^4.6.4",
     "universal-analytics": "^0.5.3",
     "vsce": "^2.7.0",

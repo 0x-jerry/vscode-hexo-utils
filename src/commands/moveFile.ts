@@ -13,7 +13,7 @@ export class MoveFile extends Command {
     super(Commands.moveToDraft, Commands.moveToPost);
   }
 
-  private async _move(to: ArticleTypes, items: ArticleItem[]) {
+  static async move(to: ArticleTypes, items: ArticleItem[]) {
     const p = items.map(async (item) => {
       const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
       const sourceUri = item.resourceUri!;
@@ -42,6 +42,6 @@ export class MoveFile extends Command {
     // hexo.moveTo[post]
     // hexo.moveTo[draft]
     const to = cmd.args[0] as ArticleTypes;
-    this._move(to, list);
+    MoveFile.move(to, list);
   }
 }
