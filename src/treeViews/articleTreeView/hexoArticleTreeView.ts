@@ -40,7 +40,6 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
     if (!item) {
       // Make sure load all tree view items, then try to focus again.
       await sleep(300);
-      this.focus();
       return;
     }
 
