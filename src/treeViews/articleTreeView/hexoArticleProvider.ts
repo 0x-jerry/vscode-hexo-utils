@@ -22,7 +22,7 @@ import { mineTypePrefix } from './const';
 
 
 export interface HexoArticleOption {
-  dropMimeType: string;
+  acceptDropMimeType: string;
 }
 
 export class HexoArticleProvider
@@ -45,7 +45,7 @@ export class HexoArticleProvider
     this.subscribe(this._onDidChangeTreeData);
 
     this.dragMimeTypes.push(this.mimeType);
-    this.dropMimeTypes.push(option.dropMimeType);
+    this.dropMimeTypes.push(option.acceptDropMimeType);
 
     this.recalculateItems();
   }
