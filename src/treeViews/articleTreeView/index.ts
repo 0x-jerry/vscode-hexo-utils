@@ -7,7 +7,7 @@ import { mineTypePrefix } from './const';
 export class PostArticleTreeView extends ArticleTreeView {
   constructor() {
     super(ViewTypes.post, ArticleTypes.post, {
-      dropMimeType: mineTypePrefix + ArticleTypes.draft,
+      acceptDropMimeType: mineTypePrefix + ArticleTypes.draft,
     });
     this.registerRefreshCmd(Commands.refreshPost);
   }
@@ -17,7 +17,7 @@ export class PostArticleTreeView extends ArticleTreeView {
 export class DraftArticleTreeView extends ArticleTreeView {
   constructor() {
     super(ViewTypes.draft, ArticleTypes.draft, {
-      dropMimeType: mineTypePrefix + ArticleTypes.post,
+      acceptDropMimeType: mineTypePrefix + ArticleTypes.post,
     });
     this.registerRefreshCmd(Commands.refreshDraft);
   }
