@@ -24,4 +24,4 @@
 - [x] support `hexo` project is a sub folder. [config](./README.md#extension-settings)
 - [x] support hexo tag syntax highlight
 - [x] support hexo code snippets
-- [ ] support drag and drop tree item [drag and drop](https://github.com/Microsoft/vscode/issues/32592)
+- [x] support drag and drop tree item [drag and drop](https://github.com/Microsoft/vscode/issues/32592)
