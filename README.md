@@ -28,8 +28,6 @@ A sidebar for [Hexo] blog system.
 
 ## Known Issues
 
-- [Can't drag an item then drop it to an empty treeView #149890](https://github.com/microsoft/vscode/issues/149890)
-
 If you found any bugs. Please open an [issue](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
 
 ## Release Notes
