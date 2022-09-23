@@ -78,7 +78,16 @@ function hexoTagRules(md: MarkdownIt) {
 
     const matchStringReg = /(['"])(\\\1|.)*?\1|[^\s]+/g;
 
-    const [tag, ...attrs] = hexoTagMatches[1].trim().match(matchStringReg) || [];
+    let [tag, ...attrs] = hexoTagMatches[1].trim().match(matchStringReg) || [];
+
+    // remove quote
+    attrs = attrs.map((attr) => {
+      try {
+        return JSON.parse(attr);
+      } catch (error) {
+        return attr;
+      }
+    });
 
     const supportedHexoTags = Object.keys(supportedTagMap);
 
