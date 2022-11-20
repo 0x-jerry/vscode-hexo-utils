@@ -10,7 +10,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/markdown-it': ^12.2.3
       '@types/mustache': ^4.1.2
-      '@types/node': ^16.0.0
+      '@types/node': ^18.0.0
       '@types/universal-analytics': ^0.4.5
       '@types/vscode': ^1.67.0
       '@types/yamljs': ^0.2.31
@@ -38,7 +38,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/markdown-it': 12.2.3
       '@types/mustache': 4.1.2
-      '@types/node': 16.11.33
+      '@types/node': 18.11.9
       '@types/universal-analytics': 0.4.5
       '@types/vscode': 1.67.0
       '@types/yamljs': 0.2.31
@@ -179,7 +179,7 @@ packages:
   /@types/fs-extra/9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
     dependencies:
-      '@types/node': 17.0.31
+      '@types/node': 18.11.9
     dev: true
 
   /@types/linkify-it/3.0.2:
@@ -213,8 +213,8 @@ packages:
     resolution: {integrity: sha512-0PJ0vg+JyU0MIan58IOIFRtSvsb7Ri+7Wltx2qAg94eMOrpg4+uuP3aUHCpxXc1i0jCXiC+zIamSZh3l9AbcQA==}
     dev: true
 
-  /@types/node/17.0.31:
-    resolution: {integrity: sha512-AR0x5HbXGqkEx9CadRH3EBYx/VkiUgZIhP4wvPn/+5KIsgpNoyFaRlVe0Zlx9gRtg8fA06a9tskE2MSN7TcG4Q==}
+  /@types/node/18.11.9:
+    resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
