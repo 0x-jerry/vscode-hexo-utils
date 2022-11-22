@@ -64,7 +64,7 @@ importers:
     specifiers:
       hexo: ^6.0.0
       hexo-generator-archive: ^2.0.0
-      hexo-generator-category: ^1.0.0
+      hexo-generator-category: ^2.0.0
       hexo-generator-index: ^3.0.0
       hexo-generator-tag: ^1.0.0
       hexo-renderer-ejs: ^2.0.0
@@ -75,7 +75,7 @@ importers:
     dependencies:
       hexo: 6.0.0
       hexo-generator-archive: 2.0.0
-      hexo-generator-category: 1.0.0
+      hexo-generator-category: 2.0.0
       hexo-generator-index: 3.0.0
       hexo-generator-tag: 1.0.0
       hexo-renderer-ejs: 2.0.0
@@ -1905,11 +1905,11 @@ packages:
       hexo-pagination: 3.0.0
     dev: false
 
-  /hexo-generator-category/1.0.0:
-    resolution: {integrity: sha512-kmtwT1SHYL2ismbGnYQXNtqLFSeTdtHNbJIqno3LKROpCK8ybST5QVXF1bZI9LkFcXV/H8ilt8gfg4/dNNcQQQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/hexo-generator-category/-/hexo-generator-category-1.0.0.tgz}
-    engines: {node: '>=8.6.0'}
+  /hexo-generator-category/2.0.0:
+    resolution: {integrity: sha512-9OduRBf3WeRDa4BR0kAfRjOVHur7v3fm0NKAwbjUiqULigAdNZVZPO3cHKW2MlBbl/lI5PuWdhQ9zZ99CCCAgQ==}
+    engines: {node: '>=14'}
     dependencies:
-      hexo-pagination: 1.0.0
+      hexo-pagination: 3.0.0
     dev: false
 
   /hexo-generator-index/3.0.0:
