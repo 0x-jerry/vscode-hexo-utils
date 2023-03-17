@@ -27,7 +27,7 @@ importers:
       markdown-it: ^13.0.1
       mustache: ^4.2.0
       tsup: ^6.0.0
-      typescript: ^4.6.4
+      typescript: ^5.0.0
       universal-analytics: ^0.5.3
       vsce: ^2.7.0
       yamljs: ^0.3.0
@@ -54,8 +54,8 @@ importers:
       hexo-cli: 4.3.0
       markdown-it: 13.0.1
       mustache: 4.2.0
-      tsup: 6.1.2_typescript@4.6.4
-      typescript: 4.6.4
+      tsup: 6.1.2_typescript@5.0.2
+      typescript: 5.0.2
       universal-analytics: 0.5.3
       vsce: 2.7.0
       yamljs: 0.3.0
@@ -1944,11 +1944,6 @@ packages:
     engines: {node: '>=12.4.0'}
     dependencies:
       nanocolors: 0.2.13
-    dev: false
-
-  /hexo-pagination/1.0.0:
-    resolution: {integrity: sha512-miEVFgxchPr2qNWxw0JWpJ9R/Yaf7HjHBZVjvCCcqfbsLyYtCvIfJDxcEwz1sDOC/fLzYPqNnhUI73uNxBHRSA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/hexo-pagination/-/hexo-pagination-1.0.0.tgz}
-    engines: {node: '>=8.6.0'}
     dev: false
 
   /hexo-pagination/3.0.0:
@@ -3944,7 +3939,7 @@ packages:
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
-  /tsup/6.1.2_typescript@4.6.4:
+  /tsup/6.1.2_typescript@5.0.2:
     resolution: {integrity: sha512-Hw4hKDHaAQkm2eVavlArEOrAPA93bziRDamdfwaNs0vXQdUUFfItvUWY0L/F6oQQMVh6GvjQq1+HpDXw8UKtPA==}
     engines: {node: '>=14'}
     hasBin: true
@@ -3974,7 +3969,7 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.21.0
       tree-kill: 1.2.2
-      typescript: 4.6.4
+      typescript: 5.0.2
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -4025,9 +4020,9 @@ packages:
       underscore: 1.13.3
     dev: true
 
-  /typescript/4.6.4:
-    resolution: {integrity: sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==}
-    engines: {node: '>=4.2.0'}
+  /typescript/5.0.2:
+    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
