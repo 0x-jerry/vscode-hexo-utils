@@ -71,7 +71,7 @@ importers:
       hexo-renderer-marked: ^6.0.0
       hexo-renderer-stylus: ^2.0.0
       hexo-server: ^3.0.0
-      hexo-theme-landscape: ^0.0.3
+      hexo-theme-landscape: ^1.0.0
     dependencies:
       hexo: 6.0.0
       hexo-generator-archive: 2.0.0
@@ -82,7 +82,7 @@ importers:
       hexo-renderer-marked: 6.0.0
       hexo-renderer-stylus: 2.0.1
       hexo-server: 3.0.0
-      hexo-theme-landscape: 0.0.3
+      hexo-theme-landscape: 1.0.0
 
 packages:
 
@@ -1946,11 +1946,6 @@ packages:
       nanocolors: 0.2.13
     dev: false
 
-  /hexo-pagination/1.0.0:
-    resolution: {integrity: sha512-miEVFgxchPr2qNWxw0JWpJ9R/Yaf7HjHBZVjvCCcqfbsLyYtCvIfJDxcEwz1sDOC/fLzYPqNnhUI73uNxBHRSA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/hexo-pagination/-/hexo-pagination-1.0.0.tgz}
-    engines: {node: '>=8.6.0'}
-    dev: false
-
   /hexo-pagination/3.0.0:
     resolution: {integrity: sha512-8oo1iozloZo7TojPVYg4IxL3SJKCBdSJ908fTlIxIK7TWJIKdYnQlW31+12DBJ0NhVZA/lZisPObGF08wT8fKw==}
     engines: {node: '>=14'}
@@ -2004,8 +1999,8 @@ packages:
       - supports-color
     dev: false
 
-  /hexo-theme-landscape/0.0.3:
-    resolution: {integrity: sha512-b0Di+TUVs4ESrNX4ULEh9uQmADpO6kr10rIJ2OGZM8suNQNFKdxn+vJUjnLfKkCPJAfVmS7/S83KCNYe4tpoNw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/hexo-theme-landscape/-/hexo-theme-landscape-0.0.3.tgz}
+  /hexo-theme-landscape/1.0.0:
+    resolution: {integrity: sha512-bWQJWMqQI78wWiJPQZq5pJBH20TM442ShCaHGRetuEgMraxH0OKxB3NTupJzNEkzEk8DV2yrdizkXdKN6i501A==}
     dev: false
 
   /hexo-util/2.6.0:
