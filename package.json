@@ -375,7 +375,7 @@
     "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.31",
     "axios": "^1.0.0",
-    "conventional-changelog-cli": "^2.2.2",
+    "conventional-changelog-cli": "^3.0.0",
     "cos-nodejs-sdk-v5": "^2.11.9",
     "dayjs": "^1.11.2",
     "debounce": "^1.2.1",
