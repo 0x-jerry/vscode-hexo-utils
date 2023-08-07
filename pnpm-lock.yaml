@@ -8,7 +8,7 @@ importers:
       '@types/debounce': ^1.2.1
       '@types/debug': ^4.1.7
       '@types/fs-extra': ^9.0.13
-      '@types/markdown-it': ^12.2.3
+      '@types/markdown-it': ^13.0.0
       '@types/mustache': ^4.1.2
       '@types/node': ^18.0.0
       '@types/universal-analytics': ^0.4.5
@@ -36,7 +36,7 @@ importers:
       '@types/debounce': 1.2.1
       '@types/debug': 4.1.7
       '@types/fs-extra': 9.0.13
-      '@types/markdown-it': 12.2.3
+      '@types/markdown-it': 13.0.0
       '@types/mustache': 4.1.2
       '@types/node': 18.11.9
       '@types/universal-analytics': 0.4.5
@@ -186,8 +186,8 @@ packages:
     resolution: {integrity: sha512-HZQYqbiFVWufzCwexrvh694SOim8z2d+xJl5UNamcvQFejLY/2YUtzXHYi3cHdI7PMlS8ejH2slRAOJQ32aNbA==}
     dev: true
 
-  /@types/markdown-it/12.2.3:
-    resolution: {integrity: sha512-GKMHFfv3458yYy+v/N8gjufHO6MSZKCOXpZc5GXIWWy8uldwfmPn98vp81gZ5f9SVw8YYBctgfJ22a2d7AOMeQ==}
+  /@types/markdown-it/13.0.0:
+    resolution: {integrity: sha512-mPTaUl5glYfzdJFeCsvhXQwZKdyszNAZcMm5ZTP5SfpTu+vIbog7J3z8Fa4x/Fzv5TB4R6OA/pHBYIYmkYOWGQ==}
     dependencies:
       '@types/linkify-it': 3.0.2
       '@types/mdurl': 1.0.2
@@ -1944,11 +1944,6 @@ packages:
     engines: {node: '>=12.4.0'}
     dependencies:
       nanocolors: 0.2.13
-    dev: false
-
-  /hexo-pagination/1.0.0:
-    resolution: {integrity: sha512-miEVFgxchPr2qNWxw0JWpJ9R/Yaf7HjHBZVjvCCcqfbsLyYtCvIfJDxcEwz1sDOC/fLzYPqNnhUI73uNxBHRSA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/hexo-pagination/-/hexo-pagination-1.0.0.tgz}
-    engines: {node: '>=8.6.0'}
     dev: false
 
   /hexo-pagination/3.0.0:

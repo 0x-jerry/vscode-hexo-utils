@@ -368,7 +368,7 @@
     "@types/debounce": "^1.2.1",
     "@types/debug": "^4.1.7",
     "@types/fs-extra": "^9.0.13",
-    "@types/markdown-it": "^12.2.3",
+    "@types/markdown-it": "^13.0.0",
     "@types/mustache": "^4.1.2",
     "@types/node": "^18.0.0",
     "@types/universal-analytics": "^0.4.5",
