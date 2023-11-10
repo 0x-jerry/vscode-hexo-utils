@@ -374,7 +374,7 @@
     "@types/universal-analytics": "^0.4.5",
     "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.31",
-    "axios": "^1.0.0",
+    "axios": "^1.6.0",
     "conventional-changelog-cli": "^4.0.0",
     "cos-nodejs-sdk-v5": "^2.11.9",
     "dayjs": "^1.11.2",
