@@ -67,8 +67,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0
       getmac:
-        specifier: ^5.20.0
-        version: 5.20.0
+        specifier: ^6.0.0
+        version: 6.0.0
       hexo-cli:
         specifier: ^4.3.0
         version: 4.3.0
@@ -450,10 +450,6 @@ packages:
 
   /@types/mustache@4.1.2:
     resolution: {integrity: sha512-c4OVMMcyodKQ9dpwBwh3ofK9P6U9ZktKU9S+p33UqwMNN1vlv2P0zJZUScTshnx7OEoIIRcCFNQ904sYxZz8kg==}
-    dev: true
-
-  /@types/node@16.11.33:
-    resolution: {integrity: sha512-0PJ0vg+JyU0MIan58IOIFRtSvsb7Ri+7Wltx2qAg94eMOrpg4+uuP3aUHCpxXc1i0jCXiC+zIamSZh3l9AbcQA==}
     dev: true
 
   /@types/node@18.11.9:
@@ -1680,11 +1676,9 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /getmac@5.20.0:
-    resolution: {integrity: sha512-O9T855fb+Hx9dsTJHNv72ZUuA6Y18+BO/0ypPXf6s/tunzXqhc3kbQkNAl+9HVKVlwkWmglHS4LMoJ9YbymKYQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      '@types/node': 16.11.33
+  /getmac@6.0.0:
+    resolution: {integrity: sha512-ybBE4RGE3z4aNiPNms/cxUAjHjYwslZhyUEVARLnW4mlvi24kud81vT445jC/rlHaVkb91H+nPQLQu9MhQMfkA==}
+    engines: {node: '>=8'}
     dev: true
 
   /getpass@0.1.7:
