@@ -384,7 +384,7 @@
     "fs-extra": "^10.1.0",
     "getmac": "^5.20.0",
     "hexo-cli": "^4.3.0",
-    "markdown-it": "^13.0.1",
+    "markdown-it": "^14.0.0",
     "mustache": "^4.2.0",
     "tsup": "^7.0.0",
     "typescript": "^4.6.4",
