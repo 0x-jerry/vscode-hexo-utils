@@ -31,7 +31,8 @@ export class PasteImage extends Command {
     }
 
     const parsed = path.parse(filePath.fsPath);
-    const imageFolder = Uri.joinPath(filePath, '..', parsed.name);
+    console.log(filePath, parsed.name)
+    const imageFolder = Uri.joinPath(filePath, '../../images', parsed.name);
 
     const selectText = editor.document.getText(editor.selection);
 
@@ -107,6 +108,10 @@ export class PasteImage extends Command {
 
   async updateEditor(imageURI: string, editor: TextEditor) {
     const parsed = path.parse(imageURI);
+    const image_reative_path = path.relative(
+      path.join(parsed.dir, '../../'),
+      imageURI,
+    );
 
     editor.edit((edit) => {
       const current = editor.selection;
@@ -117,7 +122,7 @@ export class PasteImage extends Command {
       }
 
       const insertText = `![${parsed.name}](${
-        imageURI.startsWith('http') ? imageURI : parsed.base
+        imageURI.startsWith('http') ? imageURI : image_reative_path
       })`;
 
       if (current.isEmpty) {
