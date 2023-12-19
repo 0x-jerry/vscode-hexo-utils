@@ -112,6 +112,7 @@ export class PasteImage extends Command {
       path.join(parsed.dir, '../../'),
       imageURI,
     );
+    const image_absolute_path = path.join("/", image_reative_path)
 
     editor.edit((edit) => {
       const current = editor.selection;
@@ -122,7 +123,7 @@ export class PasteImage extends Command {
       }
 
       const insertText = `![${parsed.name}](${
-        imageURI.startsWith('http') ? imageURI : image_reative_path
+        imageURI.startsWith('http') ? imageURI : image_absolute_path
       })`;
 
       if (current.isEmpty) {
