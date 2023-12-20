@@ -13,6 +13,7 @@ export enum ConfigProperties {
   imgChr = 'uploadImgchr',
   tencentOSS = 'uploadTencentOSS',
   generateTimeFormat = 'generateTimeFormat',
+  pasteFolderType = 'pasteFolderType',
 }
 
 export enum SortBy {

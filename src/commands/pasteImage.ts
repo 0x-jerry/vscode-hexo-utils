@@ -31,8 +31,9 @@ export class PasteImage extends Command {
     }
 
     const parsed = path.parse(filePath.fsPath);
-    console.log(filePath, parsed.name)
-    const imageFolder = Uri.joinPath(filePath, '../../images', parsed.name);
+
+    const pasteFolderType = getConfig<string>(ConfigProperties.pasteFolderType);
+    const imageFolder = pasteFolderType === "post" ? Uri.joinPath(filePath, '..', parsed.name) : Uri.joinPath(filePath, '../../images', parsed.name);
 
     const selectText = editor.document.getText(editor.selection);
 
@@ -108,11 +109,12 @@ export class PasteImage extends Command {
 
   async updateEditor(imageURI: string, editor: TextEditor) {
     const parsed = path.parse(imageURI);
-    const image_reative_path = path.relative(
-      path.join(parsed.dir, '../../'),
-      imageURI,
-    );
-    const image_absolute_path = path.join("/", image_reative_path)
+
+    const pasteFolderType = getConfig<string>(ConfigProperties.pasteFolderType);
+    const image_path = 
+    pasteFolderType === "post" 
+      ? parsed.base
+      : path.join("/", path.relative(path.join(parsed.dir, '../../'), imageURI))
 
     editor.edit((edit) => {
       const current = editor.selection;
@@ -123,7 +125,7 @@ export class PasteImage extends Command {
       }
 
       const insertText = `![${parsed.name}](${
-        imageURI.startsWith('http') ? imageURI : image_absolute_path
+        imageURI.startsWith('http') ? imageURI : image_path
       })`;
 
       if (current.isEmpty) {

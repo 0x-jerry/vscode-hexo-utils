@@ -116,6 +116,15 @@
               "description": "Tencent COS Bucket"
             }
           }
+        },
+        "hexo.pasteFolderType": {
+          "type": "string",
+          "enum": [
+            "post",
+            "global"
+          ],
+          "default": "post",
+          "description": "Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/assets/<__post>/`)"
         }
       }
     },
