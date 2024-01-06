@@ -2,7 +2,7 @@ Please set vscode config as follow:
 
 ```json
 {
-  "hexo.assetFolderType": "post"
+  "hexo.assetFolderType": "global"
 }
 ```
 
