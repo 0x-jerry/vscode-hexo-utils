@@ -2,7 +2,7 @@ import path from 'path';
 import mustache from 'mustache';
 import { getDirFiles, askForNext, error, isExist } from '../utils';
 import { commands, Uri, window, workspace } from 'vscode';
-import { Command, Commands, command, ICommandParsed } from './common';
+import { Command, Commands, command, type ICommandParsed } from './common';
 import { configs, getConfig, ConfigProperties } from '../configs';
 import dayjs from 'dayjs';
 

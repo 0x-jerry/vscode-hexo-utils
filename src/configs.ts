@@ -21,6 +21,11 @@ export enum SortBy {
   date = 'date',
 }
 
+export enum PastResourceType {
+  Post = 'post',
+  Global = 'global',
+}
+
 export function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
   const configs = workspace.getConfiguration(section);
   return configs.get<T>(propName)!;
