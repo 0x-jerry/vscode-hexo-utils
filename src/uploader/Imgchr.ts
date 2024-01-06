@@ -1,16 +1,16 @@
 import Axios from 'axios';
 import FormData from 'form-data';
 import { warn } from '../utils';
-import fs from 'fs-extra';
+import fs from 'fs/promises';
 import path from 'path';
 
-const axios = Axios.create();
-
-axios.defaults.headers = {
-  'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
-  Accept: '*/*',
-};
+const axios = Axios.create({
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
+    Accept: '*/*',
+  },
+});
 
 const apiConfig = {
   root: 'https://imgtu.com',
@@ -53,7 +53,7 @@ export class ImgChr {
 
     this.token = matched[1];
 
-    this.addCookie(res.headers['set-cookie'][0]);
+    this.addCookie(res.headers['set-cookie']?.[0]!);
   }
 
   async _saveConfig() {
@@ -110,7 +110,7 @@ export class ImgChr {
 
       warn('Imgchr login failed.', 'Please check username and password');
       throw new Error('Imgchr login failed.');
-    } catch (data) {
+    } catch (data: any) {
       if (data.response && data.response.status === 301) {
         const cookie: string = data.response.headers['set-cookie'][0];
 
