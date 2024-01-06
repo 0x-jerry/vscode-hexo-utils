@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it';
 import path from 'path';
 import { Uri, window } from 'vscode';
-import { ConfigProperties, PastResourceType, configs, getConfig } from './configs';
+import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs';
 import { isVirtualWorkspace } from './utils';
 import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
 import { Token } from './md-it/index';
@@ -122,14 +122,14 @@ function createHexoImgToken(token: Token, src: string, alt: string) {
 function getResDir(fileUri: Uri) {
   const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1;
 
-  const pasteFolderType = getConfig<PastResourceType>(ConfigProperties.pasteFolderType);
+  const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType);
 
   const fileDir = path
     .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
     .replace(/\.md$/, '');
 
   const resourceDir =
-    pasteFolderType === PastResourceType.Post
+    assetFolderType === AssetFolderType.Post
       ? Uri.joinPath(configs.paths.post, fileDir)
       : Uri.joinPath(configs.hexoRoot!, 'source');
 

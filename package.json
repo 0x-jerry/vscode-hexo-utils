@@ -117,7 +117,7 @@
             }
           }
         },
-        "hexo.pasteFolderType": {
+        "hexo.assetFolderType": {
           "type": "string",
           "enum": [
             "post",

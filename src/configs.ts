@@ -13,7 +13,7 @@ export enum ConfigProperties {
   imgChr = 'uploadImgchr',
   tencentOSS = 'uploadTencentOSS',
   generateTimeFormat = 'generateTimeFormat',
-  pasteFolderType = 'pasteFolderType',
+  assetFolderType = 'assetFolderType',
 }
 
 export enum SortBy {
@@ -21,7 +21,7 @@ export enum SortBy {
   date = 'date',
 }
 
-export enum PastResourceType {
+export enum AssetFolderType {
   Post = 'post',
   Global = 'global',
 }

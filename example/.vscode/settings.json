@@ -1,4 +1,4 @@
 {
-    "hexo.generateTimeFormat": "YYYY/MM/DD HH:mm:ss",
-    "hexo.pasteFolderType": "post"
+  "hexo.generateTimeFormat": "YYYY/MM/DD HH:mm:ss",
+  "hexo.assetFolderType": "post"
 }
