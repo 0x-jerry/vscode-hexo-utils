@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it';
 import path from 'path';
 import { Uri, window } from 'vscode';
-import { configs } from './configs';
+import { ConfigProperties, PastResourceType, configs, getConfig } from './configs';
 import { isVirtualWorkspace } from './utils';
 import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
 import { Token } from './md-it/index';
@@ -121,18 +121,25 @@ function createHexoImgToken(token: Token, src: string, alt: string) {
 
 function getResDir(fileUri: Uri) {
   const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1;
+
+  const pasteFolderType = getConfig<PastResourceType>(ConfigProperties.pasteFolderType);
+
   const fileDir = path
     .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
     .replace(/\.md$/, '');
 
-  const resourceDir = Uri.joinPath(configs.paths.post, fileDir);
+  const resourceDir =
+    pasteFolderType === PastResourceType.Post
+      ? Uri.joinPath(configs.paths.post, fileDir)
+      : Uri.joinPath(configs.hexoRoot!, 'source');
+
   return resourceDir;
 }
 
 function getCorrectImagePath(imgNameWithExt: string): string {
   let resultPath = imgNameWithExt;
 
-  if (!window.activeTextEditor) {
+  if (!window.activeTextEditor || isVirtualWorkspace()) {
     return resultPath;
   }
 
@@ -143,10 +150,6 @@ function getCorrectImagePath(imgNameWithExt: string): string {
   const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath);
 
   try {
-    if (isVirtualWorkspace()) {
-      return imgNameWithExt;
-    }
-
     // drawback: not support virtual workspace.
     const fs = require('fs') as typeof import('fs');
 
