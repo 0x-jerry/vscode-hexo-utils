@@ -6,7 +6,7 @@ import { window, type TextEditor, ProgressLocation, workspace, Uri } from 'vscod
 import { warn, error, askForNext, isExist } from '../utils';
 import { Command, type ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
-import { getConfig, ConfigProperties } from '../configs';
+import { getConfig, ConfigProperties, configs } from '../configs';
 
 @command()
 export class PasteImage extends Command {
@@ -33,7 +33,11 @@ export class PasteImage extends Command {
     const parsed = path.parse(filePath.fsPath);
 
     const pasteFolderType = getConfig<string>(ConfigProperties.pasteFolderType);
-    const imageFolder = pasteFolderType === "post" ? Uri.joinPath(filePath, '..', parsed.name) : Uri.joinPath(filePath, '../../images', parsed.name);
+    const hexoFolder = configs.hexoRoot!;
+    const imageFolder =
+      pasteFolderType === 'post'
+        ? Uri.joinPath(filePath, '..', parsed.name)
+        : Uri.joinPath(hexoFolder, 'source/images', parsed.name);
 
     const selectText = editor.document.getText(editor.selection);
 
@@ -111,10 +115,12 @@ export class PasteImage extends Command {
     const parsed = path.parse(imageURI);
 
     const pasteFolderType = getConfig<string>(ConfigProperties.pasteFolderType);
-    const image_path = 
-    pasteFolderType === "post" 
-      ? parsed.base
-      : path.join("/", path.relative(path.join(parsed.dir, '../../'), imageURI))
+    const hexoSourceFolder = Uri.joinPath(configs.hexoRoot!, 'source').fsPath;
+
+    const image_path =
+      pasteFolderType === 'post'
+        ? parsed.base
+        : path.join('/', path.relative(hexoSourceFolder, imageURI));
 
     editor.edit((edit) => {
       const current = editor.selection;
