@@ -1,10 +1,10 @@
 import path from 'path';
 import {
-  CompletionItemProvider,
-  TextDocument,
-  CancellationToken,
+  type CompletionItemProvider,
+  type TextDocument,
+  type CancellationToken,
   Position,
-  CompletionContext,
+  type CompletionContext,
   CompletionItem,
   CompletionList,
   MarkdownString,
