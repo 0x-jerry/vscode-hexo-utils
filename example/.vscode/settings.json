@@ -1,3 +1,4 @@
 {
-    "hexo.generateTimeFormat": "YYYY/MM/DD HH:mm:ss"
+    "hexo.generateTimeFormat": "YYYY/MM/DD HH:mm:ss",
+    "hexo.pasteFolderType": "global"
 }
