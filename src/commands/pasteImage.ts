@@ -2,9 +2,9 @@ import path from 'path';
 import os from 'os';
 import dayjs from 'dayjs';
 import { spawn } from 'child_process';
-import { window, TextEditor, ProgressLocation, workspace, Uri } from 'vscode';
+import { window, type TextEditor, ProgressLocation, workspace, Uri } from 'vscode';
 import { warn, error, askForNext, isExist } from '../utils';
-import { Command, ICommandParsed, command, Commands } from './common';
+import { Command, type ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
 import { getConfig, ConfigProperties } from '../configs';
 
@@ -62,7 +62,7 @@ export class PasteImage extends Command {
         await this.updateEditor(imagePath, editor);
       }
     } catch (err) {
-      error(err);
+      error(String(err));
     }
   }
 

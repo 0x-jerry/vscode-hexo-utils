@@ -1,10 +1,10 @@
-import Token from 'markdown-it/lib/token';
-import StateInline from 'markdown-it/lib/rules_inline/state_inline';
 import MarkdownIt from 'markdown-it';
 import path from 'path';
 import { Uri, window } from 'vscode';
 import { configs } from './configs';
 import { isVirtualWorkspace } from './utils';
+import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
+import { Token } from './md-it/index';
 
 interface ResolveHexoTag {
   (status: StateInline, ...attrs: string[]): any;
@@ -91,11 +91,11 @@ function hexoTagRules(md: MarkdownIt) {
 
     const supportedHexoTags = Object.keys(supportedTagMap);
 
-    if (!supportedHexoTags.includes(tag)) {
+    if (!supportedHexoTags.includes(tag!)) {
       return false;
     }
 
-    supportedTagMap[tag](status, ...attrs);
+    supportedTagMap[tag!](status, ...attrs);
 
     status.pos += hexoTagMatches[0].length;
 

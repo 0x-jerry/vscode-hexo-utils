@@ -1,6 +1,6 @@
-import { command, Command, ICommandParsed, Commands } from './common';
+import { command, Command, type ICommandParsed, Commands } from './common';
 import { commands, workspace } from 'vscode';
-import { debounce } from 'debounce';
+import debounce from 'debounce';
 import { ConfigProperties } from '../configs';
 
 @command()

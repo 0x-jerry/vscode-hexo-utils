@@ -1,33 +1,11 @@
 import path from 'path';
 import yamljs from 'yamljs';
 import { Uri, window, workspace } from 'vscode';
-import { configs } from '../configs';
-import { IHexoMetadata } from '../hexoMetadata';
-import { isExist } from './fs';
-
-async function getPkg() {
-  const rootPath = configs.hexoRoot;
-  if (!rootPath) {
-    return null;
-  }
-
-  const pkgPath = Uri.joinPath(rootPath, 'package.json');
-
-  if (!isExist(pkgPath)) {
-    return null;
-  }
-
-  const pkg = await workspace.fs.readFile(pkgPath);
-
-  return JSON.parse(pkg.toString());
-}
+import type { IHexoMetadata } from '../hexoMetadata';
 
 export async function isHexoProject() {
-  // const pkg = await getPkg();
-  // return !!(pkg && pkg.dependencies && pkg.dependencies.hexo);
-
   // no need to check dependency.
-  return true
+  return true;
 }
 
 /**

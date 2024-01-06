@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "target": "esnext",
     "outDir": "out",
     "lib": ["esnext"],
@@ -10,7 +11,8 @@
     "strict": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules", ".vscode-test"],
   "include": ["src", "typings"]
