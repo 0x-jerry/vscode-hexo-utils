@@ -25,6 +25,7 @@ A sidebar for [Hexo] blog system.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.
 - `hexo.uploadTencentOSS`: Account settings for tencent OSS service. Only available when `hexo.upload` is `true`.(Thanks [abnernat])
 - `hexo.generateTimeFormat`: The time format when generate new article, default is ISO format. ([time-format-tokens])
+- `hexo.assetFolderType`: Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/sources/images/<__post>/`), see [#89](https://github.com/0x-jerry/vscode-hexo-utils/pull/89)
 
 ## Known Issues
 
