@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -12,18 +15,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
-          registry-url: https://registry.npm.taobao.org
-
-      - name: Install Changelog Tool
-        run: npm install -g conventional-changelog-cli
-
-      - name: Generate Release Note
-        run: conventional-changelog -p angular -i RELEASE-NOTE.md -s -r 2
+          node-version: 20
 
       - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: RELEASE-NOTE.md
+        run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
