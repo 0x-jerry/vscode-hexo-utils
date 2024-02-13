@@ -29,19 +29,15 @@ A sidebar for [Hexo] blog system.
 
 ## Known Issues
 
-If you found any bugs. Please open an [issue](https://github.com/cwxyz007/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
+If you found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
 
 ## Release Notes
 
-See [CHANGELOG](CHANGELOG.md)
+See [releases](https://github.com/0x-jerry/vscode-hexo-utils/releases).
 
 [hexo]: https://hexo.io
 [vscode-paste-image]: https://github.com/mushanshitiancai/vscode-paste-image
 [time-format-tokens]: https://day.js.org/docs/en/plugin/custom-parse-format#list-of-all-available-format-tokens
 [abnernat]: https://github.com/abnernat
-
-## License
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcwxyz007%2Fvscode-hexo-utils?ref=badge_large)
 
 **Enjoy!**
