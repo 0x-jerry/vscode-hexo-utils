@@ -363,10 +363,20 @@
   },
   "scripts": {
     "vscode:prepublish": "tsup src/extension.ts --sourcemap",
-    "build": "tsup src/extension.ts --sourcemap --external vscode",
-    "dev": "tsup src/extension.ts --sourcemap --external vscode --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "publish": "vsce publish --no-dependencies",
     "release": "x-release"
+  },
+  "tsup": {
+    "entry": [
+      "src/extension.ts"
+    ],
+    "sourcemap": true,
+    "clean": true,
+    "external": [
+      "vscode"
+    ]
   },
   "peerDependencies": {
     "@types/vscode": "*"
