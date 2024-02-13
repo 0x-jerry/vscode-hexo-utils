@@ -362,7 +362,6 @@
     "markdown.markdownItPlugins": true
   },
   "scripts": {
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r",
     "vscode:prepublish": "tsup src/extension.ts --sourcemap",
     "build": "tsup src/extension.ts --sourcemap --external vscode",
     "dev": "tsup src/extension.ts --sourcemap --external vscode --watch",
