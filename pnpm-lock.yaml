@@ -26,9 +26,6 @@ importers:
       '@types/node':
         specifier: ^20.10.6
         version: 20.10.6
-      '@types/universal-analytics':
-        specifier: ^0.4.8
-        version: 0.4.8
       '@types/vscode':
         specifier: ^1.67.0
         version: 1.85.0
@@ -59,9 +56,6 @@ importers:
       form-data:
         specifier: ^4.0.0
         version: 4.0.0
-      getmac:
-        specifier: ^6.6.0
-        version: 6.6.0
       hexo-cli:
         specifier: ^4.3.1
         version: 4.3.1
@@ -77,9 +71,6 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
-      universal-analytics:
-        specifier: ^0.5.3
-        version: 0.5.3
       yamljs:
         specifier: ^0.3.0
         version: 0.3.0
@@ -610,10 +601,6 @@ packages:
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
-    dev: true
-
-  /@types/universal-analytics@0.4.8:
-    resolution: {integrity: sha512-HozCrji3dIImmQcKnP7cN0ZBiYTjuOavzgPRY0CbT4AQ2zH/ZRqYDNTMiYI7aBeMV5ylbu+h59WG/N8qGePmww==}
     dev: true
 
   /@types/vscode@1.85.0:
@@ -1843,11 +1830,6 @@ packages:
   /get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
-    dev: true
-
-  /getmac@6.6.0:
-    resolution: {integrity: sha512-o1sq9o5QTfwUyWy7Dao1YGZOI9lN+xzEr9Ul36hyOxFrtuwgLG1ff7oiBEfRDxOrB3jJ2u4jKEs5KMSElyE0cQ==}
-    engines: {node: '>=8'}
     dev: true
 
   /getpass@0.1.7:
@@ -4019,16 +4001,6 @@ packages:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true
 
-  /universal-analytics@0.5.3:
-    resolution: {integrity: sha512-HXSMyIcf2XTvwZ6ZZQLfxfViRm/yTGoRgDeTbojtq6rezeyKB0sTBcKH2fhddnteAHRcHiKgr/ACpbgjGOC6RQ==}
-    engines: {node: '>=12.18.2'}
-    dependencies:
-      debug: 4.3.4
-      uuid: 8.3.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /universalify@0.2.0:
     resolution: {integrity: sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==}
     engines: {node: '>= 4.0.0'}
@@ -4063,11 +4035,6 @@ packages:
   /uuid@3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-    hasBin: true
-    dev: true
-
-  /uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: true
 

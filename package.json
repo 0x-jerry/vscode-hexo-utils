@@ -378,7 +378,6 @@
     "@types/markdown-it": "^13.0.7",
     "@types/mustache": "^4.2.5",
     "@types/node": "^20.10.6",
-    "@types/universal-analytics": "^0.4.8",
     "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.34",
     "@vscode/vsce": "^2.22.0",
@@ -389,13 +388,11 @@
     "debounce": "^2.0.0",
     "debug": "^4.3.4",
     "form-data": "^4.0.0",
-    "getmac": "^6.6.0",
     "hexo-cli": "^4.3.1",
     "markdown-it": "^14.0.0",
     "mustache": "^4.2.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "universal-analytics": "^0.5.3",
     "yamljs": "^0.3.0"
   }
 }
