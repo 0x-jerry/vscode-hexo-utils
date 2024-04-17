@@ -392,6 +392,7 @@
     "@types/yamljs": "^0.2.34",
     "@vscode/vsce": "^2.24.0",
     "axios": "^1.6.8",
+    "clipboard-rs": "^0.0.9",
     "conventional-changelog-cli": "^4.1.0",
     "cos-nodejs-sdk-v5": "^2.13.4",
     "dayjs": "^1.11.10",

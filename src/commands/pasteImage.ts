@@ -1,12 +1,12 @@
 import path from 'path';
 import os from 'os';
 import dayjs from 'dayjs';
-import { spawn } from 'child_process';
 import { window, type TextEditor, ProgressLocation, workspace, Uri } from 'vscode';
 import { warn, error, askForNext, isExist } from '../utils';
 import { Command, type ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
 import { getConfig, ConfigProperties, configs, AssetFolderType } from '../configs';
+import { readImage, readFiles } from 'clipboard-rs';
 
 @command()
 export class PasteImage extends Command {
@@ -143,69 +143,23 @@ export class PasteImage extends Command {
     });
   }
 
-  getCommand(destPath: string) {
-    const platform = process.platform;
-
-    if (platform === 'win32') {
-      return {
-        cmd: 'powershell',
-        params: [
-          '-noprofile',
-          '-noninteractive',
-          '-nologo',
-          '-sta',
-          '-executionpolicy',
-          'unrestricted',
-          '-windowstyle',
-          'hidden',
-          '-file',
-          path.join(__dirname, '..', 'scripts', 'pc.ps1'),
-          destPath,
-        ],
-      };
-    } else if (platform === 'darwin') {
-      return {
-        cmd: 'osascript',
-        params: [path.join(__dirname, '..', 'scripts', 'mac.applescript'), destPath],
-      };
-    } else {
-      return {
-        cmd: 'sh',
-        params: [path.join(__dirname, '..', 'scripts', 'linux.sh'), destPath],
-      };
-    }
-  }
-
   /**
-   * !Linux need xclip command
    * @param imageDestPath
    */
-  pasteImage(imageDestPath: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const cmd = this.getCommand(imageDestPath);
-      const program = spawn(cmd.cmd, cmd.params);
-      let resultData = '';
+  async pasteImage(imageDestPath: string) {
+    const buf = readImage();
 
-      program.on('error', (e) => {
-        warn(e.message);
-        reject();
-      });
+    const _files = readFiles();
+    // todo, also check files
 
-      program.on('exit', (code, signal) => {
-        resultData = resultData.trim();
-        if (resultData === 'no xclip') {
-          warn('Need xclip command.');
-          reject();
-        } else if (resultData === 'no image') {
-          warn('There is not a image in clipboard.');
-        } else {
-          resolve(resultData);
-        }
-      });
+    if (!buf) {
+      warn('There is not a image in clipboard.');
+      return;
+    }
 
-      program.stdout.on('data', (data: Buffer) => {
-        resultData += data.toString();
-      });
-    });
+    // todo, test on different platform
+    const destImagePath = Uri.file(imageDestPath);
+    await workspace.fs.writeFile(destImagePath, Uint8Array.from(buf));
+
   }
 }

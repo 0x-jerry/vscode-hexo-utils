@@ -38,6 +38,9 @@ importers:
       axios:
         specifier: ^1.6.8
         version: 1.6.8(debug@4.3.4)
+      clipboard-rs:
+        specifier: ^0.0.9
+        version: 0.0.9
       conventional-changelog-cli:
         specifier: ^4.1.0
         version: 4.1.0
@@ -1004,6 +1007,141 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /clipboard-rs-darwin-arm64@0.0.9:
+    resolution: {integrity: sha512-3SIlNKmX4c3lN4QHVc0TZTjAeG1S/7JGz1KTPp8/EF7DUNgPZKhDKsjndjKyYH7Bf/iS7dhRxOxFbzmpJVmZSA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-darwin-universal@0.0.9:
+    resolution: {integrity: sha512-Zt0L+LmFtZ284fpVyuvArrAH8v0Y1Z/2ip8yTgn125F8/2BGuD0XZOCYSu6Wg6pWW56sD1YPToU23/eg/cTqiA==}
+    engines: {node: '>= 10'}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-darwin-x64@0.0.9:
+    resolution: {integrity: sha512-gjw699j3l/y7C3SH+E8OtEg7JsL8dmvBeIAPCeGVqH41F6p3zeA82kUTdA6wtuZmP3mV5xh+7c/Jelt77TBeMA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-arm-gnueabihf@0.0.9:
+    resolution: {integrity: sha512-vaudL57BFLTO+XK96xzwr8Kk+vpe6ME1deRWc1GhdYy8WlaACVnpKOqwIwffrckEkZ82QvdjcKfxnEnYJR1vQA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-arm-musleabihf@0.0.9:
+    resolution: {integrity: sha512-Ky1l3bU5hjcG6M20ZOzu9ANm981a8ZZ7Tu9Z7gB/LvRKvPCoqrhMVoFQ3F5vJV7sXPRQKCXHM7ACYaMWMzD0+g==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-arm64-gnu@0.0.9:
+    resolution: {integrity: sha512-s1h4bqRq1ILEgkqqshNopFyWnK4K39Om0nLeY9KSsRo2ayQxMLTEUY3D8xBJmaffHeQUzQ48iEq1v+L6SrBkhw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-arm64-musl@0.0.9:
+    resolution: {integrity: sha512-DFg0w0bLkPJP5Hd6l0JKzqON1OEhuKX61UyVOut5h4UmF9YULnkB1aND/LkmlL7fgqZN9mmPPxS823z8c4gGuA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-riscv64-gnu@0.0.9:
+    resolution: {integrity: sha512-wOMRRD9JMjTE/L11WUh6ks5dCblKza8HCEuR7rav3ku/QVfhL0RN+PBlL8ckRBgLaRA3y8HduCjxsC8K0QfCDg==}
+    engines: {node: '>= 10'}
+    cpu: [riscv64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-x64-gnu@0.0.9:
+    resolution: {integrity: sha512-GcvWTyaWav++7qvUXu39mtvOy6E82/hXjtX8TSccRCeC9FO5hoafuofvKIyAyG9xUnkheRyvZhqyg1ng3wJsQw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-linux-x64-musl@0.0.9:
+    resolution: {integrity: sha512-YcwgOqTYjoCFggKi28VvvS4w/qA/BB5QLtvjH+bqNEg8EJuaeZHmpDkg6cfk1aqCH5HKSd25Aoz9u6lx9SOcfA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-win32-arm64-msvc@0.0.9:
+    resolution: {integrity: sha512-LpO7meHH3BIoN06oLDW+1E6/V7o0o6qvvuU7/cIa3k2ToZi3/gbSFj5TYN0t8s7feZNGb6rsILgdp8Ay4+cEow==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-win32-ia32-msvc@0.0.9:
+    resolution: {integrity: sha512-mJzJSHgoG0xtqDtT2zhxr/W3a44fi+/FSZV3RMnVAreDxDZ7gqrpf9QUfHQRJWyYR2BaQ6umhXiSLfG2NE8SeQ==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs-win32-x64-msvc@0.0.9:
+    resolution: {integrity: sha512-8x71s2ngXpwMww50HMiBIYYmmgUN8MNNwuOZDd+HkB8s4qGz/vo2Zb9jvn62p1nxWcapExKqMuyrwzNPTaJMjQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /clipboard-rs@0.0.9:
+    resolution: {integrity: sha512-/QXtakC/n4TlDVxNmZlEEiAYmr2Sj9NFtWLXr9v8vYCb4xh+20ZzLx7NpUombMUGYbZFmkL+aE3nCGgfTymixw==}
+    engines: {node: '>= 10'}
+    optionalDependencies:
+      clipboard-rs-darwin-arm64: 0.0.9
+      clipboard-rs-darwin-universal: 0.0.9
+      clipboard-rs-darwin-x64: 0.0.9
+      clipboard-rs-linux-arm-gnueabihf: 0.0.9
+      clipboard-rs-linux-arm-musleabihf: 0.0.9
+      clipboard-rs-linux-arm64-gnu: 0.0.9
+      clipboard-rs-linux-arm64-musl: 0.0.9
+      clipboard-rs-linux-riscv64-gnu: 0.0.9
+      clipboard-rs-linux-x64-gnu: 0.0.9
+      clipboard-rs-linux-x64-musl: 0.0.9
+      clipboard-rs-win32-arm64-msvc: 0.0.9
+      clipboard-rs-win32-ia32-msvc: 0.0.9
+      clipboard-rs-win32-x64-msvc: 0.0.9
+    dev: true
 
   /cockatiel@3.1.2:
     resolution: {integrity: sha512-5yARKww0dWyWg2/3xZeXgoxjHLwpVqFptj9Zy7qioJ6+/L0ARM184sgMUrQDjxw7ePJWlGhV998mKhzrxT0/Kg==}
