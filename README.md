@@ -7,7 +7,7 @@ A sidebar for [Hexo] blog system.
 - Create new article with exists template
 - Sidebar, include tags, categories, posts and drafts
 - Preview image with assets folder
-- Hexo tag syntax highlight and hexo snippets ([Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235))
+- Hexo tag syntax highlight and hexo snippets
 - Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)
 - Support remote development
 - And more ...
@@ -30,6 +30,10 @@ A sidebar for [Hexo] blog system.
 ## Known Issues
 
 If you found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
+
+## Q&A
+
+- [Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235)
 
 ## Release Notes
 
