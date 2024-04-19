@@ -368,16 +368,6 @@
     "publish": "vsce publish --no-dependencies",
     "release": "x-release"
   },
-  "tsup": {
-    "entry": [
-      "src/extension.ts"
-    ],
-    "sourcemap": true,
-    "clean": true,
-    "external": [
-      "vscode"
-    ]
-  },
   "peerDependencies": {
     "@types/vscode": "*"
   },

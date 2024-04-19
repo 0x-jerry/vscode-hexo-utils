@@ -6,6 +6,7 @@
     "target": "esnext",
     "outDir": "out",
     "lib": ["esnext"],
+    "allowJs": true,
     "sourceMap": true,
     "rootDir": "src",
     "strict": true,

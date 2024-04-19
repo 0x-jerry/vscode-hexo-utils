@@ -6,7 +6,8 @@ import { warn, error, askForNext, isExist } from '../utils';
 import { Command, type ICommandParsed, command, Commands } from './common';
 import { upload } from '../uploader/uploader';
 import { getConfig, ConfigProperties, configs, AssetFolderType } from '../configs';
-import { readImage, readFiles } from 'clipboard-rs';
+import { readImage, readFiles, supported } from '../addon/clipboard';
+import { spawn } from 'node:child_process';
 
 @command()
 export class PasteImage extends Command {
@@ -76,9 +77,11 @@ export class PasteImage extends Command {
   async saveImage(editor: TextEditor): Promise<string | false> {
     const uploadEnabled = getConfig<boolean>(ConfigProperties.upload);
 
-    const tempFilename = Math.random().toString().substr(2) + '.jpg';
-    const tempPath = path.join(os.tmpdir(), tempFilename);
-    await this.pasteImage(tempPath);
+    const tempFilename = Math.random().toString().slice(2);
+    const tempPathWithoutExt = path.join(os.tmpdir(), tempFilename);
+    const tempPath = await this.pasteImage(tempPathWithoutExt);
+
+    if (!tempPath) return false;
 
     if (uploadEnabled) {
       const url = await window.withProgress(
@@ -88,7 +91,7 @@ export class PasteImage extends Command {
           title: 'Upload image',
         },
         async () => {
-          return await upload(tempPath);
+          return await upload(tempPath.fsPath);
         },
       );
 
@@ -105,7 +108,7 @@ export class PasteImage extends Command {
       ) {
         return false;
       }
-      const tempUri = Uri.file(tempPath);
+      const tempUri = tempPath;
 
       await workspace.fs.copy(tempUri, imagePath);
       return imagePath.fsPath;
@@ -144,22 +147,104 @@ export class PasteImage extends Command {
   }
 
   /**
-   * @param imageDestPath
+   * @param savedPath should not contain file extension
    */
-  async pasteImage(imageDestPath: string) {
-    const buf = readImage();
-
-    const _files = readFiles();
-    // todo, also check files
-
-    if (!buf) {
-      warn('There is not a image in clipboard.');
-      return;
+  async pasteImage(savedPath: string) {
+    if (!supported) {
+      return this._pasteImageFallback(savedPath);
     }
 
     // todo, test on different platform
-    const destImagePath = Uri.file(imageDestPath);
-    await workspace.fs.writeFile(destImagePath, Uint8Array.from(buf));
+    const buf = readImage();
+    if (buf) {
+      const destImagePath = Uri.file(savedPath + '.png');
+      await workspace.fs.writeFile(destImagePath, Uint8Array.from(buf));
 
+      return destImagePath;
+    }
+
+    const files = readFiles();
+
+    const imgRE = /\.(jpg|jpeg|png|avif|webp|gif)/;
+    if (files?.length) {
+      const image = files.find((file) => imgRE.test(file));
+
+      if (image) {
+        const ext = image.split('.').pop();
+        const destImagePath = Uri.file(`${savedPath}.${ext}`);
+        await workspace.fs.copy(Uri.file(image), destImagePath);
+
+        return destImagePath;
+      }
+    }
+
+    warn('There is not a image in clipboard.');
+    return;
+  }
+
+  getCommand(destPath: string) {
+    const platform = process.platform;
+
+    if (platform === 'win32') {
+      return {
+        cmd: 'powershell',
+        params: [
+          '-noprofile',
+          '-noninteractive',
+          '-nologo',
+          '-sta',
+          '-executionpolicy',
+          'unrestricted',
+          '-windowstyle',
+          'hidden',
+          '-file',
+          path.join(__dirname, '..', 'scripts', 'pc.ps1'),
+          destPath,
+        ],
+      };
+    } else if (platform === 'darwin') {
+      return {
+        cmd: 'osascript',
+        params: [path.join(__dirname, '..', 'scripts', 'mac.applescript'), destPath],
+      };
+    } else {
+      return {
+        cmd: 'sh',
+        params: [path.join(__dirname, '..', 'scripts', 'linux.sh'), destPath],
+      };
+    }
+  }
+
+  /**
+   * !Linux need xclip command
+   * @param savedPath
+   */
+  _pasteImageFallback(savedPath: string) {
+    return new Promise<Uri>((resolve, reject) => {
+      const cmd = this.getCommand(savedPath + '.png');
+      const program = spawn(cmd.cmd, cmd.params);
+      let resultData = '';
+
+      program.on('error', (e) => {
+        warn(e.message);
+        reject();
+      });
+
+      program.on('exit', (code, signal) => {
+        resultData = resultData.trim();
+        if (resultData === 'no xclip') {
+          warn('Need xclip command.');
+          reject();
+        } else if (resultData === 'no image') {
+          warn('There is not a image in clipboard.');
+        } else {
+          resolve(Uri.file(resultData));
+        }
+      });
+
+      program.stdout.on('data', (data: Buffer) => {
+        resultData += data.toString();
+      });
+    });
   }
 }
