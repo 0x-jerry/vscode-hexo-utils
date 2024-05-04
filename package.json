@@ -392,7 +392,7 @@
     "@types/yamljs": "^0.2.34",
     "@vscode/vsce": "^2.24.0",
     "axios": "^1.6.8",
-    "conventional-changelog-cli": "^4.1.0",
+    "conventional-changelog-cli": "^5.0.0",
     "cos-nodejs-sdk-v5": "^2.13.4",
     "dayjs": "^1.11.10",
     "debounce": "^2.0.0",
