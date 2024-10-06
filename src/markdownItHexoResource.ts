@@ -1,10 +1,8 @@
-import MarkdownIt from 'markdown-it';
 import path from 'path';
 import { Uri, window } from 'vscode';
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs';
 import { isVirtualWorkspace } from './utils';
-import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
-import { Token } from './md-it/index';
+import { Token, type StateInline } from './md-it';
 
 interface ResolveHexoTag {
   (status: StateInline, ...attrs: string[]): any;
