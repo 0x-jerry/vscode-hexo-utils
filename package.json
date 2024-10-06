@@ -366,7 +366,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "publish": "vsce publish --no-dependencies",
-    "release": "x-release"
+    "release": "x-release --publish false"
   },
   "tsup": {
     "entry": [
@@ -382,27 +382,25 @@
     "@types/vscode": "*"
   },
   "devDependencies": {
-    "@0x-jerry/x-release": "^1.0.0",
+    "@0x-jerry/x-release": "^2.2.2",
     "@types/debounce": "^1.2.4",
     "@types/debug": "^4.1.12",
-    "@types/markdown-it": "^14.0.1",
+    "@types/markdown-it": "^14.1.2",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^20.12.3",
+    "@types/node": "^22.7.4",
     "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.34",
-    "@vscode/vsce": "^3.0.0",
-    "axios": "^1.6.8",
-    "conventional-changelog-cli": "^4.1.0",
-    "cos-nodejs-sdk-v5": "^2.13.4",
-    "dayjs": "^1.11.10",
-    "debounce": "^2.0.0",
-    "debug": "^4.3.4",
+    "@vscode/vsce": "^3.1.1",
+    "axios": "^1.7.7",
+    "cos-nodejs-sdk-v5": "^2.14.6",
+    "dayjs": "^1.11.13",
+    "debounce": "^2.1.1",
+    "debug": "^4.3.7",
     "form-data": "^4.0.0",
-    "hexo-cli": "^4.3.1",
     "markdown-it": "^14.1.0",
     "mustache": "^4.2.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.3",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2",
     "yamljs": "^0.3.0"
   }
 }
