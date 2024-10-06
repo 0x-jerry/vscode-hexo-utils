@@ -1,14 +1,18 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { type ExtensionContext, languages, window } from 'vscode';
+import { type ExtensionContext, languages, window, workspace } from 'vscode';
 import { registerCommands } from './commands';
 import { HexoCompletionProvider } from './hexoCompletionProvider';
-import MarkdownIt from 'markdown-it';
 import plugin from './markdownItHexoResource';
 import { getConfig, ConfigProperties } from './configs';
 import { registerTreeViews } from './treeViews';
 
 export function activate(context: ExtensionContext) {
+  // Only activate when open with a workspace folder, close #98.
+  if (!workspace.workspaceFolders?.length) {
+    return;
+  }
+
   const selectors = [
     { language: 'markdown', scheme: 'file' },
     { language: 'markdown', scheme: 'untitled' },
