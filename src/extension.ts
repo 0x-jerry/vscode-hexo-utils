@@ -6,6 +6,7 @@ import { HexoCompletionProvider } from './hexoCompletionProvider';
 import plugin from './markdownItHexoResource';
 import { getConfig, ConfigProperties } from './configs';
 import { registerTreeViews } from './treeViews';
+import type { MarkdownIt } from './md-it';
 
 export function activate(context: ExtensionContext) {
   // Only activate when open with a workspace folder, close #98.

@@ -2,7 +2,7 @@ import path from 'path';
 import { Uri, window } from 'vscode';
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs';
 import { isVirtualWorkspace } from './utils';
-import { Token, type StateInline } from './md-it';
+import { Token, type MarkdownIt, type StateInline } from './md-it';
 
 interface ResolveHexoTag {
   (status: StateInline, ...attrs: string[]): any;
