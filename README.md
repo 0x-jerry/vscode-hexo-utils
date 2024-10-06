@@ -33,7 +33,11 @@ If you found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode
 
 ## Q&A
 
-- [Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235)
+1. [Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235)
+
+2. If you are use this extension by connect to a remote server by SSH, you need to install this extension by `install in SSH:xxx` to extends vscode's markdown render.
+
+![](./docs-images/ssh.png)
 
 ## Release Notes
 
