@@ -1,65 +1,64 @@
 import {
-  TreeDataProvider,
+  type TreeDataProvider,
   EventEmitter,
   TreeItem,
   ThemeIcon,
-  TreeItemCollapsibleState,
-  Uri,
-  ProviderResult,
-  TreeDragAndDropController,
-  CancellationToken,
-  DataTransfer,
+  type TreeItemCollapsibleState,
+  type Uri,
+  type ProviderResult,
+  type TreeDragAndDropController,
+  type CancellationToken,
+  type DataTransfer,
   DataTransferItem,
-} from 'vscode';
-import { Commands } from '../../commands/common';
-import { ArticleTypes } from '../../commands/createArticle';
-import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils';
-import { configs, getConfig, ConfigProperties, SortBy } from '../../configs';
-import { IHexoMetadata } from '../../hexoMetadata';
-import { BaseDispose } from '../common';
-import { MoveFile } from '../../commands';
-import { mineTypePrefix } from './const';
-
+} from 'vscode'
+import { Commands } from '../../commands/common'
+import { ArticleTypes } from '../../commands/createArticle'
+import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils'
+import { configs, getConfig, ConfigProperties, SortBy } from '../../configs'
+import type { IHexoMetadata } from '../../hexoMetadata'
+import { BaseDispose } from '../common'
+import { MoveFile } from '../../commands'
+import { mineTypePrefix } from './const'
 
 export interface HexoArticleOption {
-  acceptDropMimeType: string;
+  acceptDropMimeType: string
 }
 
 export class HexoArticleProvider
   extends BaseDispose
   implements TreeDataProvider<ArticleItem>, TreeDragAndDropController<ArticleItem>
 {
-  dropMimeTypes: string[] = [];
-  dragMimeTypes: string[] = [];
+  dropMimeTypes: string[] = []
+  dragMimeTypes: string[] = []
 
-  private _onDidChangeTreeData = new EventEmitter<ArticleItem | null>();
-  readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData = new EventEmitter<ArticleItem | null>()
+  readonly onDidChangeTreeData = this._onDidChangeTreeData.event
 
-  type = ArticleTypes.post;
+  type = ArticleTypes.post
 
-  private allItems: Map<string, ArticleItem> = new Map();
+  private allItems: Map<string, ArticleItem> = new Map()
 
   constructor(type: ArticleTypes, option: HexoArticleOption) {
-    super();
-    this.type = type;
-    this.subscribe(this._onDidChangeTreeData);
+    super()
+    this.type = type
+    this.subscribe(this._onDidChangeTreeData)
 
-    this.dragMimeTypes.push(this.mimeType);
-    this.dropMimeTypes.push(option.acceptDropMimeType);
+    this.dragMimeTypes.push(this.mimeType)
+    this.dropMimeTypes.push(option.acceptDropMimeType)
 
-    this.recalculateItems();
+    this.recalculateItems()
   }
 
   private get mimeType() {
-    return mineTypePrefix + this.type;
+    return mineTypePrefix + this.type
   }
 
   private recalculateItems() {
     const _dispose = this.onDidChangeTreeData(() => {
-      this.allItems = new Map();
-    });
+      this.allItems = new Map()
+    })
 
-    this.subscribe(_dispose);
+    this.subscribe(_dispose)
   }
 
   handleDrag(
@@ -67,7 +66,7 @@ export class HexoArticleProvider
     dataTransfer: DataTransfer,
     token: CancellationToken,
   ): void {
-    dataTransfer.set(this.mimeType, new DataTransferItem(source));
+    dataTransfer.set(this.mimeType, new DataTransferItem(source))
   }
 
   async handleDrop(
@@ -75,72 +74,72 @@ export class HexoArticleProvider
     dataTransfer: DataTransfer,
     token: CancellationToken,
   ) {
-    const transferItem = dataTransfer.get(this.dropMimeTypes[0]);
+    const transferItem = dataTransfer.get(this.dropMimeTypes[0])
 
     if (!transferItem) {
-      return;
+      return
     }
 
     try {
-      const treeItems: ArticleItem[] = JSON.parse(await transferItem.asString());
+      const treeItems: ArticleItem[] = JSON.parse(await transferItem.asString())
       await MoveFile.move(this.type, treeItems)
     } catch (error) {
-      console.warn(error);
+      console.warn(error)
     }
   }
 
   refresh() {
-    this._onDidChangeTreeData.fire(null);
+    this._onDidChangeTreeData.fire(null)
   }
 
   getTreeItem(element: ArticleItem): TreeItem {
-    return element;
+    return element
   }
 
   getItem(file: string) {
-    return this.allItems.get(file);
+    return this.allItems.get(file)
   }
 
   getParent(element: ArticleItem): ProviderResult<ArticleItem> {
-    return null;
+    return null
   }
 
   async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
-    const items: ArticleItem[] = [];
+    const items: ArticleItem[] = []
     if (!(await isHexoProject())) {
-      return items;
+      return items
     }
 
     const articleRootPath =
-      this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post;
+      this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
 
-    const paths = await getMDFiles(articleRootPath);
+    const paths = await getMDFiles(articleRootPath)
 
     await Promise.all(
       paths.map(async (p) => {
-        const metadata = await getMDFileMetadata(p);
+        const metadata = await getMDFileMetadata(p)
 
-        const name = p.fsPath.slice(articleRootPath.fsPath.length + 1);
+        const name = p.fsPath.slice(articleRootPath.fsPath.length + 1)
 
-        const item = new ArticleItem(name, p, metadata);
+        const item = new ArticleItem(name, p, metadata)
 
-        items.push(item);
-        this.allItems.set(p.fsPath, item);
+        items.push(item)
+        this.allItems.set(p.fsPath, item)
       }),
-    );
+    )
 
     return items.sort((a, b) => {
-      const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod);
+      const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod)
       switch (sortMethod) {
         case SortBy.name:
-          return a.label! < b.label! ? -1 : 1;
+          return a.label! < b.label! ? -1 : 1
         case SortBy.date:
-          return a.metadata.date! < b.metadata.date! ? 1 : -1;
+          return a.metadata.date! < b.metadata.date! ? 1 : -1
 
         default:
-          return a.label! < b.label! ? -1 : 1;
+          return a.label! < b.label! ? -1 : 1
       }
-    });
+    })
   }
 
   dispose() {
@@ -149,8 +148,8 @@ export class HexoArticleProvider
 }
 
 export class ArticleItem extends TreeItem {
-  iconPath = ThemeIcon.File;
-  metadata: IHexoMetadata;
+  iconPath = ThemeIcon.File
+  metadata: IHexoMetadata
 
   constructor(
     label: string,
@@ -158,14 +157,14 @@ export class ArticleItem extends TreeItem {
     metadata: IHexoMetadata,
     collapsibleState?: TreeItemCollapsibleState,
   ) {
-    super(label, collapsibleState);
-    this.metadata = metadata;
+    super(label, collapsibleState)
+    this.metadata = metadata
 
-    this.resourceUri = uri;
+    this.resourceUri = uri
     this.command = {
       title: 'open',
       command: Commands.open,
       arguments: [this.resourceUri],
-    };
+    }
   }
 }

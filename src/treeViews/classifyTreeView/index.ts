@@ -1,15 +1,15 @@
-import { Commands } from '../../commands';
-import { treeView, ViewTypes } from '../common';
-import { ClassifyTreeView } from './hexoClassifyTreeView';
-import { ClassifyTypes } from './hexoClassifyProvider';
+import { Commands } from '../../commands'
+import { treeView, ViewTypes } from '../common'
+import { ClassifyTreeView } from './hexoClassifyTreeView'
+import { ClassifyTypes } from './hexoClassifyProvider'
 
 @treeView()
 export class TagsClassifyTreeView extends ClassifyTreeView {
   constructor() {
     super(ViewTypes.tags, ClassifyTypes.tag, {
       showCollapseAll: true,
-    });
-    this.registerRefreshCmd(Commands.refreshTags);
+    })
+    this.registerRefreshCmd(Commands.refreshTags)
   }
 }
 
@@ -18,7 +18,7 @@ export class CategoriesClassifyTreeView extends ClassifyTreeView {
   constructor() {
     super(ViewTypes.categories, ClassifyTypes.category, {
       showCollapseAll: true,
-    });
-    this.registerRefreshCmd(Commands.refreshCategories);
+    })
+    this.registerRefreshCmd(Commands.refreshCategories)
   }
 }

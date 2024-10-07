@@ -1,82 +1,82 @@
-import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider';
-import path from 'path';
-import { ConfigProperties, getConfig, SortBy } from './configs';
-import { Uri } from 'vscode';
+import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider'
+import path from 'path'
+import { ConfigProperties, getConfig, SortBy } from './configs'
+import type { Uri } from 'vscode'
 
 export interface IHexoMetadata {
-  tags: string[];
-  categories: string[];
-  title: string;
-  date: Date;
-  filePath: Uri;
+  tags: string[]
+  categories: string[]
+  title: string
+  date: Date
+  filePath: Uri
   /**
    * For cache, latest modification time.
    */
-  mtime: number;
+  mtime: number
 }
 
-type THexoMeta = IHexoMetadata & { name?: string };
+type THexoMeta = IHexoMetadata & { name?: string }
 
 interface IClassify {
-  name: string;
-  files: THexoMeta[];
+  name: string
+  files: THexoMeta[]
 }
 
 export class HexoMetadataUtils {
-  tags: IClassify[] = [];
-  categories: IClassify[] = [];
+  tags: IClassify[] = []
+  categories: IClassify[] = []
 
   constructor(metadatas: THexoMeta[]) {
     metadatas.forEach((metadata) => {
-      metadata.name = path.parse(metadata.filePath.fsPath).name;
+      metadata.name = path.parse(metadata.filePath.fsPath).name
 
       if (metadata.tags) {
         metadata.tags.forEach((t) => {
-          this.addClassify(ClassifyTypes.tag, t, metadata);
-        });
+          this.addClassify(ClassifyTypes.tag, t, metadata)
+        })
       }
 
       if (metadata.categories) {
         metadata.categories.forEach((t) => {
-          this.addClassify(ClassifyTypes.category, t, metadata);
-        });
+          this.addClassify(ClassifyTypes.category, t, metadata)
+        })
       }
-    });
+    })
 
-    this.sort();
+    this.sort()
   }
 
   private sort() {
-    const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod);
+    const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod)
 
-    const key: keyof THexoMeta = sortMethod === SortBy.date ? 'date' : 'name';
+    const key: keyof THexoMeta = sortMethod === SortBy.date ? 'date' : 'name'
 
     const sortClassify = (category: IClassify) => {
-      category.files.sort((a, b) => (a[key]! < b[key]! ? 1 : -1));
-    };
+      category.files.sort((a, b) => (a[key]! < b[key]! ? 1 : -1))
+    }
 
-    this.tags.sort((a, b) => (a.name < b.name ? 1 : -1));
-    this.categories.sort((a, b) => (a.name < b.name ? 1 : -1));
+    this.tags.sort((a, b) => (a.name < b.name ? 1 : -1))
+    this.categories.sort((a, b) => (a.name < b.name ? 1 : -1))
 
-    this.tags.forEach(sortClassify);
-    this.categories.forEach(sortClassify);
+    this.tags.forEach(sortClassify)
+    this.categories.forEach(sortClassify)
   }
 
   private addClassify(type: ClassifyTypes, name: string, metadata: IHexoMetadata) {
-    const find = this[type].find((t) => t.name === name);
+    const find = this[type].find((t) => t.name === name)
 
     if (!find) {
       this[type].push({
         name,
         files: [metadata],
-      });
-      return;
+      })
+      return
     }
 
-    const exist = find.files.find((f) => f.filePath === metadata.filePath);
+    const exist = find.files.find((f) => f.filePath === metadata.filePath)
 
     if (!exist) {
-      find.files.push(metadata);
+      find.files.push(metadata)
     }
   }
 }

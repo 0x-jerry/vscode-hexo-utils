@@ -1,55 +1,55 @@
-import { Commands } from '../../commands';
-import { TreeViewOptions, commands, window } from 'vscode';
-import { BaseTreeView, ViewTypes } from '../common';
-import { ClassifyItem, HexoClassifyProvider, ClassifyTypes } from './hexoClassifyProvider';
-import { sleep } from '../../utils';
+import type { Commands } from '../../commands'
+import { type TreeViewOptions, commands, window } from 'vscode'
+import { BaseTreeView, type ViewTypes } from '../common'
+import { type ClassifyItem, HexoClassifyProvider, type ClassifyTypes } from './hexoClassifyProvider'
+import { sleep } from '../../utils'
 
 export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
-  provider: HexoClassifyProvider;
+  provider: HexoClassifyProvider
 
   constructor(
     viewId: ViewTypes,
     type: ClassifyTypes,
     opts: Partial<TreeViewOptions<ClassifyItem>> = {},
   ) {
-    const provider = new HexoClassifyProvider(type);
-    super(viewId, provider, opts);
+    const provider = new HexoClassifyProvider(type)
+    super(viewId, provider, opts)
 
-    this.provider = provider;
+    this.provider = provider
 
-    this.onDidChanged();
+    this.onDidChanged()
 
-    this.autoFocus();
+    this.autoFocus()
   }
 
   private focus(editor = window.activeTextEditor) {
     if (!editor || !this.treeView.visible) {
-      return;
+      return
     }
 
-    const file = editor.document.uri;
+    const file = editor.document.uri
     const fsPath =
       file.scheme === 'git'
         ? // remove `.git` suffix
           file.fsPath.slice(0, -3)
-        : file.fsPath;
+        : file.fsPath
 
-    const item = this.provider.getItem(fsPath);
+    const item = this.provider.getItem(fsPath)
 
     if (!item) {
-      return;
+      return
     }
 
-    this.treeView.reveal(item);
+    this.treeView.reveal(item)
   }
 
   private autoFocus() {
     this.subscribe(
       window.onDidChangeActiveTextEditor(async (editor) => {
-        await sleep(300);
-        this.focus(editor);
+        await sleep(300)
+        this.focus(editor)
       }),
-    );
+    )
   }
 
   onDidChanged() {
@@ -59,7 +59,7 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
   }
 
   registerRefreshCmd(cmd: Commands) {
-    const _cmd = commands.registerCommand(cmd, () => this.provider.refresh());
-    this.subscribe(_cmd);
+    const _cmd = commands.registerCommand(cmd, () => this.provider.refresh())
+    this.subscribe(_cmd)
   }
 }

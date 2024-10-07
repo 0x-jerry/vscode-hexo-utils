@@ -1,20 +1,20 @@
-import { Uri, WorkspaceEdit, workspace } from 'vscode';
+import { Uri, WorkspaceEdit, workspace } from 'vscode'
 
 function toUri(path: string | Uri) {
   if (typeof path === 'string') {
-    return Uri.file(path);
+    return Uri.file(path)
   }
 
-  return path;
+  return path
 }
 
 export async function rename(oldPath: Uri | string, newPath: Uri | string) {
-  const edit = new WorkspaceEdit();
+  const edit = new WorkspaceEdit()
 
   edit.renameFile(toUri(oldPath), toUri(newPath), {
     ignoreIfExists: true,
     overwrite: true,
-  });
+  })
 
-  return workspace.applyEdit(edit);
+  return workspace.applyEdit(edit)
 }

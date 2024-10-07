@@ -1,26 +1,26 @@
-import { FileType, RelativePattern, Uri, workspace } from 'vscode';
+import { FileType, RelativePattern, type Uri, workspace } from 'vscode'
 
 export async function getDirFiles(dir: Uri) {
-  const exist = (await isExist(dir))?.type === FileType.Directory;
+  const exist = (await isExist(dir))?.type === FileType.Directory
 
   if (!exist) {
-    return [];
+    return []
   }
 
-  return workspace.fs.readDirectory(dir);
+  return workspace.fs.readDirectory(dir)
 }
 
 export async function getMDFiles(dir: Uri) {
-  const mds = await workspace.findFiles(new RelativePattern(dir, '**/*.md'), 'node_modules');
+  const mds = await workspace.findFiles(new RelativePattern(dir, '**/*.md'), 'node_modules')
 
-  return mds;
+  return mds
 }
 
 export async function isExist(uri: Uri) {
   try {
-    const stat = await workspace.fs.stat(uri);
-    return stat;
+    const stat = await workspace.fs.stat(uri)
+    return stat
   } catch {
-    return null;
+    return null
   }
 }

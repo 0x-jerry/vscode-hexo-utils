@@ -1,5 +1,5 @@
-import { ExtensionContext, Disposable, commands } from 'vscode';
-import { isHexoProject } from '../utils';
+import { type ExtensionContext, Disposable, commands } from 'vscode'
+import { isHexoProject } from '../utils'
 
 /**
  * hexo.<command>[[...args]]
@@ -31,78 +31,78 @@ export enum BuiltInCommands {
 }
 
 export interface ICommandParsed {
-  cmd: string;
-  args: string[];
+  cmd: string
+  args: string[]
 }
 
 export abstract class Command implements Disposable {
   static parseCommand(command: Commands): ICommandParsed {
-    let args: string[] = [];
+    let args: string[] = []
     const cmd = command
       .replace(/\[(.+)\]/, (...rest) => {
-        const params = rest[1];
+        const params = rest[1]
         if (typeof params === 'string') {
-          args = params.split(',').map((a) => a.trim());
+          args = params.split(',').map((a) => a.trim())
         }
 
-        return '';
+        return ''
       })
       .split('.')
-      .pop()!;
+      .pop()
 
     return {
       cmd,
       args,
-    };
+    }
   }
 
-  private _disposable: Disposable;
+  private _disposable: Disposable
 
   constructor(...ids: Commands[]) {
     const registers = ids.map((id) =>
       commands.registerCommand(
         id,
         (...args: any[]) => {
-          this._execute(id, ...args);
+          this._execute(id, ...args)
         },
         this,
       ),
-    );
+    )
 
-    this._disposable = Disposable.from(...registers);
+    this._disposable = Disposable.from(...registers)
   }
 
-  abstract execute(cmd: ICommandParsed, ...arg: any[]): Promise<any>;
+  abstract execute(cmd: ICommandParsed, ...arg: any[]): Promise<any>
 
   private async _execute(command: Commands, ...args: any[]) {
-    if (!await isHexoProject()) {
-      return;
+    if (!(await isHexoProject())) {
+      return
     }
 
-    const cmd = Command.parseCommand(command);
+    const cmd = Command.parseCommand(command)
 
-    return this.execute(cmd, ...args);
+    return this.execute(cmd, ...args)
   }
 
   subscribe(...disposables: Disposable[]) {
-    this._disposable = Disposable.from(this._disposable, ...disposables);
+    this._disposable = Disposable.from(this._disposable, ...disposables)
   }
 
   dispose() {
-    this._disposable.dispose();
+    this._disposable.dispose()
   }
 }
 
-const registrableCommands: any[] = [];
+const registrableCommands: any[] = []
 
 export function command(): ClassDecorator {
   return (target: any) => {
-    registrableCommands.push(target);
-  };
+    registrableCommands.push(target)
+  }
 }
 
 export function registerCommands(context: ExtensionContext): void {
   for (const c of registrableCommands) {
-    context.subscriptions.push(new c());
+    context.subscriptions.push(new c())
   }
 }

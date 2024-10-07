@@ -1,2 +1,1 @@
-
-export const mineTypePrefix = 'application/vnd.code.tree.hexo.';
+export const mineTypePrefix = 'application/vnd.code.tree.hexo.'

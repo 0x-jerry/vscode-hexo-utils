@@ -1,11 +1,11 @@
-import path from 'path';
-import yamljs from 'yamljs';
-import { Uri, window, workspace } from 'vscode';
-import type { IHexoMetadata } from '../hexoMetadata';
+import path from 'path'
+import yamljs from 'yamljs'
+import { type Uri, window, workspace } from 'vscode'
+import type { IHexoMetadata } from '../hexoMetadata'
 
 export async function isHexoProject() {
   // no need to check dependency.
-  return true;
+  return true
 }
 
 /**
@@ -15,45 +15,45 @@ export async function isHexoProject() {
 export async function askForNext(placeHolder: string): Promise<boolean> {
   const replace = await window.showQuickPick(['yes', 'no'], {
     placeHolder,
-  });
+  })
 
-  return replace === 'yes';
+  return replace === 'yes'
 }
 
-const metaCache: Record<string, IHexoMetadata> = {};
+const metaCache: Record<string, IHexoMetadata> = {}
 
 export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
-  const stat = await workspace.fs.stat(uri);
+  const stat = await workspace.fs.stat(uri)
 
-  const cacheId = uri.toString();
-  const hit = metaCache[cacheId];
+  const cacheId = uri.toString()
+  const hit = metaCache[cacheId]
 
   if (hit && stat.mtime === hit.mtime) {
-    return hit;
+    return hit
   }
 
   try {
-    const content = await workspace.fs.readFile(uri);
+    const content = await workspace.fs.readFile(uri)
     // /---(data)---/ => $1 === data
-    const yamlReg = /^---((.|\n|\r)+?)---$/m;
+    const yamlReg = /^---((.|\n|\r)+?)---$/m
 
-    const yamlData = yamlReg.exec(content.toString());
+    const yamlData = yamlReg.exec(content.toString())
 
-    const data = yamljs.parse(yamlData![1]) || {};
+    const data = yamljs.parse(yamlData![1]) || {}
 
     const categories: (string | string[])[] = Array.isArray(data.categories)
       ? data.categories
       : typeof data.categories === 'string'
-      ? [data.categories]
-      : [];
+        ? [data.categories]
+        : []
 
-    const hasSubCategory = categories.find((n) => Array.isArray(n));
+    const hasSubCategory = categories.find((n) => Array.isArray(n))
 
     const normalizedCategories = hasSubCategory
       ? categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c))
       : categories.length
-      ? [categories.join(' / ')]
-      : [];
+        ? [categories.join(' / ')]
+        : []
 
     const metadata = {
       tags: Array.isArray(data.tags) ? data.tags : [],
@@ -63,11 +63,11 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
       title: data.title || '',
       date: data.date || '',
       mtime: stat.mtime,
-    };
+    }
 
-    metaCache[cacheId] = metadata;
+    metaCache[cacheId] = metadata
 
-    return metadata;
+    return metadata
   } catch (error) {
     const metadata = {
       tags: [],
@@ -76,21 +76,21 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
       title: path.parse(uri.fsPath).name,
       date: new Date(stat.ctime),
       mtime: 0,
-    };
+    }
 
-    metaCache[cacheId] = metadata;
+    metaCache[cacheId] = metadata
 
-    return metadata;
+    return metadata
   }
 }
 
 export function sleep(ts = 1000) {
-  return new Promise((resolve) => setTimeout(resolve, ts));
+  return new Promise((resolve) => setTimeout(resolve, ts))
 }
 
 export function isVirtualWorkspace() {
   const isVirtualWorkspace =
-    workspace.workspaceFolders && workspace.workspaceFolders.every((f) => f.uri.scheme !== 'file');
+    workspace.workspaceFolders && workspace.workspaceFolders.every((f) => f.uri.scheme !== 'file')
 
-  return isVirtualWorkspace;
+  return isVirtualWorkspace
 }

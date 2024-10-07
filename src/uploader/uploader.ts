@@ -1,6 +1,6 @@
-import { getConfig, ConfigProperties } from '../configs';
-import { ImgChr, IImgChrOption } from './Imgchr';
-import { TencentOSS, TencentOSSOption } from './TencentOSS';
+import { getConfig, ConfigProperties } from '../configs'
+import { ImgChr, type IImgChrOption } from './Imgchr'
+import { TencentOSS, type TencentOSSOption } from './TencentOSS'
 
 enum UploadType {
   imgchr = 'imgchr',
@@ -8,29 +8,29 @@ enum UploadType {
 }
 
 export interface Uploader {
-  upload(file: string): Promise<string>;
+  upload(file: string): Promise<string>
 }
 
 export async function upload(filePath: string) {
   if (!getConfig<boolean>(ConfigProperties.upload)) {
-    return;
+    return
   }
 
-  const type = getConfig<UploadType>(ConfigProperties.uploadType);
+  const type = getConfig<UploadType>(ConfigProperties.uploadType)
 
-  let uploader: Uploader | null = null;
+  let uploader: Uploader | null = null
 
   switch (type) {
     case UploadType.imgchr:
-      uploader = new ImgChr(getConfig<IImgChrOption>(ConfigProperties.imgChr)!);
-      break;
+      uploader = new ImgChr(getConfig<IImgChrOption>(ConfigProperties.imgChr)!)
+      break
     case UploadType.tencentoss:
-      uploader = new TencentOSS(getConfig<TencentOSSOption>(ConfigProperties.tencentOSS)!);
+      uploader = new TencentOSS(getConfig<TencentOSSOption>(ConfigProperties.tencentOSS)!)
     default:
-      break;
+      break
   }
 
   if (uploader) {
-    return await uploader.upload(filePath);
+    return await uploader.upload(filePath)
   }
 }

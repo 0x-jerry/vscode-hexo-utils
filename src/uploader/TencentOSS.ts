@@ -1,34 +1,34 @@
-import cos from 'cos-nodejs-sdk-v5';
-import path from 'path';
-import fs from 'fs';
+import cos from 'cos-nodejs-sdk-v5'
+import path from 'path'
+import fs from 'fs'
 
 export interface TencentOSSOption {
-  SecretId: string;
-  SecretKey: string;
-  Region: string;
-  Bucket: string;
+  SecretId: string
+  SecretKey: string
+  Region: string
+  Bucket: string
 }
 
 export class TencentOSS {
-  SecretId: string;
-  SecretKey: string;
-  Region: string;
-  Bucket: string;
+  SecretId: string
+  SecretKey: string
+  Region: string
+  Bucket: string
 
   constructor(opt: TencentOSSOption) {
-    this.SecretId = opt.SecretId;
-    this.SecretKey = opt.SecretKey;
-    this.Region = opt.Region;
-    this.Bucket = opt.Bucket;
+    this.SecretId = opt.SecretId
+    this.SecretKey = opt.SecretKey
+    this.Region = opt.Region
+    this.Bucket = opt.Bucket
   }
 
   async _upload(imgPath: string): Promise<any> {
     const COS = new cos({
       SecretId: this.SecretId,
       SecretKey: this.SecretKey,
-    });
-    const p = path.parse(imgPath);
-    let data = await new Promise((res, rej) => {
+    })
+    const p = path.parse(imgPath)
+    const data = await new Promise((res, rej) => {
       COS.putObject(
         {
           Bucket: this.Bucket,
@@ -36,23 +36,23 @@ export class TencentOSS {
           Key: 'media/image/' + p.base,
           Body: fs.createReadStream(imgPath),
         },
-        function (err: any, data: any) {
+        (err: any, data: any) => {
           if (err) {
-            rej(err);
+            rej(err)
           } else {
-            res(data);
+            res(data)
           }
         },
-      );
-    });
+      )
+    })
 
-    return data;
+    return data
   }
 
   async upload(imgPath: string): Promise<string> {
-    const res = await this._upload(imgPath);
+    const res = await this._upload(imgPath)
 
-    return 'https://' + res.Location;
+    return 'https://' + res.Location
   }
 }
 
