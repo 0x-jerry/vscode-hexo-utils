@@ -4,7 +4,6 @@
   "description": "vscode extension for hexo",
   "version": "0.4.3",
   "license": "MIT",
-  "type": "module",
   "author": {
     "name": "Jerry wang",
     "email": "x.jerry.wang@gmail.com"
@@ -362,7 +361,7 @@
     "markdown.markdownItPlugins": true
   },
   "scripts": {
-    "vscode:prepublish": "tsup src/extension.ts --sourcemap",
+    "vscode:prepublish": "tsup",
     "build": "tsup",
     "dev": "tsup --watch",
     "publish": "vsce publish --no-dependencies",
@@ -375,9 +374,6 @@
     ],
     "sourcemap": true,
     "clean": true,
-    "format": [
-      "esm"
-    ],
     "external": [
       "vscode"
     ]
