@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { type ExtensionContext, languages, window, workspace } from 'vscode'
+import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
 import { registerCommands } from './commands'
 import { HexoCompletionProvider } from './hexoCompletionProvider'
 import plugin from './markdownItHexoResource'
@@ -14,10 +14,7 @@ export function activate(context: ExtensionContext) {
     return
   }
 
-  const selectors = [
-    { language: 'markdown', scheme: 'file' },
-    { language: 'markdown', scheme: 'untitled' },
-  ]
+  const selectors: DocumentSelector = [{ language: 'markdown' }]
 
   const completionItemProvider = languages.registerCompletionItemProvider(
     selectors,
