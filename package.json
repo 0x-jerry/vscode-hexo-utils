@@ -32,8 +32,7 @@
   ],
   "main": "./dist/extension.js",
   "extensionKind": [
-    "workspace",
-    "ui"
+    "workspace"
   ],
   "contributes": {
     "configuration": {
