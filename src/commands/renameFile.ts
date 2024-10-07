@@ -25,7 +25,7 @@ export class RenameFile extends Command {
       return null
     }
 
-    const newPath = Uri.joinPath(oldPath, `${newName}.md`)
+    const newPath = Uri.joinPath(oldPath, '..', `${newName}.md`)
     if ((await isExist(newPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null
     }

@@ -1,4 +1,5 @@
 import { Uri, WorkspaceEdit, workspace } from 'vscode'
+import { warn } from '../utils'
 
 function toUri(path: string | Uri) {
   if (typeof path === 'string') {
@@ -12,9 +13,14 @@ export async function rename(oldPath: Uri | string, newPath: Uri | string) {
   const edit = new WorkspaceEdit()
 
   edit.renameFile(toUri(oldPath), toUri(newPath), {
-    ignoreIfExists: true,
     overwrite: true,
   })
 
-  return workspace.applyEdit(edit)
+  const result = await workspace.applyEdit(edit)
+
+  if (!result) {
+    warn('Rename failed')
+  }
+
+  return result
 }
