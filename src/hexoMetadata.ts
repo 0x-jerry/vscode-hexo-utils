@@ -1,5 +1,5 @@
 import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider'
-import path from 'path'
+import path from 'node:path'
 import { ConfigProperties, getConfig, SortBy } from './configs'
 import type { Uri } from 'vscode'
 
@@ -27,21 +27,21 @@ export class HexoMetadataUtils {
   categories: IClassify[] = []
 
   constructor(metadatas: THexoMeta[]) {
-    metadatas.forEach((metadata) => {
+    for (const metadata of metadatas) {
       metadata.name = path.parse(metadata.filePath.fsPath).name
 
       if (metadata.tags) {
-        metadata.tags.forEach((t) => {
+        for (const t of metadata.tags) {
           this.addClassify(ClassifyTypes.tag, t, metadata)
-        })
+        }
       }
 
       if (metadata.categories) {
-        metadata.categories.forEach((t) => {
+        for (const t of metadata.categories) {
           this.addClassify(ClassifyTypes.category, t, metadata)
-        })
+        }
       }
-    })
+    }
 
     this.sort()
   }
@@ -52,7 +52,7 @@ export class HexoMetadataUtils {
     const key: keyof THexoMeta = sortMethod === SortBy.date ? 'date' : 'name'
 
     const sortClassify = (category: IClassify) => {
-      category.files.sort((a, b) => (a[key]! < b[key]! ? 1 : -1))
+      category.files.sort((a, b) => ((a[key] ?? 0) < (b[key] ?? 0) ? 1 : -1))
     }
 
     this.tags.sort((a, b) => (a.name < b.name ? 1 : -1))

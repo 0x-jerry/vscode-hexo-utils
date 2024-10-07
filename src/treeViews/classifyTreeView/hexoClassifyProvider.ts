@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils'
 import { Commands } from '../../commands/common'
 import { HexoMetadataUtils, type IHexoMetadata } from '../../hexoMetadata'
@@ -83,7 +83,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
       const classify = this._hexoMetadataUtils[this.type].find((t) => t.name === element.label)
 
       if (classify) {
-        classify.files.forEach((metadata) => {
+        for (const metadata of classify.files) {
           const isDraft =
             include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1
 
@@ -97,11 +97,13 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
           this._allItems.set(metadata.filePath.fsPath, item)
           items.push(item)
-        })
+        }
       }
     } else {
       this._hexoMetadataUtils = new HexoMetadataUtils(filesData)
-      this._hexoMetadataUtils[this.type].forEach((t) => {
+      const classifies = this._hexoMetadataUtils[this.type]
+
+      for (const t of classifies) {
         const item = new ClassifyItem(
           t.name,
           this.type,
@@ -111,7 +113,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
         this._allItems.set(t.name, item)
         items.push(item)
-      })
+      }
     }
 
     return items

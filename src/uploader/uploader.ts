@@ -22,10 +22,13 @@ export async function upload(filePath: string) {
 
   switch (type) {
     case UploadType.imgchr:
-      uploader = new ImgChr(getConfig<IImgChrOption>(ConfigProperties.imgChr)!)
+      uploader = new ImgChr(getConfig<IImgChrOption>(ConfigProperties.imgChr))
       break
+
     case UploadType.tencentoss:
-      uploader = new TencentOSS(getConfig<TencentOSSOption>(ConfigProperties.tencentOSS)!)
+      uploader = new TencentOSS(getConfig<TencentOSSOption>(ConfigProperties.tencentOSS))
+      break
+
     default:
       break
   }

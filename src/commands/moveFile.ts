@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import { askForNext, isExist } from '../utils'
 import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
 import { ArticleTypes } from './createArticle'
@@ -16,7 +16,9 @@ export class MoveFile extends Command {
   static async move(to: ArticleTypes, items: ArticleItem[]) {
     const p = items.map(async (item) => {
       const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
-      const sourceUri = item.resourceUri!
+      const sourceUri = item.resourceUri
+
+      if (!sourceUri) return
 
       const fileName = path.relative(
         to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
@@ -35,7 +37,7 @@ export class MoveFile extends Command {
     await Promise.all(p)
   }
 
-  async execute(cmd: ICommandParsed, item: ArticleItem, list: ArticleItem[] = []): Promise<any> {
+  async execute(cmd: ICommandParsed, item: ArticleItem, list: ArticleItem[] = []) {
     if (list.length === 0) {
       list.push(item)
     }

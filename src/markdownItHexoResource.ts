@@ -1,10 +1,10 @@
-import path from 'path'
+import path from 'node:path'
 import { Uri, window } from 'vscode'
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs'
 import { isVirtualWorkspace } from './utils'
 import { Token, type MarkdownIt, type StateInline } from './md-it'
 
-type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => any
+type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => unknown
 
 /**
  *
@@ -87,11 +87,11 @@ function hexoTagRules(md: MarkdownIt) {
 
     const supportedHexoTags = Object.keys(supportedTagMap)
 
-    if (!supportedHexoTags.includes(tag!)) {
+    if (!tag || !supportedHexoTags.includes(tag)) {
       return false
     }
 
-    supportedTagMap[tag!](status, ...attrs)
+    supportedTagMap[tag](status, ...attrs)
 
     status.pos += hexoTagMatches[0].length
 
@@ -127,7 +127,7 @@ function getResDir(fileUri: Uri) {
   const resourceDir =
     assetFolderType === AssetFolderType.Post
       ? Uri.joinPath(configs.paths.post, fileDir)
-      : Uri.joinPath(configs.hexoRoot!, 'source')
+      : Uri.joinPath(configs.hexoRoot, 'source')
 
   return resourceDir
 }
@@ -147,7 +147,7 @@ function getCorrectImagePath(imgNameWithExt: string): string {
 
   try {
     // drawback: not support virtual workspace.
-    const fs = require('fs') as typeof import('fs')
+    const fs = require('node:fs') as typeof import('fs')
 
     const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt
 
@@ -159,6 +159,7 @@ function getCorrectImagePath(imgNameWithExt: string): string {
 }
 
 function rewriteMarkdownItRenderRule(md: MarkdownIt) {
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   const defaultImageRender = md.renderer.rules.image!
 
   md.renderer.rules.image = (tokens, idx, opts, env, self) => {
@@ -172,6 +173,7 @@ function rewriteMarkdownItRenderRule(md: MarkdownIt) {
     return defaultImageRender(tokens, idx, opts, env, self)
   }
 
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
   const defaultCodeInlineRender = md.renderer.rules.html_block!
 
   md.renderer.rules.html_block = (tokens, idx, opts, env, self) => {

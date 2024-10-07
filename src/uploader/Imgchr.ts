@@ -1,8 +1,8 @@
-import Axios from 'axios'
+import Axios, { AxiosError, type AxiosResponse } from 'axios'
 import FormData from 'form-data'
 import { warn } from '../utils'
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 const axios = Axios.create({
   headers: {
@@ -44,16 +44,18 @@ export class ImgChr {
   }
 
   addCookie(cookie: string) {
-    cookie.split(';').forEach((n) => this.cookies.add(n))
+    for (const n of cookie.split(';')) {
+      this.cookies.add(n)
+    }
   }
 
   async _updateConfig() {
     const res = await axios.get(apiConfig.root)
-    const matched = /auth_token\s*=\s*"(\w+)"/.exec(res.data)!
+    const matched = /auth_token\s*=\s*"(\w+)"/.exec(res.data)
 
-    this.token = matched[1]
+    this.token = matched?.[1] || ''
 
-    this.addCookie(res.headers['set-cookie']?.[0]!)
+    this.addCookie(res.headers['set-cookie']?.[0] || '')
   }
 
   async _saveConfig() {
@@ -110,16 +112,16 @@ export class ImgChr {
 
       warn('Imgchr login failed.', 'Please check username and password')
       throw new Error('Imgchr login failed.')
-    } catch (data: any) {
-      if (data.response && data.response.status === 301) {
-        const cookie: string = data.response.headers['set-cookie'][0]
+    } catch (err) {
+      if (err instanceof AxiosError && err.response?.status === 301) {
+        const cookie = err.response.headers['set-cookie']?.[0] || ''
 
         this.addCookie(cookie)
 
         await this._saveConfig()
       } else {
         warn('Imgchr login failed.', 'Please check username and password')
-        throw new Error(data)
+        throw new Error(String(err))
       }
     }
   }

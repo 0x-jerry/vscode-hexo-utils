@@ -7,6 +7,7 @@ import {
   Disposable,
 } from 'vscode'
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const treeViews: any[] = []
 
 export enum ViewTypes {
@@ -47,7 +48,7 @@ export abstract class BaseTreeView<T> extends BaseDispose {
 }
 
 export function treeView(): ClassDecorator {
-  return (target: any) => {
+  return (target) => {
     treeViews.push(target)
   }
 }

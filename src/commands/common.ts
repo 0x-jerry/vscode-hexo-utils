@@ -38,17 +38,18 @@ export interface ICommandParsed {
 export abstract class Command implements Disposable {
   static parseCommand(command: Commands): ICommandParsed {
     let args: string[] = []
-    const cmd = command
-      .replace(/\[(.+)\]/, (...rest) => {
-        const params = rest[1]
-        if (typeof params === 'string') {
-          args = params.split(',').map((a) => a.trim())
-        }
+    const cmd =
+      command
+        .replace(/\[(.+)\]/, (...rest) => {
+          const params = rest[1]
+          if (typeof params === 'string') {
+            args = params.split(',').map((a) => a.trim())
+          }
 
-        return ''
-      })
-      .split('.')
-      .pop()
+          return ''
+        })
+        .split('.')
+        .pop() || ''
 
     return {
       cmd,
@@ -62,7 +63,7 @@ export abstract class Command implements Disposable {
     const registers = ids.map((id) =>
       commands.registerCommand(
         id,
-        (...args: any[]) => {
+        (...args: unknown[]) => {
           this._execute(id, ...args)
         },
         this,
@@ -72,9 +73,9 @@ export abstract class Command implements Disposable {
     this._disposable = Disposable.from(...registers)
   }
 
-  abstract execute(cmd: ICommandParsed, ...arg: any[]): Promise<any>
+  abstract execute(cmd: ICommandParsed, ...arg: unknown[]): Promise<unknown>
 
-  private async _execute(command: Commands, ...args: any[]) {
+  private async _execute(command: Commands, ...args: unknown[]) {
     if (!(await isHexoProject())) {
       return
     }
@@ -93,10 +94,11 @@ export abstract class Command implements Disposable {
   }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const registrableCommands: any[] = []
 
 export function command(): ClassDecorator {
-  return (target: any) => {
+  return (target) => {
     registrableCommands.push(target)
   }
 }

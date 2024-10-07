@@ -1,5 +1,5 @@
 import { Uri, workspace } from 'vscode'
-import path from 'path'
+import path from 'node:path'
 import yamljs from 'yamljs'
 
 export enum ConfigProperties {
@@ -28,32 +28,29 @@ export enum AssetFolderType {
 
 export function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
   const configs = workspace.getConfiguration(section)
-  return configs.get<T>(propName)!
+  return configs.get<T>(propName) as T
 }
 
 export const configs = {
   get hexoRoot() {
-    const folders = workspace.workspaceFolders
-    if (folders) {
-      return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot)!)
-    }
+    const folders = workspace.workspaceFolders || []
 
-    return undefined
+    return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot))
   },
   paths: {
     get scaffold() {
-      return Uri.joinPath(configs.hexoRoot!, 'scaffolds')
+      return Uri.joinPath(configs.hexoRoot, 'scaffolds')
     },
     get post() {
-      return Uri.joinPath(configs.hexoRoot!, 'source', `_posts`)
+      return Uri.joinPath(configs.hexoRoot, 'source', '_posts')
     },
     get draft() {
-      return Uri.joinPath(configs.hexoRoot!, 'source', `_drafts`)
+      return Uri.joinPath(configs.hexoRoot, 'source', '_drafts')
     },
   },
   async hexoConfig() {
     try {
-      const configUri = Uri.joinPath(configs.hexoRoot!, '_config.yml')
+      const configUri = Uri.joinPath(configs.hexoRoot, '_config.yml')
       const hexoConf = await workspace.fs.readFile(configUri)
       return yamljs.parse(hexoConf.toString())
     } catch (error) {

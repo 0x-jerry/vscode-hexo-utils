@@ -129,15 +129,16 @@ export class HexoArticleProvider
     )
 
     return items.sort((a, b) => {
-      const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod)
+      const sortMethod = getConfig<SortBy>(ConfigProperties.sortMethod)
+
       switch (sortMethod) {
         case SortBy.name:
-          return a.label! < b.label! ? -1 : 1
+          return String(a.label) < String(b.label) ? -1 : 1
         case SortBy.date:
-          return a.metadata.date! < b.metadata.date! ? 1 : -1
+          return a.metadata.date < b.metadata.date ? 1 : -1
 
         default:
-          return a.label! < b.label! ? -1 : 1
+          return String(a.label) < String(b.label) ? -1 : 1
       }
     })
   }

@@ -1,7 +1,7 @@
 import { error, isExist } from '../utils'
 import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
 import { Command, type ICommandParsed, Commands, command } from './common'
-import path from 'path'
+import path from 'node:path'
 import { configs } from '../configs'
 import { Uri, workspace } from 'vscode'
 
@@ -11,13 +11,17 @@ export class DeleteFile extends Command {
     super(Commands.delete)
   }
 
-  async execute(_: ICommandParsed, _file: ArticleItem, list: ArticleItem[] = []): Promise<any> {
+  async execute(_: ICommandParsed, _file: ArticleItem, list: ArticleItem[] = []) {
     if (list.length === 0) {
       list.push(_file)
     }
 
     const p = list.map(async (item) => {
-      const fileUri = item.resourceUri!
+      const fileUri = item.resourceUri
+      if (!fileUri) {
+        return
+      }
+
       const filename = path.parse(fileUri.fsPath).name
 
       if (await isExist(fileUri)) {

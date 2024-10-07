@@ -1,7 +1,7 @@
-import path from 'path'
-import os from 'os'
+import path from 'node:path'
+import os from 'node:os'
 import dayjs from 'dayjs'
-import { spawn } from 'child_process'
+import { spawn } from 'node:child_process'
 import { window, type TextEditor, ProgressLocation, workspace, Uri } from 'vscode'
 import { warn, error, askForNext, isExist } from '../utils'
 import { Command, type ICommandParsed, command, Commands } from './common'
@@ -33,7 +33,7 @@ export class PasteImage extends Command {
     const parsed = path.parse(filePath.fsPath)
 
     const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
-    const hexoFolder = configs.hexoRoot!
+    const hexoFolder = configs.hexoRoot
 
     const imageFolder =
       assetFolderType === AssetFolderType.Post
@@ -45,7 +45,7 @@ export class PasteImage extends Command {
     let name = dayjs().format('YYYY-MM-DDTHHmmss.png')
 
     if (selectText && !/[\/\\:*?<>|\s]/.test(selectText)) {
-      name = selectText + '.png'
+      name = `${selectText}.png`
     }
 
     await workspace.fs.createDirectory(imageFolder)
@@ -56,7 +56,7 @@ export class PasteImage extends Command {
    * @param cmd
    * @returns
    */
-  async execute(cmd: ICommandParsed): Promise<any> {
+  async execute(cmd: ICommandParsed): Promise<unknown> {
     const editor = window.activeTextEditor
     if (!editor) {
       return
@@ -76,7 +76,7 @@ export class PasteImage extends Command {
   async saveImage(editor: TextEditor): Promise<string | false> {
     const uploadEnabled = getConfig<boolean>(ConfigProperties.upload)
 
-    const tempFilename = Math.random().toString().substr(2) + '.jpg'
+    const tempFilename = `${Math.random().toString().slice(2)}.jpg`
     const tempPath = path.join(os.tmpdir(), tempFilename)
     await this.pasteImage(tempPath)
 
@@ -93,30 +93,30 @@ export class PasteImage extends Command {
       )
 
       return url || false
-    } else {
-      const imagePath = await this.getImageFilePath(editor)
-      if (!imagePath) {
-        return false
-      }
-
-      if (
-        (await isExist(imagePath)) &&
-        !(await askForNext(`${imagePath} existed, would you want to replace ?`))
-      ) {
-        return false
-      }
-      const tempUri = Uri.file(tempPath)
-
-      await workspace.fs.copy(tempUri, imagePath)
-      return imagePath.fsPath
     }
+
+    const imagePath = await this.getImageFilePath(editor)
+    if (!imagePath) {
+      return false
+    }
+
+    if (
+      (await isExist(imagePath)) &&
+      !(await askForNext(`${imagePath} existed, would you want to replace ?`))
+    ) {
+      return false
+    }
+    const tempUri = Uri.file(tempPath)
+
+    await workspace.fs.copy(tempUri, imagePath)
+    return imagePath.fsPath
   }
 
   async updateEditor(imageURI: string, editor: TextEditor) {
     const parsed = path.parse(imageURI)
 
     const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
-    const hexoSourceFolder = Uri.joinPath(configs.hexoRoot!, 'source').fsPath
+    const hexoSourceFolder = Uri.joinPath(configs.hexoRoot, 'source').fsPath
 
     const image_path =
       assetFolderType === AssetFolderType.Post
@@ -125,11 +125,6 @@ export class PasteImage extends Command {
 
     editor.edit((edit) => {
       const current = editor.selection
-
-      try {
-      } catch (error) {
-        warn('Uploaded failed')
-      }
 
       const insertText = `![${parsed.name}](${imageURI.startsWith('http') ? imageURI : image_path})`
 
@@ -161,16 +156,18 @@ export class PasteImage extends Command {
           destPath,
         ],
       }
-    } else if (platform === 'darwin') {
+    }
+
+    if (platform === 'darwin') {
       return {
         cmd: 'osascript',
         params: [path.join(__dirname, '..', 'scripts', 'mac.applescript'), destPath],
       }
-    } else {
-      return {
-        cmd: 'sh',
-        params: [path.join(__dirname, '..', 'scripts', 'linux.sh'), destPath],
-      }
+    }
+
+    return {
+      cmd: 'sh',
+      params: [path.join(__dirname, '..', 'scripts', 'linux.sh'), destPath],
     }
   }
 

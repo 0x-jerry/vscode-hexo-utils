@@ -40,9 +40,9 @@ export function activate(context: ExtensionContext) {
 
       if (resolve) {
         return md.use(plugin)
-      } else {
-        return md
       }
+
+      return md
     },
   }
 }

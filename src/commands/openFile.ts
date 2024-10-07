@@ -10,7 +10,7 @@ export class OpenFile extends Command {
     super(Commands.open)
   }
 
-  async execute(cmd: ICommandParsed, uri: Uri): Promise<any> {
+  async execute(cmd: ICommandParsed, uri: Uri) {
     if (this.checkDoubleClick(uri)) {
       const doc = await workspace.openTextDocument(uri)
       await window.showTextDocument(doc, {

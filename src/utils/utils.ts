@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import yamljs from 'yamljs'
 import { type Uri, window, workspace } from 'vscode'
 import type { IHexoMetadata } from '../hexoMetadata'
@@ -37,9 +37,9 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
     // /---(data)---/ => $1 === data
     const yamlReg = /^---((.|\n|\r)+?)---$/m
 
-    const yamlData = yamlReg.exec(content.toString())
+    const yamlData = yamlReg.exec(content.toString()) || []
 
-    const data = yamljs.parse(yamlData![1]) || {}
+    const data = yamljs.parse(yamlData[1]) || {}
 
     const categories: (string | string[])[] = Array.isArray(data.categories)
       ? data.categories
@@ -89,8 +89,7 @@ export function sleep(ts = 1000) {
 }
 
 export function isVirtualWorkspace() {
-  const isVirtualWorkspace =
-    workspace.workspaceFolders && workspace.workspaceFolders.every((f) => f.uri.scheme !== 'file')
+  const isVirtualWorkspace = workspace.workspaceFolders?.every((f) => f.uri.scheme !== 'file')
 
   return isVirtualWorkspace
 }

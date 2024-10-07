@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import mustache from 'mustache'
 import { getDirFiles, askForNext, error, isExist } from '../utils'
 import { commands, Uri, window, workspace } from 'vscode'
@@ -17,8 +17,8 @@ export class CreateArticle extends Command {
     super(Commands.new, Commands.newDraft, Commands.newPost)
   }
 
-  private async createFileWithTemplate(type: ArticleTypes, template?: string) {
-    template = template || type
+  private async createFileWithTemplate(type: ArticleTypes, _template?: string) {
+    const template = _template || type
 
     const name = await window.showInputBox({
       value: 'new article',
@@ -30,8 +30,13 @@ export class CreateArticle extends Command {
       return null
     }
 
+    const filePath = title.split('.').pop()
+    if (!filePath) {
+      error(`[${template}] not found`)
+      return
+    }
+
     try {
-      const filePath = title.split('.').pop()!
       const file = await this.createWithTpl(filePath, type, template)
       await commands.executeCommand(Commands.open, file)
     } catch (err) {
@@ -40,7 +45,7 @@ export class CreateArticle extends Command {
   }
 
   private async createWithTpl(filePath: string, type: ArticleTypes, template: string) {
-    const filePathInfo = path.parse(filePath + '.md')
+    const filePathInfo = path.parse(`${filePath}.md`)
 
     const typeFolder = configs.paths[type]
 
@@ -52,7 +57,7 @@ export class CreateArticle extends Command {
       return null
     }
 
-    const tplPath = Uri.joinPath(configs.paths.scaffold, template + '.md')
+    const tplPath = Uri.joinPath(configs.paths.scaffold, `${template}.md`)
     const tpl = await workspace.fs.readFile(tplPath)
 
     const result = mustache.render(
@@ -79,7 +84,7 @@ export class CreateArticle extends Command {
 
   private async createResourceDir(fileAssetPath: Uri) {
     const hexoConf = await configs.hexoConfig()
-    if (hexoConf && hexoConf.post_asset_folder && !(await isExist(fileAssetPath))) {
+    if (hexoConf?.post_asset_folder && !(await isExist(fileAssetPath))) {
       await workspace.fs.createDirectory(fileAssetPath)
     }
   }

@@ -1,6 +1,6 @@
 import cos from 'cos-nodejs-sdk-v5'
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
 export interface TencentOSSOption {
   SecretId: string
@@ -22,28 +22,19 @@ export class TencentOSS {
     this.Bucket = opt.Bucket
   }
 
-  async _upload(imgPath: string): Promise<any> {
+  async _upload(imgPath: string) {
     const COS = new cos({
       SecretId: this.SecretId,
       SecretKey: this.SecretKey,
     })
+
     const p = path.parse(imgPath)
-    const data = await new Promise((res, rej) => {
-      COS.putObject(
-        {
-          Bucket: this.Bucket,
-          Region: this.Region,
-          Key: 'media/image/' + p.base,
-          Body: fs.createReadStream(imgPath),
-        },
-        (err: any, data: any) => {
-          if (err) {
-            rej(err)
-          } else {
-            res(data)
-          }
-        },
-      )
+
+    const data = await COS.putObject({
+      Bucket: this.Bucket,
+      Region: this.Region,
+      Key: `media/image/${p.base}`,
+      Body: fs.createReadStream(imgPath),
     })
 
     return data
@@ -52,7 +43,7 @@ export class TencentOSS {
   async upload(imgPath: string): Promise<string> {
     const res = await this._upload(imgPath)
 
-    return 'https://' + res.Location
+    return `https://${res.Location}`
   }
 }
 

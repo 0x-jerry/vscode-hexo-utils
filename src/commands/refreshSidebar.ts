@@ -14,7 +14,7 @@ export class RefreshSidebar extends Command {
     this.configChanged()
   }
 
-  async execute(cmd: ICommandParsed, ...arg: any[]): Promise<any> {
+  async execute(cmd: ICommandParsed, ...arg: unknown[]): Promise<void> {
     this.refreshAll()
   }
 
@@ -28,8 +28,8 @@ export class RefreshSidebar extends Command {
   configChanged() {
     // Auto refresh when config changed
     workspace.onDidChangeConfiguration((e) => {
-      const hexoProjectConfig = ConfigProperties.SECTION + '.' + ConfigProperties.hexoRoot
-      const sortMethodConfig = ConfigProperties.SECTION + '.' + ConfigProperties.sortMethod
+      const hexoProjectConfig = `${ConfigProperties.SECTION}.${ConfigProperties.hexoRoot}`
+      const sortMethodConfig = `${ConfigProperties.SECTION}.${ConfigProperties.sortMethod}`
 
       const hexoRootChanged = e.affectsConfiguration(hexoProjectConfig)
       const sortMethod = e.affectsConfiguration(sortMethodConfig)

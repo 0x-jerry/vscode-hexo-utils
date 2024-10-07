@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 import { askForNext, isExist } from '../utils'
 import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
 import { Uri, window } from 'vscode'
@@ -11,9 +11,11 @@ export class RenameFile extends Command {
     super(Commands.rename)
   }
 
-  async execute(cmd: ICommandParsed, item: ArticleItem): Promise<any> {
-    const filePath = item.resourceUri!
+  async execute(cmd: ICommandParsed, item: ArticleItem): Promise<unknown> {
+    const filePath = item.resourceUri
     const oldPath = filePath
+
+    if (!oldPath) return
 
     const newName = await window.showInputBox({
       value: path.parse(oldPath.fsPath).name,
@@ -23,7 +25,7 @@ export class RenameFile extends Command {
       return null
     }
 
-    const newPath = Uri.joinPath(oldPath, newName + '.md')
+    const newPath = Uri.joinPath(oldPath, `${newName}.md`)
     if ((await isExist(newPath)) && !(await askForNext('Whether replace exist file?'))) {
       return null
     }
