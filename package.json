@@ -4,6 +4,7 @@
   "description": "vscode extension for hexo",
   "version": "0.4.3",
   "license": "MIT",
+  "type": "module",
   "author": {
     "name": "Jerry wang",
     "email": "x.jerry.wang@gmail.com"
@@ -374,6 +375,7 @@
     ],
     "sourcemap": true,
     "clean": true,
+    "format": ["esm"],
     "external": [
       "vscode"
     ]
