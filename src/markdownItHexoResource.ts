@@ -3,6 +3,7 @@ import { Uri, window } from 'vscode'
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs'
 import { isVirtualWorkspace } from './utils'
 import { Token, type MarkdownIt, type StateInline } from './md-it'
+import fs from 'node:fs'
 
 type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => unknown
 
@@ -146,9 +147,6 @@ function getCorrectImagePath(imgNameWithExt: string): string {
   const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath)
 
   try {
-    // drawback: not support virtual workspace.
-    const fs = require('node:fs') as typeof import('fs')
-
     const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt
 
     return imagePath
