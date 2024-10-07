@@ -1,4 +1,4 @@
-import Axios, { AxiosError, type AxiosResponse } from 'axios'
+import Axios, { AxiosError } from 'axios'
 import FormData from 'form-data'
 import { warn } from '../utils'
 import fs from 'node:fs/promises'
@@ -101,7 +101,7 @@ export class ImgChr {
 
     try {
       await axios.post(apiConfig.root + apiConfig.login, form, {
-        // Get correct cookie: https://github.com/cwxyz007/vscode-hexo-utils/issues/33
+        // Get correct cookie: https://github.com/0x-jerry/vscode-hexo-utils/issues/33
         maxRedirects: 0,
         headers: {
           ...form.getHeaders(),

@@ -7,9 +7,6 @@ import {
   Disposable,
 } from 'vscode'
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const treeViews: any[] = []
-
 export enum ViewTypes {
   post = 'hexo.post',
   draft = 'hexo.draft',
@@ -46,6 +43,9 @@ export abstract class BaseTreeView<T> extends BaseDispose {
     this.subscribe(this.treeView)
   }
 }
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const treeViews: any[] = []
 
 export function treeView(): ClassDecorator {
   return (target) => {
