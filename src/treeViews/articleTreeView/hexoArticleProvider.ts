@@ -142,10 +142,6 @@ export class HexoArticleProvider
       }
     })
   }
-
-  dispose() {
-    // this.
-  }
 }
 
 export class ArticleItem extends TreeItem {
