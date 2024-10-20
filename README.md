@@ -39,6 +39,8 @@ If you found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode
 
 ![](./docs-images/ssh.png)
 
+3. If you opened multiple folders in one workspace, you need to adjust `hexo` project as the first opened folder.
+
 ## Release Notes
 
 See [releases](https://github.com/0x-jerry/vscode-hexo-utils/releases).
