@@ -29,17 +29,17 @@ A sidebar for [Hexo] blog system.
 
 ## Known Issues
 
-If you found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
+If you have found any bugs. Please open an [issue](https://github.com/0x-jerry/vscode-hexo-utils/issues/new?assignees=&labels=&template=bug_report.md&title=)
 
 ## Q&A
 
 1. [Markdown Snippet Prefix Does Not Trigger Snippet](https://github.com/Microsoft/vscode/issues/28048#issuecomment-306616235)
 
-2. If you are use this extension by connect to a remote server by SSH, then you need to install this extension by `install in SSH:xxx` to extends vscode's markdown render.
+2. If you are using this extension to connect to a remote server via SSH, then you need to install this extension by `install in SSH:xxx` to extend VSCode's Markdown rendering capabilities.
 
 ![](./docs-images/ssh.png)
 
-3. If you opened multiple folders in one workspace, you need to adjust `hexo` project as the first opened folder.
+3. If you have opened multiple folders in one workspace, you need to set the Hexo project as the first opened folder.
 
 ## Release Notes
 
