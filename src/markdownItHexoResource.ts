@@ -3,6 +3,7 @@ import { Uri, window } from 'vscode'
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs'
 import { isVirtualWorkspace } from './utils'
 import { Token, type MarkdownIt, type StateInline } from './md-it'
+import { existsSync } from 'node:fs'
 
 type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => unknown
 
@@ -149,7 +150,11 @@ function getCorrectImagePath(imgNameWithExt: string): string {
   const imgUri = Uri.joinPath(resourceDir, imgNameWithExt)
   const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath)
 
-  return relativePath
+  if (existsSync(imgUri.fsPath)) {
+    return relativePath
+  } else {
+    return imgNameWithExt
+  }
 }
 
 function rewriteMarkdownItRenderRule(md: MarkdownIt) {
