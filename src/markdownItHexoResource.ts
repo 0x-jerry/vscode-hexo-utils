@@ -55,8 +55,8 @@ const hexoAssetImgTag: ResolveHexoTag = (status, ...attrs) => {
 }
 
 function hexoTagRules(md: MarkdownIt) {
+  // https://hexo.io/docs/tag-plugins#Include-Assets
   const supportedTagMap: Record<string, ResolveHexoTag> = {
-    img: hexoAssetImgTag,
     asset_img: hexoAssetImgTag,
     asset_link: hexoAssetLinkTag,
   }
@@ -174,7 +174,9 @@ function rewriteMarkdownItRenderRule(md: MarkdownIt) {
     const hexoTagReg = /{%(.+)?%}/gm
 
     /**
-     * support asset_path tag
+     * https://github.com/0x-jerry/vscode-hexo-utils/issues/47
+     *
+     * Support asset_path tag
      *
      * {% asset_path filename %}
      */
