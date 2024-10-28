@@ -16,26 +16,18 @@ categories: ['utils']
 
 ## Preview Image
 
-1. normal image
+image relative to assets folder
 
-![description](./test.png)
+![test](test.png)
 
-2. image relative to assets folder
-
-![]()
-
-3. asset_path tag
+asset_path tag
 
 <img src="{% asset_path 11.png %}" width="100px" title="My figure.">
 
-4. asset_img tag
+asset_img tag
 
 {% asset_img "test class" 11.png 600 300 "title text" "alt text" %}
 
-5. img tag
-
-{% img "test class" 11.png 600 300 "title text" "alt text" %}
-
-6. asset_link tag
+asset_link tag
 
 {% asset_link 11.png title escape %}
