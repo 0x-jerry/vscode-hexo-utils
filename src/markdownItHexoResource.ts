@@ -125,11 +125,11 @@ function getResourceDir(fileUri: Uri) {
 
   const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1
 
-  const articaleFolder = isDraft ? configs.paths.draft : configs.paths.post
+  const articleFolder = isDraft ? configs.paths.draft : configs.paths.post
 
-  const fileDir = path.relative(articaleFolder.fsPath, fileUri.fsPath).replace(/\.md$/, '')
+  const fileDir = path.relative(articleFolder.fsPath, fileUri.fsPath).replace(/\.md$/, '')
 
-  const resourceDir = Uri.joinPath(articaleFolder, fileDir)
+  const resourceDir = Uri.joinPath(articleFolder, fileDir)
 
   return resourceDir
 }
