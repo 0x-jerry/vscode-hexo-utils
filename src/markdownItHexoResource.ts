@@ -114,7 +114,7 @@ function createHexoImgToken(token: Token, src: string, alt: string) {
   token.children = [textToken]
 }
 
-function getResDir(fileUri: Uri) {
+function getResourceDir(fileUri: Uri) {
   const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
 
   if (assetFolderType === AssetFolderType.Global) {
@@ -135,14 +135,16 @@ function getResDir(fileUri: Uri) {
 }
 
 function getCorrectImagePath(imgNameWithExt: string): string {
-  const resultPath = imgNameWithExt
+  if (/^https?:\/\//.test(imgNameWithExt)) {
+    return imgNameWithExt
+  }
 
   if (!window.activeTextEditor || isVirtualWorkspace()) {
-    return resultPath
+    return imgNameWithExt
   }
 
   const activeUri = window.activeTextEditor.document.uri
-  const resourceDir = getResDir(activeUri)
+  const resourceDir = getResourceDir(activeUri)
 
   const imgUri = Uri.joinPath(resourceDir, imgNameWithExt)
   const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath)
