@@ -1,13 +1,7 @@
 import cos from 'cos-nodejs-sdk-v5'
 import path from 'node:path'
 import fs from 'node:fs'
-
-export interface TencentOSSOption {
-  SecretId: string
-  SecretKey: string
-  Region: string
-  Bucket: string
-}
+import type { TencentOSSOption } from '../configs'
 
 export class TencentOSS {
   SecretId: string

@@ -129,7 +129,7 @@ export class HexoArticleProvider
     )
 
     return items.sort((a, b) => {
-      const sortMethod = getConfig<SortBy>(ConfigProperties.sortMethod)
+      const sortMethod = getConfig(ConfigProperties.sortMethod)
 
       switch (sortMethod) {
         case SortBy.name:

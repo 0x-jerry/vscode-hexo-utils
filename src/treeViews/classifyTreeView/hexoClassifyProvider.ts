@@ -62,7 +62,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
     const postFolder = configs.paths.post
     const draftFolder = configs.paths.draft
 
-    const include = getConfig<boolean>(ConfigProperties.includeDraft)
+    const include = getConfig(ConfigProperties.includeDraft)
 
     const postsPath = await getMDFiles(postFolder)
 

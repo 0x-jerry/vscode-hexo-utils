@@ -2,8 +2,9 @@ import { Uri, workspace } from 'vscode'
 import path from 'node:path'
 import yamljs from 'yamljs'
 
+export const ConfigSection = 'hexo'
+
 export enum ConfigProperties {
-  SECTION = 'hexo',
   includeDraft = 'includeDraft',
   resolveMarkdownResource = 'markdown.resource',
   hexoRoot = 'hexoProjectRoot',
@@ -16,6 +17,11 @@ export enum ConfigProperties {
   assetFolderType = 'assetFolderType',
 }
 
+export interface ImgChrOption {
+  username: string
+  password: string
+}
+
 export enum SortBy {
   name = 'name',
   date = 'date',
@@ -26,16 +32,42 @@ export enum AssetFolderType {
   Global = 'global',
 }
 
-export function getConfig<T>(propName: ConfigProperties, section = 'hexo'): T {
+export enum UploadType {
+  imgchr = 'imgchr',
+  tencentoss = 'tencentoss',
+}
+
+export interface TencentOSSOption {
+  SecretId: string
+  SecretKey: string
+  Region: string
+  Bucket: string
+}
+
+type ConfigTypeMap = {
+  [ConfigProperties.assetFolderType]: AssetFolderType
+  [ConfigProperties.generateTimeFormat]: string
+  [ConfigProperties.hexoRoot]: string
+  [ConfigProperties.imgChr]: ImgChrOption
+  [ConfigProperties.includeDraft]: boolean
+  [ConfigProperties.resolveMarkdownResource]: boolean
+  [ConfigProperties.sortMethod]: SortBy
+  [ConfigProperties.tencentOSS]: TencentOSSOption
+  [ConfigProperties.upload]: boolean
+  [ConfigProperties.uploadType]: UploadType
+}
+
+export function getConfig<T extends ConfigProperties>(propName: T, section = ConfigSection) {
   const configs = workspace.getConfiguration(section)
-  return configs.get<T>(propName) as T
+  type Type = ConfigTypeMap[T]
+  return configs.get(propName) as Type
 }
 
 export const configs = {
   get hexoRoot() {
     const folders = workspace.workspaceFolders || []
 
-    return Uri.joinPath(folders[0].uri, getConfig<string>(ConfigProperties.hexoRoot))
+    return Uri.joinPath(folders[0].uri, getConfig(ConfigProperties.hexoRoot))
   },
   paths: {
     get scaffold() {

@@ -3,6 +3,7 @@ import FormData from 'form-data'
 import { warn } from '../utils'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import type { ImgChrOption } from '../configs'
 
 const axios = Axios.create({
   headers: {
@@ -20,11 +21,6 @@ const apiConfig = {
 
 const configPath = path.join(__dirname, 'imgchr.setting.json')
 
-export interface IImgChrOption {
-  username: string
-  password: string
-}
-
 export class ImgChr {
   username: string
   password: string
@@ -36,7 +32,7 @@ export class ImgChr {
     return Array.from(this.cookies).join(';')
   }
 
-  constructor(opt: IImgChrOption) {
+  constructor(opt: ImgChrOption) {
     this.username = opt.username
     this.password = opt.password
     this.token = ''

@@ -47,7 +47,7 @@ export class HexoMetadataUtils {
   }
 
   private sort() {
-    const sortMethod = <SortBy>getConfig(ConfigProperties.sortMethod)
+    const sortMethod = getConfig(ConfigProperties.sortMethod)
 
     const key: keyof THexoMeta = sortMethod === SortBy.date ? 'date' : 'name'
 

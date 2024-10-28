@@ -33,7 +33,7 @@ export function activate(context: ExtensionContext) {
 
   return {
     extendMarkdownIt(md: MarkdownIt) {
-      const resolve = getConfig<boolean>(ConfigProperties.resolveMarkdownResource)
+      const resolve = getConfig(ConfigProperties.resolveMarkdownResource)
 
       if (resolve) {
         return md.use(plugin)

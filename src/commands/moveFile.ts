@@ -37,7 +37,7 @@ export class MoveFile extends Command {
 
       // move resource folder
       {
-        const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
+        const assetFolderType = getConfig(ConfigProperties.assetFolderType)
         if (assetFolderType === AssetFolderType.Global) {
           return
         }

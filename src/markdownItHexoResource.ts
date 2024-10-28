@@ -115,7 +115,7 @@ function createHexoImgToken(token: Token, src: string, alt: string) {
 }
 
 function getResourceDir(fileUri: Uri) {
-  const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
+  const assetFolderType = getConfig(ConfigProperties.assetFolderType)
 
   if (assetFolderType === AssetFolderType.Global) {
     const resourceDir = Uri.joinPath(configs.hexoRoot, 'source')

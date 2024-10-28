@@ -1,7 +1,7 @@
 import { command, Command, type ICommandParsed, Commands } from './common'
 import { commands, workspace } from 'vscode'
 import debounce from 'debounce'
-import { ConfigProperties } from '../configs'
+import { ConfigProperties, ConfigSection } from '../configs'
 
 @command()
 export class RefreshSidebar extends Command {
@@ -28,8 +28,8 @@ export class RefreshSidebar extends Command {
   configChanged() {
     // Auto refresh when config changed
     workspace.onDidChangeConfiguration((e) => {
-      const hexoProjectConfig = `${ConfigProperties.SECTION}.${ConfigProperties.hexoRoot}`
-      const sortMethodConfig = `${ConfigProperties.SECTION}.${ConfigProperties.sortMethod}`
+      const hexoProjectConfig = `${ConfigSection}.${ConfigProperties.hexoRoot}`
+      const sortMethodConfig = `${ConfigSection}.${ConfigProperties.sortMethod}`
 
       const hexoRootChanged = e.affectsConfiguration(hexoProjectConfig)
       const sortMethod = e.affectsConfiguration(sortMethodConfig)

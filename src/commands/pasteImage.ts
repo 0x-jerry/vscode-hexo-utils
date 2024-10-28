@@ -32,7 +32,7 @@ export class PasteImage extends Command {
 
     const parsed = path.parse(filePath.fsPath)
 
-    const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
+    const assetFolderType = getConfig(ConfigProperties.assetFolderType)
     const hexoFolder = configs.hexoRoot
 
     const imageFolder =
@@ -74,7 +74,7 @@ export class PasteImage extends Command {
   }
 
   async saveImage(editor: TextEditor): Promise<string | false> {
-    const uploadEnabled = getConfig<boolean>(ConfigProperties.upload)
+    const uploadEnabled = getConfig(ConfigProperties.upload)
 
     const tempFilename = `${Math.random().toString().slice(2)}.jpg`
     const tempPath = path.join(os.tmpdir(), tempFilename)
@@ -115,7 +115,7 @@ export class PasteImage extends Command {
   async updateEditor(imageURI: string, editor: TextEditor) {
     const parsed = path.parse(imageURI)
 
-    const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
+    const assetFolderType = getConfig(ConfigProperties.assetFolderType)
     const hexoSourceFolder = Uri.joinPath(configs.hexoRoot, 'source').fsPath
 
     const image_path =
