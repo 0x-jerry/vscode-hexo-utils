@@ -3,7 +3,6 @@ import { Uri, window } from 'vscode'
 import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs'
 import { isVirtualWorkspace } from './utils'
 import { Token, type MarkdownIt, type StateInline } from './md-it'
-import fs from 'node:fs'
 
 type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => unknown
 
@@ -20,13 +19,12 @@ const hexoAssetLinkTag: ResolveHexoTag = (status, ...attrs) => {
   const [href, title] = attrs
   const token = status.push('link', 'a', 1)
 
-  const src = getCorrectImagePath(href)
   token.attrs = [
-    ['href', src],
+    ['href', href],
     ['alt', title],
   ]
 
-  token.content = `[${title}](${src})`
+  token.content = `[${title}](${href})`
 
   const textToken = status.push('text', '', 0)
   textToken.content = title || ''
@@ -53,7 +51,7 @@ const hexoAssetImgTag: ResolveHexoTag = (status, ...attrs) => {
   const src = isImageReg.test(attrs[0]) ? attrs[0] : attrs[1]
 
   const token = status.push('image', 'img', 0)
-  createHexoImgToken(token, getCorrectImagePath(src), '')
+  createHexoImgToken(token, src, '')
 }
 
 function hexoTagRules(md: MarkdownIt) {
@@ -149,14 +147,7 @@ function getCorrectImagePath(imgNameWithExt: string): string {
   const imgUri = Uri.joinPath(resourceDir, imgNameWithExt)
   const relativePath = path.relative(path.parse(activeUri.fsPath).dir, imgUri.fsPath)
 
-  try {
-    const imagePath = fs.existsSync(imgUri.fsPath) ? relativePath : imgNameWithExt
-
-    return imagePath
-  } catch (error) {
-    console.log('get img failed', imgNameWithExt, error)
-    return imgNameWithExt
-  }
+  return relativePath
 }
 
 function rewriteMarkdownItRenderRule(md: MarkdownIt) {
@@ -200,8 +191,8 @@ function rewriteMarkdownItRenderRule(md: MarkdownIt) {
 }
 
 export default (md: MarkdownIt) => {
-  rewriteMarkdownItRenderRule(md)
   hexoTagRules(md)
+  rewriteMarkdownItRenderRule(md)
 
   return md
 }
