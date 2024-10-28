@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils'
+import { getMDFiles, getMDFileMetadata } from '../../utils'
 import { Commands } from '../../commands/common'
 import { HexoMetadataUtils, type IHexoMetadata } from '../../hexoMetadata'
 import { getConfig, ConfigProperties, configs } from '../../configs'
@@ -55,10 +55,6 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
   }
 
   async getChildren(element?: ClassifyItem): Promise<ClassifyItem[]> {
-    if (!isHexoProject()) {
-      return []
-    }
-
     const postFolder = configs.paths.post
     const draftFolder = configs.paths.draft
 

@@ -1,5 +1,4 @@
 import { type ExtensionContext, Disposable, commands } from 'vscode'
-import { isHexoProject } from '../utils'
 
 /**
  * hexo.<command>[[...args]]
@@ -76,10 +75,6 @@ export abstract class Command implements Disposable {
   abstract execute(cmd: ICommandParsed, ...arg: unknown[]): Promise<unknown>
 
   private async _execute(command: Commands, ...args: unknown[]) {
-    if (!(await isHexoProject())) {
-      return
-    }
-
     const cmd = Command.parseCommand(command)
 
     return this.execute(cmd, ...args)

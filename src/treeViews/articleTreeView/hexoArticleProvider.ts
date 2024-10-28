@@ -13,7 +13,7 @@ import {
 } from 'vscode'
 import { Commands } from '../../commands/common'
 import { ArticleTypes } from '../../commands/createArticle'
-import { isHexoProject, getMDFiles, getMDFileMetadata } from '../../utils'
+import { getMDFiles, getMDFileMetadata } from '../../utils'
 import { configs, getConfig, ConfigProperties, SortBy } from '../../configs'
 import type { IHexoMetadata } from '../../hexoMetadata'
 import { BaseDispose } from '../common'
@@ -106,9 +106,6 @@ export class HexoArticleProvider
 
   async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
     const items: ArticleItem[] = []
-    if (!(await isHexoProject())) {
-      return items
-    }
 
     const articleRootPath =
       this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post

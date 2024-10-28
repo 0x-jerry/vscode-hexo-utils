@@ -3,11 +3,6 @@ import yamljs from 'yamljs'
 import { type Uri, window, workspace } from 'vscode'
 import type { IHexoMetadata } from '../hexoMetadata'
 
-export async function isHexoProject() {
-  // no need to check dependency.
-  return true
-}
-
 /**
  * true if yse
  * @param placeHolder msg

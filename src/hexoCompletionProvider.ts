@@ -11,7 +11,6 @@ import {
   workspace,
   CompletionItemKind,
 } from 'vscode'
-import { isHexoProject } from './utils'
 import { configs } from './configs'
 
 export class HexoCompletionProvider implements CompletionItemProvider {
@@ -22,7 +21,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
     context: CompletionContext,
   ): Promise<CompletionItem[] | CompletionList> {
     // Filter md file
-    if (!document.uri.fsPath.endsWith('.md') || !(await isHexoProject())) {
+    if (!document.uri.fsPath.endsWith('.md')) {
       return []
     }
 
