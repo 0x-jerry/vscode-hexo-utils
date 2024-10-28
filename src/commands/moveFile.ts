@@ -3,7 +3,7 @@ import { askForNext, isExist } from '../utils'
 import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
 import { ArticleTypes } from './createArticle'
 import { Command, command, type ICommandParsed, Commands } from './common'
-import { configs } from '../configs'
+import { AssetFolderType, ConfigProperties, configs, getConfig } from '../configs'
 import { rename } from './utils'
 import { Uri } from 'vscode'
 
@@ -15,14 +15,16 @@ export class MoveFile extends Command {
 
   static async move(to: ArticleTypes, items: ArticleItem[]) {
     const p = items.map(async (item) => {
-      const toPath = to === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
-      const sourceUri = item.resourceUri
+      const isToDraft = to === ArticleTypes.draft
+      const toPath = isToDraft ? configs.paths.draft : configs.paths.post
 
-      if (!sourceUri) return
+      const fromFileUri = item.resourceUri
+
+      if (!fromFileUri) return
 
       const fileName = path.relative(
-        to === ArticleTypes.draft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
-        sourceUri.fsPath,
+        isToDraft ? configs.paths.post.fsPath : configs.paths.draft.fsPath,
+        fromFileUri.fsPath,
       )
 
       const destPath = Uri.joinPath(toPath, fileName)
@@ -31,7 +33,33 @@ export class MoveFile extends Command {
         return null
       }
 
-      await rename(sourceUri, destPath)
+      await rename(fromFileUri, destPath)
+
+      // move resource folder
+      {
+        const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
+        if (assetFolderType === AssetFolderType.Global) {
+          return
+        }
+
+        const fromResourceFolder = isToDraft ? configs.paths.post : configs.paths.draft
+        const toResourceFolder = isToDraft ? configs.paths.draft : configs.paths.post
+
+        const fileNameWithoutExt = fileName.replace(/\.md$/, '')
+        const from = Uri.joinPath(fromResourceFolder, fileNameWithoutExt)
+        const to = Uri.joinPath(toResourceFolder, fileNameWithoutExt)
+
+        if (await isExist(from)) {
+          if (
+            (await isExist(to)) &&
+            !(await askForNext('Whether to replace the exist resource folder?'))
+          ) {
+            return null
+          }
+
+          await rename(from, to)
+        }
+      }
     })
 
     await Promise.all(p)
