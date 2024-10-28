@@ -117,18 +117,21 @@ function createHexoImgToken(token: Token, src: string, alt: string) {
 }
 
 function getResDir(fileUri: Uri) {
-  const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1
-
   const assetFolderType = getConfig<AssetFolderType>(ConfigProperties.assetFolderType)
 
-  const fileDir = path
-    .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, fileUri.fsPath)
-    .replace(/\.md$/, '')
+  if (assetFolderType === AssetFolderType.Post) {
+    const resourceDir = Uri.joinPath(configs.hexoRoot, 'source')
 
-  const resourceDir =
-    assetFolderType === AssetFolderType.Post
-      ? Uri.joinPath(configs.paths.post, fileDir)
-      : Uri.joinPath(configs.hexoRoot, 'source')
+    return resourceDir
+  }
+
+  const isDraft = fileUri.fsPath.indexOf('_drafts') !== -1
+
+  const articaleFolder = isDraft ? configs.paths.draft : configs.paths.post
+
+  const fileDir = path.relative(articaleFolder.fsPath, fileUri.fsPath).replace(/\.md$/, '')
+
+  const resourceDir = Uri.joinPath(articaleFolder, fileDir)
 
   return resourceDir
 }
