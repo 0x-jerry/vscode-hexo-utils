@@ -121,7 +121,7 @@
           "description": "Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/sources/images/<__post>/`)"
         },
         "hexo.preview": {
-          "type":"object",
+          "type": "object",
           "description": "Hexo preview options",
           "properties": {
             "autoStart": {
@@ -134,6 +134,10 @@
               "default": 4001,
               "description": "hexo server port"
             }
+          },
+          "default": {
+            "autoStart": false,
+            "port": 4001
           }
         }
       }
@@ -403,6 +407,7 @@
   },
   "devDependencies": {
     "@0x-jerry/utils": "^3.0.2",
+    "@0x-jerry/vscode-simple-server": "^0.2.3",
     "@0x-jerry/x-release": "^2.2.2",
     "@biomejs/biome": "^1.9.3",
     "@types/debounce": "^1.2.4",
