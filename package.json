@@ -56,11 +56,6 @@
           "default": "",
           "description": "`Hexo` project path(relative to current workspace root), default is workspace root"
         },
-        "hexo.markdown.resource": {
-          "type": "boolean",
-          "default": true,
-          "description": "Controls whether resolve image with hexo resource folder."
-        },
         "hexo.upload": {
           "type": "boolean",
           "default": false,
@@ -124,6 +119,22 @@
           ],
           "default": "post",
           "description": "Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/sources/images/<__post>/`)"
+        },
+        "hexo.preview": {
+          "type":"object",
+          "description": "Hexo preview options",
+          "properties": {
+            "autoStart": {
+              "type": "boolean",
+              "default": false,
+              "description": "Auto start hexo server"
+            },
+            "port": {
+              "type": "number",
+              "default": 4001,
+              "description": "hexo server port"
+            }
+          }
         }
       }
     },
@@ -223,6 +234,16 @@
       {
         "command": "hexo.open",
         "title": "Open a article",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.startPreview",
+        "title": "Start Hexo server",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.stopPreview",
+        "title": "Stop Hexo server",
         "category": "Hexo Utils"
       }
     ],
@@ -357,8 +378,7 @@
         "language": "markdown",
         "path": "./snippets/snippets.hexo.json"
       }
-    ],
-    "markdown.markdownItPlugins": true
+    ]
   },
   "scripts": {
     "vscode:prepublish": "tsup",
@@ -382,6 +402,7 @@
     "@types/vscode": "*"
   },
   "devDependencies": {
+    "@0x-jerry/utils": "^3.0.2",
     "@0x-jerry/x-release": "^2.2.2",
     "@biomejs/biome": "^1.9.3",
     "@types/debounce": "^1.2.4",

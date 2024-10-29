@@ -3,10 +3,7 @@
 import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
 import { registerCommands } from './commands'
 import { HexoCompletionProvider } from './hexoCompletionProvider'
-import plugin from './markdownItHexoResource'
-import { getConfig, ConfigProperties } from './configs'
 import { registerTreeViews } from './treeViews'
-import type { MarkdownIt } from './md-it'
 
 export function activate(context: ExtensionContext) {
   // Only activate when open with a workspace folder, close #98.
@@ -29,18 +26,6 @@ export function activate(context: ExtensionContext) {
     registerCommands(context)
   } catch (err) {
     window.showErrorMessage(String(err))
-  }
-
-  return {
-    extendMarkdownIt(md: MarkdownIt) {
-      const resolve = getConfig(ConfigProperties.resolveMarkdownResource)
-
-      if (resolve) {
-        return md.use(plugin)
-      }
-
-      return md
-    },
   }
 }
 
