@@ -57,7 +57,8 @@ export function activate(context: ExtensionContext) {
       const url = new URL(`http://localhost:${port}`)
 
       if (!uri) {
-        return url.toString()
+        // No need to resolve url
+        return
       }
 
       if (!uri.fsPath.endsWith('.md')) {
