@@ -7,3 +7,4 @@ out/
 src/
 tsconfig.json
 webpack.config.js
+playground
