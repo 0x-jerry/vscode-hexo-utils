@@ -6,6 +6,7 @@ import {
   type ExtensionContext,
   languages,
   ThemeColor,
+  Uri,
   window,
   workspace,
 } from 'vscode'
@@ -14,6 +15,7 @@ import { HexoCompletionProvider } from './hexoCompletionProvider'
 import { registerTreeViews } from './treeViews'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { ConfigProperties, getConfig } from './configs'
+import { readHexoConfig, readHexoDb, resolveHexoUrlPath } from './hexo'
 
 export function activate(context: ExtensionContext) {
   // Only activate when open with a workspace folder, close #98.
@@ -71,9 +73,16 @@ export function activate(context: ExtensionContext) {
         return
       }
 
-      // todo, resolve url
-      // const relativeFilePath = path.relative(workspaceFolder.uri.fsPath, uri.fsPath)
-      // url.pathname = pathname + (pathname === CONFIG.base ? '/' : '')
+      const relativeRootPath = getConfig(ConfigProperties.hexoRoot)
+      const hexoRootUri = Uri.joinPath(workspaceFolder.uri, relativeRootPath)
+
+      const hexoUrlPath = await resolveHexoUrlPath(uri, hexoRootUri)
+
+      if (hexoUrlPath === false) {
+        return
+      }
+
+      url.pathname = hexoUrlPath
 
       return url.toString()
     },
