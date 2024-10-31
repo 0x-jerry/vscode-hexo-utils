@@ -43,10 +43,14 @@ export function activate(context: ExtensionContext) {
   const simple = new SimpleServer({
     autoStart: getConfig(ConfigProperties.preview).autoStart,
     env: context,
-    async getStartCommand() {
+    async getStartServerCommand() {
       const port = getConfig(ConfigProperties.preview).port
+      const relativeRoot = getConfig(ConfigProperties.hexoRoot)
 
-      return `npx hexo server -p ${port}`
+      return {
+        commandLine: `npx hexo server -p ${port}`,
+        cwd: relativeRoot,
+      }
     },
     async resolveUrl(uri) {
       const port = getConfig(ConfigProperties.preview).port
