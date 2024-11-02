@@ -78,16 +78,12 @@ export async function resolveHexoUrlPath(fileUri: Uri, hexoRootUri: Uri): Promis
     return false
   }
 
-  const createDate = dayjs(new Date(item.updated))
-
-  const pathTitle = path
-    .relative(Uri.joinPath(sourceUri, isDraft ? '_drafts' : '_posts').fsPath, fileUri.fsPath)
-    .replace(/\\/g, '/')
-    .replace(/\.md$/, '')
+  const createDate = dayjs(new Date(item.date))
 
   // https://hexo.io/docs/permalinks
   const permalink: string = config.permalink
 
+  // https://github.com/hexojs/hexo/blob/492debff7c3eb697594a516ab36bed96c94a8cc1/lib/plugins/filter/post_permalink.ts#L8
   const permalinkParams = {
     year: createDate.format('YYYY'),
     month: createDate.format('MM'),
@@ -98,8 +94,8 @@ export async function resolveHexoUrlPath(fileUri: Uri, hexoRootUri: Uri): Promis
     minute: createDate.format('mm'),
     second: createDate.format('ss'),
 
-    title: pathTitle,
-    name: item.slug,
+    title: item.slug,
+    name: typeof item.slug === 'string' ? path.basename(item.slug) : '',
     post_title: item.title,
     id: item._id,
 
