@@ -1,4 +1,7 @@
 {
   "hexo.generateTimeFormat": "YYYY/MM/DD HH:mm:ss",
-  "hexo.assetFolderType": "post"
+  "hexo.assetFolderType": "post",
+  "hexo.preview": {
+    "autoStart": true
+  }
 }

@@ -23,6 +23,8 @@ export enum Commands {
   newDraft = 'hexo.new[draft]',
   moveToDraft = 'hexo.moveTo[draft]',
   moveToPost = 'hexo.moveTo[post]',
+  startPreview = 'hexo.startPreview',
+  stopPreview = 'hexo.stopPreview',
 }
 
 export enum BuiltInCommands {

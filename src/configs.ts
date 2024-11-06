@@ -6,7 +6,7 @@ export const ConfigSection = 'hexo'
 
 export enum ConfigProperties {
   includeDraft = 'includeDraft',
-  resolveMarkdownResource = 'markdown.resource',
+  // resolveMarkdownResource = 'markdown.resource',
   hexoRoot = 'hexoProjectRoot',
   sortMethod = 'sortMethod',
   upload = 'upload',
@@ -15,6 +15,7 @@ export enum ConfigProperties {
   tencentOSS = 'uploadTencentOSS',
   generateTimeFormat = 'generateTimeFormat',
   assetFolderType = 'assetFolderType',
+  preview = 'preview',
 }
 
 export interface ImgChrOption {
@@ -44,17 +45,23 @@ export interface TencentOSSOption {
   Bucket: string
 }
 
+export interface PreviewConfig {
+  autoStart: boolean
+  port: number
+}
+
 type ConfigTypeMap = {
   [ConfigProperties.assetFolderType]: AssetFolderType
   [ConfigProperties.generateTimeFormat]: string
   [ConfigProperties.hexoRoot]: string
   [ConfigProperties.imgChr]: ImgChrOption
   [ConfigProperties.includeDraft]: boolean
-  [ConfigProperties.resolveMarkdownResource]: boolean
+  // [ConfigProperties.resolveMarkdownResource]: boolean
   [ConfigProperties.sortMethod]: SortBy
   [ConfigProperties.tencentOSS]: TencentOSSOption
   [ConfigProperties.upload]: boolean
   [ConfigProperties.uploadType]: UploadType
+  [ConfigProperties.preview]: PreviewConfig
 }
 
 export function getConfig<T extends ConfigProperties>(propName: T, section = ConfigSection) {
