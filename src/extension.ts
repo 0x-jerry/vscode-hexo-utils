@@ -15,7 +15,7 @@ import { HexoCompletionProvider } from './hexoCompletionProvider'
 import { registerTreeViews } from './treeViews'
 import { SimpleServer } from '@0x-jerry/vscode-simple-server'
 import { ConfigProperties, getConfig } from './configs'
-import { readHexoConfig, readHexoDb, resolveHexoUrlPath } from './hexo'
+import { resolveHexoUrlPath } from './hexo'
 
 export function activate(context: ExtensionContext) {
   // Only activate when open with a workspace folder, close #98.
@@ -41,6 +41,7 @@ export function activate(context: ExtensionContext) {
   }
 
   // -----------
+  const fileChangedTimeMap = new Map<string, number>()
 
   const simple = new SimpleServer({
     autoStart: getConfig(ConfigProperties.preview).autoStart,
@@ -48,6 +49,8 @@ export function activate(context: ExtensionContext) {
     async getStartServerCommand() {
       const port = getConfig(ConfigProperties.preview).port
       const relativeRoot = getConfig(ConfigProperties.hexoRoot)
+
+      fileChangedTimeMap.clear()
 
       return {
         commandLine: `npx hexo server -p ${port}`,
@@ -76,9 +79,11 @@ export function activate(context: ExtensionContext) {
       const relativeRootPath = getConfig(ConfigProperties.hexoRoot)
       const hexoRootUri = Uri.joinPath(workspaceFolder.uri, relativeRootPath)
 
-      const hexoUrlPath = await resolveHexoUrlPath(uri, hexoRootUri)
+      const hexoUrlPath = await resolveHexoUrlPath(uri, hexoRootUri, {
+        fileChangedTimeMap,
+      })
 
-      if (hexoUrlPath === false) {
+      if (!hexoUrlPath) {
         return
       }
 

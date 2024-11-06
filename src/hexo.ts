@@ -58,7 +58,11 @@ interface HexoPost {
   more: string
 }
 
-export async function resolveHexoUrlPath(fileUri: Uri, hexoRootUri: Uri): Promise<string | false> {
+export async function resolveHexoUrlPath(
+  fileUri: Uri,
+  hexoRootUri: Uri,
+  opt: { fileChangedTimeMap: Map<string, number> },
+): Promise<string | false> {
   const config = await readHexoConfig(hexoRootUri)
   const db = await readHexoDb(hexoRootUri)
 
@@ -79,7 +83,16 @@ export async function resolveHexoUrlPath(fileUri: Uri, hexoRootUri: Uri): Promis
   }
 
   const stat = await workspace.fs.stat(fileUri)
-  const createDate = dayjs(stat.ctime)
+
+  let isChanged = false
+
+  if (opt.fileChangedTimeMap.has(fileUri.fsPath)) {
+    isChanged = opt.fileChangedTimeMap.get(fileUri.fsPath) !== stat.mtime
+  } else {
+    opt.fileChangedTimeMap.set(fileUri.fsPath, stat.mtime)
+  }
+
+  const createDate = dayjs(isChanged ? stat.ctime : new Date(item.date))
 
   // https://hexo.io/docs/permalinks
   const permalink: string = config.permalink
