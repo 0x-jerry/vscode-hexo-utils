@@ -104,3 +104,8 @@ theme: landscape
 deploy:
   type: ''
 
+browsersync:
+  logLevel: "warn"
+  ghostMode:
+    scroll: true
+  instanceName: "uniqueString"

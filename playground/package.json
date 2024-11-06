@@ -24,6 +24,7 @@
     "hexo-theme-landscape": "^1.0.0"
   },
   "devDependencies": {
+    "hexo-browsersync": "^0.3.0",
     "hexo-cli": "^4.3.2"
   }
 }

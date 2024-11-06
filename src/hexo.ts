@@ -78,7 +78,8 @@ export async function resolveHexoUrlPath(fileUri: Uri, hexoRootUri: Uri): Promis
     return false
   }
 
-  const createDate = dayjs(new Date(item.date))
+  const stat = await workspace.fs.stat(fileUri)
+  const createDate = dayjs(stat.ctime)
 
   // https://hexo.io/docs/permalinks
   const permalink: string = config.permalink
