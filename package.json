@@ -397,7 +397,7 @@
     "dayjs": "^1.11.13",
     "debounce": "^2.1.1",
     "debug": "^4.3.7",
-    "form-data": "^4.0.0",
+    "form-data": "^4.0.4",
     "markdown-it": "^14.1.0",
     "mustache": "^4.2.0",
     "tsup": "^8.3.0",
