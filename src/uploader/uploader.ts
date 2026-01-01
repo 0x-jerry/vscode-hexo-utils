@@ -1,6 +1,7 @@
 import { getConfig, ConfigProperties, UploadType } from '../configs'
 import { ImgChr } from './Imgchr'
 import { TencentOSS } from './TencentOSS'
+import { CustomUploader } from './Custom'
 
 export interface Uploader {
   upload(file: string): Promise<string>
@@ -22,6 +23,10 @@ export async function upload(filePath: string) {
 
     case UploadType.tencentoss:
       uploader = new TencentOSS(getConfig(ConfigProperties.tencentOSS))
+      break
+
+    case UploadType.custom:
+      uploader = new CustomUploader(getConfig(ConfigProperties.customUpload))
       break
 
     default:
