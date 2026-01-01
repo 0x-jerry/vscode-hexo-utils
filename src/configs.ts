@@ -13,7 +13,7 @@ export enum ConfigProperties {
   uploadType = 'uploadType',
   imgChr = 'uploadImgchr',
   tencentOSS = 'uploadTencentOSS',
-  customUpload = 'customUpload',
+  customUpload = 'uploadCustom',
   generateTimeFormat = 'generateTimeFormat',
   assetFolderType = 'assetFolderType',
 }
