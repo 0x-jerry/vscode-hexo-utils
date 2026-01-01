@@ -12,6 +12,7 @@ import {
   CompletionItemKind,
 } from 'vscode'
 import { configs } from './configs'
+import { MetadataManager } from './metadataManager'
 
 export class HexoCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -26,6 +27,49 @@ export class HexoCompletionProvider implements CompletionItemProvider {
     }
 
     const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character)
+
+    // Check if in Front Matter
+    const isFrontMatter = this.isInFrontMatter(document, position)
+    if (isFrontMatter) {
+      let key: string | undefined
+
+      // tags: xxx, yyy
+      const tagMatch = lineTextBefore.match(/^tags:\s*(.*)$/)
+      if (tagMatch) {
+        key = 'tags'
+      }
+
+      // categories: xxx
+      const categoryMatch = lineTextBefore.match(/^categories:\s*(.*)$/)
+      if (categoryMatch) {
+        key = 'categories'
+      }
+
+      // - xxx (list format)
+      const listMatch = lineTextBefore.match(/^\s*-\s*(.*)$/)
+      if (listMatch) {
+        key = this.getParentKey(document, position.line)
+      }
+
+      if (key === 'tags') {
+        const tags = await MetadataManager.getInstance().getTags()
+        return tags.map((tag) => {
+          return new CompletionItem(tag, CompletionItemKind.Keyword)
+        })
+      }
+
+      if (key === 'categories') {
+        const categories = await MetadataManager.getInstance().getCategories()
+        return categories.map((cat) => {
+          const item = new CompletionItem(cat, CompletionItemKind.Keyword)
+          const parts = cat.split(' / ')
+          if (parts.length > 1) {
+            item.insertText = `[${parts.join(', ')}]`
+          }
+          return item
+        })
+      }
+    }
 
     // ![xxx]()
     const matches = lineTextBefore.match(/!\[[^\]]*?\]\(([^\)]*?)[\\\/]?[^\\\/\)]*$/)
@@ -58,5 +102,43 @@ export class HexoCompletionProvider implements CompletionItemProvider {
         return item
       })
     })
+  }
+
+  private isInFrontMatter(document: TextDocument, position: Position): boolean {
+    const text = document.getText()
+    const lines = text.split(/\r?\n/)
+    let dashCount = 0
+    for (let i = 0; i <= position.line; i++) {
+      if (lines[i].trim() === '---') {
+        dashCount++
+      }
+    }
+    // If we are between the first and second '---', we are in Front Matter
+    // But if the current line is the second '---', we might still be considered "in" it depending on logic.
+    // Usually, Front Matter starts at line 0 with '---'.
+    return dashCount === 1 && lines[position.line].trim() !== '---'
+  }
+
+  private getParentKey(document: TextDocument, line: number): string | undefined {
+    const currentLineText = document.lineAt(line).text
+    const match = currentLineText.match(/^(\s*)-/)
+    if (!match) return undefined
+
+    const currentIndentation = match[1].length
+
+    for (let i = line - 1; i >= 0; i--) {
+      const l = document.lineAt(i)
+      const text = l.text
+      if (text.trim() === '---') break
+
+      const m = text.match(/^(\s*)(\w+):/)
+      if (m) {
+        const indentation = m[1].length
+        if (indentation <= currentIndentation) {
+          return m[2]
+        }
+      }
+    }
+    return undefined
   }
 }
