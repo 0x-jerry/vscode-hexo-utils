@@ -168,7 +168,7 @@
       },
       {
         "command": "hexo.uploadImages",
-        "title": "Upload all local images",
+        "title": "Upload images in current file",
         "category": "Hexo Utils"
       },
       {
