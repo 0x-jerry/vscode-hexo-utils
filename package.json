@@ -61,6 +61,11 @@
           "default": true,
           "description": "Controls whether resolve image with hexo resource folder."
         },
+        "hexo.markdown.autoPreview": {
+          "type": "boolean",
+          "default": false,
+          "description": "Controls whether automatically trigger markdown side preview when opening a blog post."
+        },
         "hexo.upload": {
           "type": "boolean",
           "default": false,
