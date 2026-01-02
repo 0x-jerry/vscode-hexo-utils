@@ -32,9 +32,9 @@ export class UploadImages extends Command {
     // Find Markdown images
     while ((match = mdImageReg.exec(text)) !== null) {
       const matchIndex = match.index
-      // Skip if the match is inside an "original" comment
+      // Skip if the match is inside an HTML comment
       const beforeText = text.slice(0, matchIndex)
-      if (/<!--\s*original:\s*$/.test(beforeText)) {
+      if (beforeText.lastIndexOf('<!--') > beforeText.lastIndexOf('-->')) {
         continue
       }
 
@@ -58,9 +58,9 @@ export class UploadImages extends Command {
     // Find HTML images
     while ((match = htmlImageReg.exec(text)) !== null) {
       const matchIndex = match.index
-      // Skip if the match is inside an "original" comment
+      // Skip if the match is inside an HTML comment
       const beforeText = text.slice(0, matchIndex)
-      if (/<!--\s*original:\s*$/.test(beforeText)) {
+      if (beforeText.lastIndexOf('<!--') > beforeText.lastIndexOf('-->')) {
         continue
       }
 
@@ -114,6 +114,8 @@ export class UploadImages extends Command {
                 }
                 results.push({ range: m.range, newText })
               }
+            } else {
+              error(`Image file not found: ${absolutePath}`)
             }
           } catch (err) {
             error(`Failed to upload ${m.localPath}: ${err}`)
