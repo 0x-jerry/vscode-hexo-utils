@@ -75,7 +75,8 @@
           "type": "string",
           "enum": [
             "imgchr",
-            "tencentoss"
+            "tencentoss",
+            "custom"
           ],
           "default": "imgchr",
           "description": "Upload types."
@@ -116,6 +117,39 @@
             }
           }
         },
+        "hexo.uploadCustom": {
+          "type": "object",
+          "description": "Custom upload server configuration",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Upload API URL"
+            },
+            "method": {
+              "type": "string",
+              "default": "POST",
+              "description": "HTTP method"
+            },
+            "headers": {
+              "type": "object",
+              "description": "HTTP headers"
+            },
+            "extraFormData": {
+              "type": "object",
+              "description": "Additional form-data fields"
+            },
+            "fileKey": {
+              "type": "string",
+              "default": "file",
+              "description": "The key name for the file in form-data"
+            },
+            "urlPath": {
+              "type": "string",
+              "default": "url",
+              "description": "The path to the URL in the response JSON (e.g., 'url' or 'data.url')"
+            }
+          }
+        },
         "hexo.assetFolderType": {
           "type": "string",
           "enum": [
@@ -131,6 +165,11 @@
       {
         "command": "hexo.paste",
         "title": "Hexo Paste Image"
+      },
+      {
+        "command": "hexo.uploadImages",
+        "title": "Upload images in current file",
+        "category": "Hexo Utils"
       },
       {
         "command": "hexo.rename",
@@ -318,6 +357,13 @@
           "command": "hexo.new[draft]",
           "group": "navigation",
           "when": "view == hexo.draft"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "hexo.uploadImages",
+          "when": "editorLangId == markdown",
+          "group": "hexo@1"
         }
       ],
       "view/item/context": [

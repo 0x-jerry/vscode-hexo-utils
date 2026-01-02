@@ -23,6 +23,7 @@ export enum Commands {
   newDraft = 'hexo.new[draft]',
   moveToDraft = 'hexo.moveTo[draft]',
   moveToPost = 'hexo.moveTo[post]',
+  uploadImages = 'hexo.uploadImages',
 }
 
 export enum BuiltInCommands {

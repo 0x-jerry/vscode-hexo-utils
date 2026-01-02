@@ -13,6 +13,7 @@ export enum ConfigProperties {
   uploadType = 'uploadType',
   imgChr = 'uploadImgchr',
   tencentOSS = 'uploadTencentOSS',
+  customUpload = 'uploadCustom',
   generateTimeFormat = 'generateTimeFormat',
   assetFolderType = 'assetFolderType',
 }
@@ -20,6 +21,15 @@ export enum ConfigProperties {
 export interface ImgChrOption {
   username: string
   password: string
+}
+
+export interface CustomUploadOption {
+  url: string
+  method?: string
+  headers?: Record<string, string>
+  extraFormData?: Record<string, string>
+  fileKey?: string
+  urlPath?: string
 }
 
 export enum SortBy {
@@ -35,6 +45,7 @@ export enum AssetFolderType {
 export enum UploadType {
   imgchr = 'imgchr',
   tencentoss = 'tencentoss',
+  custom = 'custom',
 }
 
 export interface TencentOSSOption {
@@ -49,6 +60,7 @@ type ConfigTypeMap = {
   [ConfigProperties.generateTimeFormat]: string
   [ConfigProperties.hexoRoot]: string
   [ConfigProperties.imgChr]: ImgChrOption
+  [ConfigProperties.customUpload]: CustomUploadOption
   [ConfigProperties.includeDraft]: boolean
   [ConfigProperties.resolveMarkdownResource]: boolean
   [ConfigProperties.sortMethod]: SortBy
