@@ -14,7 +14,7 @@ export class CustomUploader {
       headers = {},
       extraFormData = {},
       fileKey = 'file',
-      urlPath = 'url',
+      responseUrlKey = 'url',
     } = this.option
 
     const form = new FormData()
@@ -40,15 +40,15 @@ export class CustomUploader {
       const data = res.data
       outputChannel.appendLine(`[CustomUploader] Response: ${JSON.stringify(data)}`)
 
-      // Extract URL from response based on urlPath
-      // Simple implementation: if urlPath is 'data.url', it will look for data.url
-      const keys = urlPath.split('.')
+      // Extract URL from response based on responseUrlKey
+      // Simple implementation: if responseUrlKey is 'data.url', it will look for data.url
+      const keys = responseUrlKey.split('.')
       let result = data
       for (const key of keys) {
         if (result && typeof result === 'object' && key in result) {
           result = result[key]
         } else {
-          throw new Error(`Failed to extract URL from response using path: ${urlPath}`)
+          throw new Error(`Failed to extract URL from response using path: ${responseUrlKey}`)
         }
       }
 
