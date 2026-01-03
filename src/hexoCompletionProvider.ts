@@ -34,13 +34,13 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       let key: string | undefined
 
       // tags: xxx, yyy
-      const tagMatch = lineTextBefore.match(new RegExp(`^${HexoMetadataKeys.tags}:\\s*(.*)$`))
+      const tagMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.tags}:\\s*(.*)$`))
       if (tagMatch) {
         key = HexoMetadataKeys.tags
       }
 
       // categories: xxx
-      const categoryMatch = lineTextBefore.match(new RegExp(`^${HexoMetadataKeys.categories}:\\s*(.*)$`))
+      const categoryMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`))
       if (categoryMatch) {
         key = HexoMetadataKeys.categories
       }
@@ -133,7 +133,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       const text = l.text
       if (text.trim() === '---') break
 
-      const m = text.match(/^(\s*)(\w+):/)
+      const m = text.match(/^(\s*)([\w-]+)\s*:/)
       if (m) {
         const indentation = m[1].length
         if (indentation <= currentIndentation) {

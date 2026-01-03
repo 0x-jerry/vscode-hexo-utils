@@ -31,6 +31,7 @@ export function activate(context: ExtensionContext) {
     ':',
     ' ',
     ',',
+    '[',
   )
 
   const codeLensProvider = languages.registerCodeLensProvider(selectors, new HexoCodeLensProvider())
