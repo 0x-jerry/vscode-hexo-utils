@@ -2,7 +2,7 @@
   "name": "vscode-hexo-utils",
   "displayName": "Hexo Utils",
   "description": "vscode extension for hexo",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
