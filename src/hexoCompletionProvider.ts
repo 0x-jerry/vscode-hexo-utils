@@ -12,7 +12,7 @@ import {
   CompletionItemKind,
 } from 'vscode'
 import { configs } from './configs'
-import { MetadataManager } from './metadataManager'
+import { HexoMetadataUtils } from './hexoMetadata'
 
 export class HexoCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -52,14 +52,14 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       }
 
       if (key === 'tags') {
-        const tags = await MetadataManager.getInstance().getTags()
+        const tags = await HexoMetadataUtils.getTags()
         return tags.map((tag) => {
           return new CompletionItem(tag, CompletionItemKind.Keyword)
         })
       }
 
       if (key === 'categories') {
-        const categories = await MetadataManager.getInstance().getCategories()
+        const categories = await HexoMetadataUtils.getCategories()
         return categories.map((cat) => {
           const item = new CompletionItem(cat, CompletionItemKind.Keyword)
           const parts = cat.split(' / ')

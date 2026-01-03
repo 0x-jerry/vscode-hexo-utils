@@ -1,7 +1,7 @@
 import { window, type TextEditor, Range } from 'vscode'
 import yamljs from 'yamljs'
 import { Command, command, Commands } from './common'
-import { MetadataManager } from '../metadataManager'
+import { HexoMetadataUtils } from '../hexoMetadata'
 
 abstract class ClassifyCommand extends Command {
   protected getCurrentValues(editor: TextEditor, key: string): string[] {
@@ -127,7 +127,7 @@ export class SelectTags extends ClassifyCommand {
     }
 
     const currentTags = this.getCurrentValues(editor, 'tags')
-    const allTags = await MetadataManager.getInstance().getTags()
+    const allTags = await HexoMetadataUtils.getTags()
 
     const items = allTags
       .map((tag) => ({

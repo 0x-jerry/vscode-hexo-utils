@@ -1,9 +1,7 @@
 import path from 'node:path'
-import { getMDFiles } from '../../utils'
 import { Commands } from '../../commands/common'
 import { HexoMetadataUtils } from '../../hexoMetadata'
 import { getConfig, ConfigProperties, configs } from '../../configs'
-import { MetadataManager } from '../../metadataManager'
 
 import {
   type TreeDataProvider,
@@ -39,7 +37,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
   refresh() {
     this._allItems = new Map()
-    MetadataManager.getInstance().getMetadataUtils(true).then(() => {
+    HexoMetadataUtils.get(true).then(() => {
       this._onDidChangeTreeData.fire(null)
     })
   }
@@ -63,15 +61,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
     const include = getConfig(ConfigProperties.includeDraft)
 
-    const postsPath = await getMDFiles(postFolder)
-
-    let draftsPath: Uri[] = []
-
-    if (include) {
-      draftsPath = await getMDFiles(draftFolder)
-    }
-
-    this._hexoMetadataUtils = await MetadataManager.getInstance().getMetadataUtils()
+    this._hexoMetadataUtils = await HexoMetadataUtils.get()
 
     const items: ClassifyItem[] = []
     if (element && this._hexoMetadataUtils) {

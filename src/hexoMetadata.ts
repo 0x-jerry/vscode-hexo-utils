@@ -1,7 +1,8 @@
 import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider'
 import path from 'node:path'
-import { ConfigProperties, getConfig, SortBy } from './configs'
+import { ConfigProperties, getConfig, SortBy, configs } from './configs'
 import type { Uri } from 'vscode'
+import { getMDFiles, getMDFileMetadata } from './utils'
 
 export interface IHexoMetadata {
   tags: string[]
@@ -23,6 +24,8 @@ interface IClassify {
 }
 
 export class HexoMetadataUtils {
+  private static _instance?: HexoMetadataUtils
+
   tags: IClassify[] = []
   categories: IClassify[] = []
 
@@ -44,6 +47,40 @@ export class HexoMetadataUtils {
     }
 
     this.sort()
+  }
+
+  static async get(forceRefresh = false): Promise<HexoMetadataUtils> {
+    if (HexoMetadataUtils._instance && !forceRefresh) {
+      return HexoMetadataUtils._instance
+    }
+
+    const postFolder = configs.paths.post
+    const draftFolder = configs.paths.draft
+    const includeDraft = getConfig(ConfigProperties.includeDraft)
+
+    const postsPath = await getMDFiles(postFolder)
+    let draftsPath: Uri[] = []
+    if (includeDraft) {
+      draftsPath = await getMDFiles(draftFolder)
+    }
+
+    const filesPath = postsPath.concat(draftsPath)
+    const filesData: IHexoMetadata[] = await Promise.all(
+      filesPath.map((filePath) => getMDFileMetadata(filePath)),
+    )
+
+    HexoMetadataUtils._instance = new HexoMetadataUtils(filesData)
+    return HexoMetadataUtils._instance
+  }
+
+  static async getTags(): Promise<string[]> {
+    const utils = await HexoMetadataUtils.get()
+    return utils.tags.map((t) => t.name)
+  }
+
+  static async getCategories(): Promise<string[]> {
+    const utils = await HexoMetadataUtils.get()
+    return utils.categories.map((c) => c.name)
   }
 
   private sort() {
