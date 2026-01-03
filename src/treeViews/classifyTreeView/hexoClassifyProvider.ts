@@ -69,8 +69,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
       if (classify) {
         for (const metadata of classify.files) {
-          const isDraft =
-            include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1
+          const isDraft = include && metadata.filePath.fsPath.startsWith(draftFolder.fsPath)
 
           const name = path.relative(
             isDraft ? draftFolder.fsPath : postFolder.fsPath,
@@ -119,8 +118,8 @@ export class ClassifyItem extends TreeItem {
     this.iconPath = uri
       ? ThemeIcon.File
       : {
-          dark: path.join(resourcesFolder, 'dark', `icon-${type}.svg`),
-          light: path.join(resourcesFolder, 'light', `icon-${type}.svg`),
+          dark: Uri.file(path.join(resourcesFolder, 'dark', `icon-${type}.svg`)),
+          light: Uri.file(path.join(resourcesFolder, 'light', `icon-${type}.svg`)),
         }
 
     if (uri) {
