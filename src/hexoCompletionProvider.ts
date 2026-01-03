@@ -52,22 +52,11 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       }
 
       if (key === 'tags') {
-        const tags = await HexoMetadataUtils.getTags()
-        return tags.map((tag) => {
-          return new CompletionItem(tag, CompletionItemKind.Keyword)
-        })
+        return this.completeByMetaKey('tags', await HexoMetadataUtils.getTags())
       }
 
       if (key === 'categories') {
-        const categories = await HexoMetadataUtils.getCategories()
-        return categories.map((cat) => {
-          const item = new CompletionItem(cat, CompletionItemKind.Keyword)
-          const parts = cat.split(' / ')
-          if (parts.length > 1) {
-            item.insertText = `[${parts.join(', ')}]`
-          }
-          return item
-        })
+        return this.completeByMetaKey('categories', await HexoMetadataUtils.getCategories())
       }
     }
 
@@ -101,6 +90,19 @@ export class HexoCompletionProvider implements CompletionItemProvider {
         )
         return item
       })
+    })
+  }
+
+  private completeByMetaKey(key: string, values: string[]): CompletionItem[] {
+    return values.map((val) => {
+      const item = new CompletionItem(val, CompletionItemKind.Keyword)
+      if (key === 'categories') {
+        const parts = val.split(' / ')
+        if (parts.length > 1) {
+          item.insertText = `[${parts.join(', ')}]`
+        }
+      }
+      return item
     })
   }
 

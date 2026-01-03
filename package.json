@@ -262,7 +262,6 @@
       },
       {
         "command": "hexo.delete",
-
         "title": "Delete",
         "category": "Hexo Utils",
         "icon": {
