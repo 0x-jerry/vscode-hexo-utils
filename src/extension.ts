@@ -9,6 +9,7 @@ import {
 } from 'vscode'
 import { registerCommands } from './commands'
 import { HexoCompletionProvider } from './hexoCompletionProvider'
+import { HexoCodeLensProvider } from './hexoCodeLensProvider'
 import plugin from './markdownItHexoResource'
 import { getConfig, ConfigProperties } from './configs'
 import { registerTreeViews } from './treeViews'
@@ -27,9 +28,15 @@ export function activate(context: ExtensionContext) {
     selectors,
     new HexoCompletionProvider(),
     '(',
+    ':',
+    ' ',
+    ',',
+    '[',
   )
 
-  context.subscriptions.push(completionItemProvider)
+  const codeLensProvider = languages.registerCodeLensProvider(selectors, new HexoCodeLensProvider())
+
+  context.subscriptions.push(completionItemProvider, codeLensProvider)
 
   registerAutoPreview(context)
 

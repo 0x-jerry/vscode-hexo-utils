@@ -1,7 +1,7 @@
 import path from 'node:path'
 import yamljs from 'yamljs'
 import { type Uri, window, workspace } from 'vscode'
-import type { IHexoMetadata } from '../hexoMetadata'
+import { type IHexoMetadata, HexoMetadataKeys } from '../hexoMetadata'
 
 /**
  * true if yse
@@ -36,10 +36,10 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
 
     const data = yamljs.parse(yamlData[1]) || {}
 
-    const categories: (string | string[])[] = Array.isArray(data.categories)
-      ? data.categories
-      : typeof data.categories === 'string'
-        ? [data.categories]
+    const categories: (string | string[])[] = Array.isArray(data[HexoMetadataKeys.categories])
+      ? data[HexoMetadataKeys.categories]
+      : typeof data[HexoMetadataKeys.categories] === 'string'
+        ? [data[HexoMetadataKeys.categories]]
         : []
 
     const hasSubCategory = categories.find((n) => Array.isArray(n))
@@ -51,12 +51,12 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
         : []
 
     const metadata = {
-      tags: Array.isArray(data.tags) ? data.tags : [],
+      tags: Array.isArray(data[HexoMetadataKeys.tags]) ? data[HexoMetadataKeys.tags] : [],
       filePath: uri,
       // →  · /
       categories: normalizedCategories,
-      title: data.title || '',
-      date: data.date || '',
+      title: data[HexoMetadataKeys.title] || '',
+      date: data[HexoMetadataKeys.date] || '',
       mtime: stat.mtime,
     }
 

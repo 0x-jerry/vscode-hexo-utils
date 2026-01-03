@@ -6,6 +6,8 @@ A sidebar for [Hexo] blog system.
 
 - Create new article with exists template
 - Sidebar, include tags, categories, posts and drafts
+- Front Matter completion for tags and categories
+- Front Matter shortcut action buttons (CodeLens) to select tags, update or insert date/updated fields
 - Preview image with assets folder
 - Hexo tag syntax highlight and hexo snippets
 - Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)

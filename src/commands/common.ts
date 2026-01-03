@@ -24,7 +24,10 @@ export enum Commands {
   moveToDraft = 'hexo.moveTo[draft]',
   moveToPost = 'hexo.moveTo[post]',
   uploadImages = 'hexo.uploadImages',
+  selectTags = 'hexo.selectTags',
+  updateDate = 'hexo.updateDate',
 }
+
 
 export enum BuiltInCommands {
   Open = 'vscode.open',

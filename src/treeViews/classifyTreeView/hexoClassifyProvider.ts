@@ -1,7 +1,6 @@
 import path from 'node:path'
-import { getMDFiles, getMDFileMetadata } from '../../utils'
 import { Commands } from '../../commands/common'
-import { HexoMetadataUtils, type IHexoMetadata } from '../../hexoMetadata'
+import { HexoMetadataUtils, HexoMetadataKeys } from '../../hexoMetadata'
 import { getConfig, ConfigProperties, configs } from '../../configs'
 
 import {
@@ -16,8 +15,8 @@ import {
 import { BaseDispose } from '../common'
 
 export enum ClassifyTypes {
-  category = 'categories',
-  tag = 'tags',
+  category = HexoMetadataKeys.categories,
+  tag = HexoMetadataKeys.tags,
 }
 
 export class HexoClassifyProvider extends BaseDispose implements TreeDataProvider<ClassifyItem> {
@@ -38,7 +37,9 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
   refresh() {
     this._allItems = new Map()
-    this._onDidChangeTreeData.fire(null)
+    HexoMetadataUtils.get(true).then(() => {
+      this._onDidChangeTreeData.fire(null)
+    })
   }
 
   getTreeItem(element: ClassifyItem): TreeItem | Thenable<TreeItem> {
@@ -60,19 +61,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
     const include = getConfig(ConfigProperties.includeDraft)
 
-    const postsPath = await getMDFiles(postFolder)
-
-    let draftsPath: Uri[] = []
-
-    if (include) {
-      draftsPath = await getMDFiles(draftFolder)
-    }
-
-    const filesPath = postsPath.concat(include ? draftsPath : [])
-
-    const filesData: IHexoMetadata[] = await Promise.all(
-      filesPath.map((filePath) => getMDFileMetadata(filePath)),
-    )
+    this._hexoMetadataUtils = await HexoMetadataUtils.get()
 
     const items: ClassifyItem[] = []
     if (element && this._hexoMetadataUtils) {
@@ -80,8 +69,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
       if (classify) {
         for (const metadata of classify.files) {
-          const isDraft =
-            include && draftsPath.findIndex((p) => p.fsPath === metadata.filePath.fsPath) !== -1
+          const isDraft = include && metadata.filePath.fsPath.startsWith(draftFolder.fsPath)
 
           const name = path.relative(
             isDraft ? draftFolder.fsPath : postFolder.fsPath,
@@ -96,7 +84,6 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
         }
       }
     } else {
-      this._hexoMetadataUtils = new HexoMetadataUtils(filesData)
       const classifies = this._hexoMetadataUtils[this.type]
 
       for (const t of classifies) {
@@ -131,8 +118,8 @@ export class ClassifyItem extends TreeItem {
     this.iconPath = uri
       ? ThemeIcon.File
       : {
-          dark: path.join(resourcesFolder, 'dark', `icon-${type}.svg`),
-          light: path.join(resourcesFolder, 'light', `icon-${type}.svg`),
+          dark: Uri.file(path.join(resourcesFolder, 'dark', `icon-${type}.svg`)),
+          light: Uri.file(path.join(resourcesFolder, 'light', `icon-${type}.svg`)),
         }
 
     if (uri) {

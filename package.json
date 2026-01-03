@@ -256,6 +256,11 @@
         "category": "Hexo Utils"
       },
       {
+        "command": "hexo.selectTags",
+        "title": "Select Tags",
+        "category": "Hexo Utils"
+      },
+      {
         "command": "hexo.delete",
         "title": "Delete",
         "category": "Hexo Utils",
