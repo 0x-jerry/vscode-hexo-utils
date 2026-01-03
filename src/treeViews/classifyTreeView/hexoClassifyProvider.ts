@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { Commands } from '../../commands/common'
-import { HexoMetadataUtils } from '../../hexoMetadata'
+import { HexoMetadataUtils, HexoMetadataKeys } from '../../hexoMetadata'
 import { getConfig, ConfigProperties, configs } from '../../configs'
 
 import {
@@ -15,8 +15,8 @@ import {
 import { BaseDispose } from '../common'
 
 export enum ClassifyTypes {
-  category = 'categories',
-  tag = 'tags',
+  category = HexoMetadataKeys.categories,
+  tag = HexoMetadataKeys.tags,
 }
 
 export class HexoClassifyProvider extends BaseDispose implements TreeDataProvider<ClassifyItem> {

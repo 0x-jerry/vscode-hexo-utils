@@ -1,7 +1,7 @@
 import { window, type TextEditor, Range } from 'vscode'
 import yamljs from 'yamljs'
 import { Command, command, Commands } from './common'
-import { HexoMetadataUtils } from '../hexoMetadata'
+import { HexoMetadataUtils, HexoMetadataKeys } from '../hexoMetadata'
 
 abstract class ClassifyCommand extends Command {
   protected getCurrentValues(editor: TextEditor, key: string): string[] {
@@ -72,7 +72,7 @@ abstract class ClassifyCommand extends Command {
     }
 
     let newValue = ''
-    if (key === 'categories') {
+    if (key === HexoMetadataKeys.categories) {
       if (values.length === 0) {
         newValue = `${key}: []`
       } else if (values.length === 1 && !values[0].includes(' / ')) {
@@ -126,7 +126,7 @@ export class SelectTags extends ClassifyCommand {
       return
     }
 
-    const currentTags = this.getCurrentValues(editor, 'tags')
+    const currentTags = this.getCurrentValues(editor, HexoMetadataKeys.tags)
     const allTags = await HexoMetadataUtils.getTags()
 
     const items = allTags
@@ -144,7 +144,7 @@ export class SelectTags extends ClassifyCommand {
     if (selected) {
       this.updateEditor(
         editor,
-        'tags',
+        HexoMetadataKeys.tags,
         selected.map((item) => item.label),
       )
     }

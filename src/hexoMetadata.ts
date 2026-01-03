@@ -4,6 +4,14 @@ import { ConfigProperties, getConfig, SortBy, configs } from './configs'
 import type { Uri } from 'vscode'
 import { getMDFiles, getMDFileMetadata } from './utils'
 
+export enum HexoMetadataKeys {
+  tags = 'tags',
+  categories = 'categories',
+  title = 'title',
+  date = 'date',
+  updated = 'updated',
+}
+
 export interface IHexoMetadata {
   tags: string[]
   categories: string[]

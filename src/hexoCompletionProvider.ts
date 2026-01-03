@@ -12,7 +12,7 @@ import {
   CompletionItemKind,
 } from 'vscode'
 import { configs } from './configs'
-import { HexoMetadataUtils } from './hexoMetadata'
+import { HexoMetadataUtils, HexoMetadataKeys } from './hexoMetadata'
 
 export class HexoCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -34,15 +34,15 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       let key: string | undefined
 
       // tags: xxx, yyy
-      const tagMatch = lineTextBefore.match(/^tags:\s*(.*)$/)
+      const tagMatch = lineTextBefore.match(new RegExp(`^${HexoMetadataKeys.tags}:\\s*(.*)$`))
       if (tagMatch) {
-        key = 'tags'
+        key = HexoMetadataKeys.tags
       }
 
       // categories: xxx
-      const categoryMatch = lineTextBefore.match(/^categories:\s*(.*)$/)
+      const categoryMatch = lineTextBefore.match(new RegExp(`^${HexoMetadataKeys.categories}:\\s*(.*)$`))
       if (categoryMatch) {
-        key = 'categories'
+        key = HexoMetadataKeys.categories
       }
 
       // - xxx (list format)
@@ -51,12 +51,12 @@ export class HexoCompletionProvider implements CompletionItemProvider {
         key = this.getParentKey(document, position.line)
       }
 
-      if (key === 'tags') {
-        return this.completeByMetaKey('tags', await HexoMetadataUtils.getTags())
+      if (key === HexoMetadataKeys.tags) {
+        return this.completeByMetaKey(HexoMetadataKeys.tags, await HexoMetadataUtils.getTags())
       }
 
-      if (key === 'categories') {
-        return this.completeByMetaKey('categories', await HexoMetadataUtils.getCategories())
+      if (key === HexoMetadataKeys.categories) {
+        return this.completeByMetaKey(HexoMetadataKeys.categories, await HexoMetadataUtils.getCategories())
       }
     }
 
@@ -96,7 +96,7 @@ export class HexoCompletionProvider implements CompletionItemProvider {
   private completeByMetaKey(key: string, values: string[]): CompletionItem[] {
     return values.map((val) => {
       const item = new CompletionItem(val, CompletionItemKind.Keyword)
-      if (key === 'categories') {
+      if (key === HexoMetadataKeys.categories) {
         const parts = val.split(' / ')
         if (parts.length > 1) {
           item.insertText = `[${parts.join(', ')}]`

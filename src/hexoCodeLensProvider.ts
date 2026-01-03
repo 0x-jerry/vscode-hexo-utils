@@ -6,6 +6,7 @@ import {
   Range,
 } from 'vscode'
 import { Commands } from './commands/common'
+import { HexoMetadataKeys } from './hexoMetadata'
 
 export class HexoCodeLensProvider implements CodeLensProvider {
   provideCodeLenses(document: TextDocument, token: CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
@@ -31,7 +32,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
       }
 
       if (inFrontMatter) {
-        if (line.startsWith('tags:')) {
+        if (line.startsWith(`${HexoMetadataKeys.tags}:`)) {
           const range = new Range(i, 0, i, 0)
           lenses.push(
             new CodeLens(range, {
@@ -41,24 +42,24 @@ export class HexoCodeLensProvider implements CodeLensProvider {
           )
         }
 
-        if (line.startsWith('date:')) {
+        if (line.startsWith(`${HexoMetadataKeys.date}:`)) {
           const range = new Range(i, 0, i, 0)
           lenses.push(
             new CodeLens(range, {
               title: '$(calendar) Update Date',
               command: Commands.updateDate,
-              arguments: ['date'],
+              arguments: [HexoMetadataKeys.date],
             }),
           )
         }
 
-        if (line.startsWith('updated:')) {
+        if (line.startsWith(`${HexoMetadataKeys.updated}:`)) {
           const range = new Range(i, 0, i, 0)
           lenses.push(
             new CodeLens(range, {
               title: '$(calendar) Update Updated',
               command: Commands.updateDate,
-              arguments: ['updated'],
+              arguments: [HexoMetadataKeys.updated],
             }),
           )
         }
@@ -67,8 +68,10 @@ export class HexoCodeLensProvider implements CodeLensProvider {
 
     // If date or updated is missing, provide insert option
     if (fmStart !== -1 && fmEnd !== -1) {
-      const hasDate = lines.slice(fmStart, fmEnd).some((l) => l.startsWith('date:'))
-      const hasUpdated = lines.slice(fmStart, fmEnd).some((l) => l.startsWith('updated:'))
+      const hasDate = lines.slice(fmStart, fmEnd).some((l) => l.startsWith(`${HexoMetadataKeys.date}:`))
+      const hasUpdated = lines
+        .slice(fmStart, fmEnd)
+        .some((l) => l.startsWith(`${HexoMetadataKeys.updated}:`))
 
       const range = new Range(fmStart, 0, fmStart, 0)
       if (!hasDate) {
@@ -76,7 +79,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
           new CodeLens(range, {
             title: '$(calendar) Insert Date',
             command: Commands.updateDate,
-            arguments: ['date'],
+            arguments: [HexoMetadataKeys.date],
           }),
         )
       }
@@ -85,7 +88,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
           new CodeLens(range, {
             title: '$(calendar) Insert Updated',
             command: Commands.updateDate,
-            arguments: ['updated'],
+            arguments: [HexoMetadataKeys.updated],
           }),
         )
       }
