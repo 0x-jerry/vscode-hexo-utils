@@ -6,14 +6,14 @@ A sidebar for [Hexo] blog system.
 
 - Create new article with exists template
 - Sidebar, include tags, categories, posts and drafts
-- Front Matter completion for tags and categories
-- Front Matter shortcut action buttons (CodeLens) to select tags, update or insert date/updated fields
+- Front Matter completion for tags and categories (Thanks [ruanimal])
+- Front Matter shortcut action buttons (CodeLens) to select tags, update or insert date/updated fields (Thanks [ruanimal])
 - Preview image with assets folder
 - Hexo tag syntax highlight and hexo snippets
 - Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)
 - Upload all local images in current file, it will replace the local path with the uploaded URL and keep the original path as a comment.
 - Support remote development
-- Automatically open Markdown side preview when opening a blog post
+- Automatically open Markdown side preview when opening a blog post (Thanks [ruanimal])
 - And more ...
 
 ![feature](docs-images/feature.png)
@@ -29,7 +29,7 @@ A sidebar for [Hexo] blog system.
 - `hexo.uploadType`: Support `imgchr, tencentoss, custom`.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.
 - `hexo.uploadTencentOSS`: Account settings for tencent OSS service. Only available when `hexo.upload` is `true`.(Thanks [abnernat])
-- `hexo.uploadCustom`: Custom upload server configuration. Only available when `hexo.upload` is `true`.
+- `hexo.uploadCustom`: Custom upload server configuration. Only available when `hexo.upload` is `true`.(Thanks [ruanimal])
 - `hexo.generateTimeFormat`: The time format when generate new article, default is ISO format. ([time-format-tokens])
 - `hexo.assetFolderType`: Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/sources/images/<__post>/`), see [#89](https://github.com/0x-jerry/vscode-hexo-utils/pull/89)
 
@@ -39,20 +39,20 @@ If you want to use a custom upload server, you can configure it as follows:
 
 ```json
 {
-    "hexo.uploadType": "custom",
-    "hexo.uploadCustom": {
-        "url": "https://xxxx.com/upload",
-        "method": "POST",
-        "fileKey": "file",
-        "responseUrlKey": "data.url",
-        "headers": {
-            "Authorization": "Bearer your_token"
-        },
-        "extraFormData": {
-            "account_id": "",
-            "secret_access_key": ""
-        }
+  "hexo.uploadType": "custom",
+  "hexo.uploadCustom": {
+    "url": "https://xxxx.com/upload",
+    "method": "POST",
+    "fileKey": "file",
+    "responseUrlKey": "data.url",
+    "headers": {
+      "Authorization": "Bearer your_token"
+    },
+    "extraFormData": {
+      "account_id": "",
+      "secret_access_key": ""
     }
+  }
 }
 ```
 
@@ -85,5 +85,6 @@ See [releases](https://github.com/0x-jerry/vscode-hexo-utils/releases).
 [vscode-paste-image]: https://github.com/mushanshitiancai/vscode-paste-image
 [time-format-tokens]: https://day.js.org/docs/en/plugin/custom-parse-format#list-of-all-available-format-tokens
 [abnernat]: https://github.com/abnernat
+[ruanimal]: https://github.com/ruanimal
 
 **Enjoy!**
