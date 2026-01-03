@@ -1,11 +1,18 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
+import {
+  type DocumentSelector,
+  type ExtensionContext,
+  languages,
+  window,
+  workspace,
+} from 'vscode'
 import { registerCommands } from './commands'
 import { HexoCompletionProvider } from './hexoCompletionProvider'
 import plugin from './markdownItHexoResource'
 import { getConfig, ConfigProperties } from './configs'
 import { registerTreeViews } from './treeViews'
+import { registerAutoPreview } from './autoPreview'
 import type { MarkdownIt } from './md-it'
 
 export function activate(context: ExtensionContext) {
@@ -23,6 +30,8 @@ export function activate(context: ExtensionContext) {
   )
 
   context.subscriptions.push(completionItemProvider)
+
+  registerAutoPreview(context)
 
   try {
     registerTreeViews(context)

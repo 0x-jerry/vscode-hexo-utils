@@ -11,6 +11,7 @@ A sidebar for [Hexo] blog system.
 - Paste image directly from clipboard, default shortcut is ctrl+alt+v. (Thanks [vscode-paste-image] project)
 - Upload all local images in current file, it will replace the local path with the uploaded URL and keep the original path as a comment.
 - Support remote development
+- Automatically open Markdown side preview when opening a blog post
 - And more ...
 
 ![feature](docs-images/feature.png)
@@ -21,6 +22,7 @@ A sidebar for [Hexo] blog system.
 - `hexo.includeDraft`: Controls whether include drafts in tag and category view container, default `false`.
 - `hexo.hexoProjectRoot`: `Hexo` project path(relative to current workspace root), default is workspace root.
 - `hexo.markdown.resource`: Controls whether resolve image with hexo resource folder, default is `true`.
+- `hexo.markdown.autoPreview`: Controls whether automatically trigger markdown side preview when opening a blog post, default `false`.
 - `hexo.upload`: Controls whether upload image when use paste image command.
 - `hexo.uploadType`: Support `imgchr, tencentoss, custom`.
 - `hexo.uploadImgchr`: Account settings for `https://imgchr.com/` site. Only available when `hexo.upload` is `true`.

@@ -7,6 +7,7 @@ export const ConfigSection = 'hexo'
 export enum ConfigProperties {
   includeDraft = 'includeDraft',
   resolveMarkdownResource = 'markdown.resource',
+  autoPreview = 'markdown.autoPreview',
   hexoRoot = 'hexoProjectRoot',
   sortMethod = 'sortMethod',
   upload = 'upload',
@@ -63,6 +64,7 @@ type ConfigTypeMap = {
   [ConfigProperties.customUpload]: CustomUploadOption
   [ConfigProperties.includeDraft]: boolean
   [ConfigProperties.resolveMarkdownResource]: boolean
+  [ConfigProperties.autoPreview]: boolean
   [ConfigProperties.sortMethod]: SortBy
   [ConfigProperties.tencentOSS]: TencentOSSOption
   [ConfigProperties.upload]: boolean
