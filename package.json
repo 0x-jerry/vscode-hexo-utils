@@ -448,7 +448,7 @@
     "@types/vscode": "^1.67.0",
     "@types/yamljs": "^0.2.34",
     "@vscode/vsce": "^3.6.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "cos-nodejs-sdk-v5": "^2.15.4",
     "dayjs": "^1.11.13",
     "debounce": "^2.2.0",
