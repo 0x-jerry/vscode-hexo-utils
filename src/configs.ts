@@ -29,7 +29,7 @@ export interface CustomUploadOption {
   headers?: Record<string, string>
   extraFormData?: Record<string, string>
   fileKey?: string
-  urlPath?: string
+  responseUrlKey?: string
 }
 
 export enum SortBy {

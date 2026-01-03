@@ -40,7 +40,7 @@ If you want to use a custom upload server, you can configure it as follows:
         "url": "https://xxxx.com/upload",
         "method": "POST",
         "fileKey": "file",
-        "urlPath": "data.url",
+        "responseUrlKey": "data.url",
         "headers": {
             "Authorization": "Bearer your_token"
         },
@@ -55,7 +55,7 @@ If you want to use a custom upload server, you can configure it as follows:
 - `url`: The API endpoint for uploading images.
 - `method`: HTTP method, default is `POST`.
 - `fileKey`: The form-data key name for the file, default is `file`.
-- `urlPath`: The path to the image URL in the response JSON (e.g., `url` or `data.url`).
+- `responseUrlKey`: The path to the image URL in the response JSON (e.g., `url` or `data.url`).
 - `headers`: Optional HTTP headers.
 - `extraFormData`: Optional additional form-data fields.
 
