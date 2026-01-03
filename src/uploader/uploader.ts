@@ -1,8 +1,8 @@
-import { getConfig, ConfigProperties, UploadType } from '../configs'
+import { ConfigProperties, getConfig, UploadType } from '../configs'
+import { outputChannel } from '../utils'
+import { CustomUploader } from './Custom'
 import { ImgChr } from './Imgchr'
 import { TencentOSS } from './TencentOSS'
-import { CustomUploader } from './Custom'
-import { outputChannel } from '../utils'
 
 export interface Uploader {
   upload(file: string): Promise<string>

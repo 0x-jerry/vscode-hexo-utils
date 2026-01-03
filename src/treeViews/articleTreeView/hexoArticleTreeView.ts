@@ -1,12 +1,12 @@
+import { commands, type TreeViewOptions, window } from 'vscode'
+import type { ArticleTypes, Commands } from '../../commands'
+import { sleep } from '../../utils'
+import { BaseTreeView, type ViewTypes } from '../common'
 import {
-  HexoArticleProvider,
   type ArticleItem,
   type HexoArticleOption,
+  HexoArticleProvider,
 } from './hexoArticleProvider'
-import type { ArticleTypes, Commands } from '../../commands'
-import { type TreeViewOptions, commands, window } from 'vscode'
-import { BaseTreeView, type ViewTypes } from '../common'
-import { sleep } from '../../utils'
 
 export class ArticleTreeView extends BaseTreeView<ArticleItem> {
   provider: HexoArticleProvider

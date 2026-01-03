@@ -1,15 +1,18 @@
 import {
-  type CodeLensProvider,
-  type TextDocument,
   type CancellationToken,
   CodeLens,
+  type CodeLensProvider,
   Range,
+  type TextDocument,
 } from 'vscode'
 import { Commands } from './commands/common'
 import { HexoMetadataKeys } from './hexoMetadata'
 
 export class HexoCodeLensProvider implements CodeLensProvider {
-  provideCodeLenses(document: TextDocument, token: CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
+  provideCodeLenses(
+    document: TextDocument,
+    token: CancellationToken,
+  ): CodeLens[] | Thenable<CodeLens[]> {
     const lenses: CodeLens[] = []
     const text = document.getText()
 
@@ -68,7 +71,9 @@ export class HexoCodeLensProvider implements CodeLensProvider {
 
     // If date or updated is missing, provide insert option
     if (fmStart !== -1 && fmEnd !== -1) {
-      const hasDate = lines.slice(fmStart, fmEnd).some((l) => l.startsWith(`${HexoMetadataKeys.date}:`))
+      const hasDate = lines
+        .slice(fmStart, fmEnd)
+        .some((l) => l.startsWith(`${HexoMetadataKeys.date}:`))
       const hasUpdated = lines
         .slice(fmStart, fmEnd)
         .some((l) => l.startsWith(`${HexoMetadataKeys.updated}:`))

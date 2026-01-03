@@ -1,9 +1,9 @@
-import Axios, { AxiosError } from 'axios'
-import FormData from 'form-data'
-import { warn } from '../utils'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import Axios, { AxiosError } from 'axios'
+import FormData from 'form-data'
 import type { ImgChrOption } from '../configs'
+import { warn } from '../utils'
 
 const axios = Axios.create({
   headers: {

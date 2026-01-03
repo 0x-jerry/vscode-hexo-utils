@@ -1,6 +1,6 @@
-import cos from 'cos-nodejs-sdk-v5'
-import path from 'node:path'
 import fs from 'node:fs'
+import path from 'node:path'
+import cos from 'cos-nodejs-sdk-v5'
 import type { TencentOSSOption } from '../configs'
 
 export class TencentOSS {

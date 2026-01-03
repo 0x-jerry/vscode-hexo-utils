@@ -1,7 +1,7 @@
-import { command, Command, type ICommandParsed, Commands } from './common'
-import { commands, workspace } from 'vscode'
 import debounce from 'debounce'
+import { commands, workspace } from 'vscode'
 import { ConfigProperties, ConfigSection } from '../configs'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class RefreshSidebar extends Command {

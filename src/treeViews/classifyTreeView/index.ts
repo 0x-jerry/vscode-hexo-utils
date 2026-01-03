@@ -1,7 +1,7 @@
 import { Commands } from '../../commands'
 import { treeView, ViewTypes } from '../common'
-import { ClassifyTreeView } from './hexoClassifyTreeView'
 import { ClassifyTypes } from './hexoClassifyProvider'
+import { ClassifyTreeView } from './hexoClassifyTreeView'
 
 @treeView()
 export class TagsClassifyTreeView extends ClassifyTreeView {

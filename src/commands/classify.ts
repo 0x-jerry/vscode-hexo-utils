@@ -1,7 +1,7 @@
-import { window, type TextEditor, Range } from 'vscode'
+import { Range, type TextEditor, window } from 'vscode'
 import yamljs from 'yamljs'
-import { Command, command, Commands } from './common'
-import { HexoMetadataUtils, HexoMetadataKeys } from '../hexoMetadata'
+import { HexoMetadataKeys, HexoMetadataUtils } from '../hexoMetadata'
+import { Command, Commands, command } from './common'
 
 abstract class ClassifyCommand extends Command {
   protected getCurrentValues(editor: TextEditor, key: string): string[] {
@@ -150,4 +150,3 @@ export class SelectTags extends ClassifyCommand {
     }
   }
 }
-

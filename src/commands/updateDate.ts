@@ -1,7 +1,7 @@
-import { window, type TextEditor, Range, Position } from 'vscode'
-import { Command, command, Commands, type ICommandParsed } from './common'
-import { getConfig, ConfigProperties } from '../configs'
 import dayjs from 'dayjs'
+import { Position, Range, type TextEditor, window } from 'vscode'
+import { ConfigProperties, getConfig } from '../configs'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class UpdateDate extends Command {

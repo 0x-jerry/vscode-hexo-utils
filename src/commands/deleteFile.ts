@@ -1,9 +1,9 @@
-import { error, isExist } from '../utils'
-import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
-import { Command, type ICommandParsed, Commands, command } from './common'
 import path from 'node:path'
-import { configs } from '../configs'
 import { Uri, workspace } from 'vscode'
+import { configs } from '../configs'
+import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
+import { error, isExist } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class DeleteFile extends Command {

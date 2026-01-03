@@ -1,17 +1,16 @@
 import path from 'node:path'
-import { Commands } from '../../commands/common'
-import { HexoMetadataUtils, HexoMetadataKeys } from '../../hexoMetadata'
-import { getConfig, ConfigProperties, configs } from '../../configs'
-
 import {
-  type TreeDataProvider,
   EventEmitter,
+  type ProviderResult,
+  ThemeIcon,
+  type TreeDataProvider,
   TreeItem,
   TreeItemCollapsibleState,
-  ThemeIcon,
   Uri,
-  type ProviderResult,
 } from 'vscode'
+import { Commands } from '../../commands/common'
+import { ConfigProperties, configs, getConfig } from '../../configs'
+import { HexoMetadataKeys, HexoMetadataUtils } from '../../hexoMetadata'
 import { BaseDispose } from '../common'
 
 export enum ClassifyTypes {

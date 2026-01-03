@@ -1,18 +1,18 @@
 import path from 'node:path'
 import {
-  type CompletionItemProvider,
-  type TextDocument,
   type CancellationToken,
-  type Position,
   type CompletionContext,
   CompletionItem,
+  CompletionItemKind,
+  type CompletionItemProvider,
   type CompletionList,
   MarkdownString,
+  type Position,
+  type TextDocument,
   workspace,
-  CompletionItemKind,
 } from 'vscode'
 import { configs } from './configs'
-import { HexoMetadataUtils, HexoMetadataKeys } from './hexoMetadata'
+import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
 
 export class HexoCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -40,7 +40,9 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       }
 
       // categories: xxx
-      const categoryMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`))
+      const categoryMatch = lineTextBefore.match(
+        new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`),
+      )
       if (categoryMatch) {
         key = HexoMetadataKeys.categories
       }
@@ -56,12 +58,15 @@ export class HexoCompletionProvider implements CompletionItemProvider {
       }
 
       if (key === HexoMetadataKeys.categories) {
-        return this.completeByMetaKey(HexoMetadataKeys.categories, await HexoMetadataUtils.getCategories())
+        return this.completeByMetaKey(
+          HexoMetadataKeys.categories,
+          await HexoMetadataUtils.getCategories(),
+        )
       }
     }
 
     // ![xxx]()
-    const matches = lineTextBefore.match(/!\[[^\]]*?\]\(([^\)]*?)[\\\/]?[^\\\/\)]*$/)
+    const matches = lineTextBefore.match(/!\[[^\]]*?\]\(([^)]*?)[\\/]?[^\\/)]*$/)
 
     if (!(matches && matches[1] !== undefined)) {
       return []

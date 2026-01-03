@@ -1,7 +1,7 @@
-import { ArticleTreeView } from './hexoArticleTreeView'
 import { ArticleTypes, Commands } from '../../commands'
 import { treeView, ViewTypes } from '../common'
 import { mineTypePrefix } from './const'
+import { ArticleTreeView } from './hexoArticleTreeView'
 
 @treeView()
 export class PostArticleTreeView extends ArticleTreeView {

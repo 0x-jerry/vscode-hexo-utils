@@ -1,11 +1,5 @@
-import {
-  window,
-  workspace,
-  commands,
-  ViewColumn,
-  type ExtensionContext,
-} from 'vscode'
-import { getConfig, ConfigProperties, configs } from './configs'
+import { commands, type ExtensionContext, ViewColumn, window, workspace } from 'vscode'
+import { ConfigProperties, configs, getConfig } from './configs'
 
 export function registerAutoPreview(context: ExtensionContext) {
   let lastActiveFile: string | undefined
@@ -75,7 +69,11 @@ export function registerAutoPreview(context: ExtensionContext) {
           for (const group of tabGroups.all) {
             for (const tab of group.tabs) {
               const input = tab.input as any
-              if (input && typeof input.viewType === 'string' && input.viewType.includes('markdown.preview')) {
+              if (
+                input &&
+                typeof input.viewType === 'string' &&
+                input.viewType.includes('markdown.preview')
+              ) {
                 // Try to match URI in any property of the input object
                 const isMatch = Object.values(input).some(
                   (val: any) =>

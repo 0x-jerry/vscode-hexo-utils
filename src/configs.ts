@@ -1,5 +1,5 @@
-import { Uri, workspace } from 'vscode'
 import path from 'node:path'
+import { Uri, workspace } from 'vscode'
 import yamljs from 'yamljs'
 
 export const ConfigSection = 'hexo'

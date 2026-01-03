@@ -1,9 +1,9 @@
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { Uri, window } from 'vscode'
-import { ConfigProperties, AssetFolderType, configs, getConfig } from './configs'
+import { AssetFolderType, ConfigProperties, configs, getConfig } from './configs'
+import { type MarkdownIt, type StateInline, Token } from './md-it'
 import { isVirtualWorkspace } from './utils'
-import { Token, type MarkdownIt, type StateInline } from './md-it'
-import { existsSync } from 'node:fs'
 
 type ResolveHexoTag = (status: StateInline, ...attrs: string[]) => unknown
 

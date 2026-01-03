@@ -1,4 +1,4 @@
-import { type ExtensionContext, Disposable, commands } from 'vscode'
+import { commands, Disposable, type ExtensionContext } from 'vscode'
 
 /**
  * hexo.<command>[[...args]]
@@ -27,7 +27,6 @@ export enum Commands {
   selectTags = 'hexo.selectTags',
   updateDate = 'hexo.updateDate',
 }
-
 
 export enum BuiltInCommands {
   Open = 'vscode.open',

@@ -1,9 +1,9 @@
+import fs from 'node:fs'
 import path from 'node:path'
-import { window, Range, ProgressLocation } from 'vscode'
-import { Command, command, Commands } from './common'
+import { ProgressLocation, Range, window } from 'vscode'
 import { upload } from '../uploader/uploader'
 import { error, info } from '../utils'
-import fs from 'node:fs'
+import { Command, Commands, command } from './common'
 
 @command()
 export class UploadImages extends Command {
@@ -96,7 +96,10 @@ export class UploadImages extends Command {
           }
 
           const m = matches[i]
-          progress.report({ message: `Uploading ${i + 1}/${matches.length}: ${m.localPath}`, increment: (1 / matches.length) * 100 })
+          progress.report({
+            message: `Uploading ${i + 1}/${matches.length}: ${m.localPath}`,
+            increment: (1 / matches.length) * 100,
+          })
 
           try {
             const absolutePath = this.resolvePath(m.localPath, document.uri.fsPath)
@@ -110,7 +113,8 @@ export class UploadImages extends Command {
                   newText = `![${alt}](${url}) <!-- original: ${m.fullMatch} -->`
                 } else {
                   // HTML
-                  newText = m.fullMatch.replace(m.localPath, url) + ` <!-- original: ${m.fullMatch} -->`
+                  newText =
+                    m.fullMatch.replace(m.localPath, url) + ` <!-- original: ${m.fullMatch} -->`
                 }
                 results.push({ range: m.range, newText })
               }
@@ -131,7 +135,7 @@ export class UploadImages extends Command {
           })
           info(`Successfully uploaded ${results.length} images.`)
         }
-      }
+      },
     )
   }
 

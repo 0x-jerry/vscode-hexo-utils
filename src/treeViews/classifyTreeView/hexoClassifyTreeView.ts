@@ -1,8 +1,8 @@
+import { commands, type TreeViewOptions, window } from 'vscode'
 import type { Commands } from '../../commands'
-import { type TreeViewOptions, commands, window } from 'vscode'
-import { BaseTreeView, type ViewTypes } from '../common'
-import { type ClassifyItem, HexoClassifyProvider, type ClassifyTypes } from './hexoClassifyProvider'
 import { sleep } from '../../utils'
+import { BaseTreeView, type ViewTypes } from '../common'
+import { type ClassifyItem, type ClassifyTypes, HexoClassifyProvider } from './hexoClassifyProvider'
 
 export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
   provider: HexoClassifyProvider

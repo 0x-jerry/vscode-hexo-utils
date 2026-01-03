@@ -422,7 +422,7 @@
     "dev": "tsup --watch",
     "publish": "vsce publish --no-dependencies",
     "release": "x-release --publish false",
-    "lint": "biome lint --write"
+    "lint": "biome check --write"
   },
   "tsup": {
     "entry": [

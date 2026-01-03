@@ -1,10 +1,10 @@
 import {
-  type ExtensionContext,
-  window,
-  type TreeDataProvider,
-  type TreeViewOptions,
-  type TreeView,
   Disposable,
+  type ExtensionContext,
+  type TreeDataProvider,
+  type TreeView,
+  type TreeViewOptions,
+  window,
 } from 'vscode'
 
 export enum ViewTypes {

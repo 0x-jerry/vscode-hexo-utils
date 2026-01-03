@@ -1,10 +1,10 @@
 import path from 'node:path'
-import mustache from 'mustache'
-import { getDirFiles, askForNext, error, isExist } from '../utils'
-import { commands, Uri, window, workspace } from 'vscode'
-import { Command, Commands, command, type ICommandParsed } from './common'
-import { configs, getConfig, ConfigProperties } from '../configs'
 import dayjs from 'dayjs'
+import mustache from 'mustache'
+import { commands, Uri, window, workspace } from 'vscode'
+import { ConfigProperties, configs, getConfig } from '../configs'
+import { askForNext, error, getDirFiles, isExist } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 export enum ArticleTypes {
   post = 'post',

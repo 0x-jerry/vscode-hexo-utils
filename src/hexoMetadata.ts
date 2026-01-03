@@ -1,8 +1,8 @@
-import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider'
 import path from 'node:path'
-import { ConfigProperties, getConfig, SortBy, configs } from './configs'
 import type { Uri } from 'vscode'
-import { getMDFiles, getMDFileMetadata } from './utils'
+import { ConfigProperties, configs, getConfig, SortBy } from './configs'
+import { ClassifyTypes } from './treeViews/classifyTreeView/hexoClassifyProvider'
+import { getMDFileMetadata, getMDFiles } from './utils'
 
 export enum HexoMetadataKeys {
   tags = 'tags',

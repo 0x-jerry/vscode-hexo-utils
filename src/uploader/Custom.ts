@@ -1,6 +1,6 @@
+import fs from 'node:fs'
 import Axios from 'axios'
 import FormData from 'form-data'
-import fs from 'node:fs'
 import type { CustomUploadOption } from '../configs'
 import { outputChannel } from '../utils'
 

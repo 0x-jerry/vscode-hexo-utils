@@ -1,7 +1,7 @@
 import path from 'node:path'
-import yamljs from 'yamljs'
 import { type Uri, window, workspace } from 'vscode'
-import { type IHexoMetadata, HexoMetadataKeys } from '../hexoMetadata'
+import yamljs from 'yamljs'
+import { HexoMetadataKeys, type IHexoMetadata } from '../hexoMetadata'
 
 /**
  * true if yse

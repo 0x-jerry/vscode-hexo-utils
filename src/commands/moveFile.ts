@@ -1,11 +1,11 @@
 import path from 'node:path'
-import { askForNext, isExist } from '../utils'
-import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
-import { ArticleTypes } from './createArticle'
-import { Command, command, type ICommandParsed, Commands } from './common'
-import { AssetFolderType, ConfigProperties, configs, getConfig } from '../configs'
-import { rename } from './utils'
 import { Uri } from 'vscode'
+import { AssetFolderType, ConfigProperties, configs, getConfig } from '../configs'
+import type { ArticleItem } from '../treeViews/articleTreeView/hexoArticleProvider'
+import { askForNext, isExist } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
+import { ArticleTypes } from './createArticle'
+import { rename } from './utils'
 
 @command()
 export class MoveFile extends Command {

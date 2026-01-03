@@ -1,5 +1,5 @@
-import { type Uri, commands, window, workspace } from 'vscode'
-import { Command, type ICommandParsed, command, Commands, BuiltInCommands } from './common'
+import { commands, type Uri, window, workspace } from 'vscode'
+import { BuiltInCommands, Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class OpenFile extends Command {

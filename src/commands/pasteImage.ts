@@ -1,12 +1,12 @@
-import path from 'node:path'
-import os from 'node:os'
-import dayjs from 'dayjs'
 import { spawn } from 'node:child_process'
-import { window, type TextEditor, ProgressLocation, workspace, Uri } from 'vscode'
-import { warn, error, askForNext, isExist } from '../utils'
-import { Command, type ICommandParsed, command, Commands } from './common'
+import os from 'node:os'
+import path from 'node:path'
+import dayjs from 'dayjs'
+import { ProgressLocation, type TextEditor, Uri, window, workspace } from 'vscode'
+import { AssetFolderType, ConfigProperties, configs, getConfig } from '../configs'
 import { upload } from '../uploader/uploader'
-import { getConfig, ConfigProperties, configs, AssetFolderType } from '../configs'
+import { askForNext, error, isExist, warn } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class PasteImage extends Command {
@@ -44,7 +44,7 @@ export class PasteImage extends Command {
 
     let name = dayjs().format('YYYY-MM-DDTHHmmss.png')
 
-    if (selectText && !/[\/\\:*?<>|\s]/.test(selectText)) {
+    if (selectText && !/[/\\:*?<>|\s]/.test(selectText)) {
       name = `${selectText}.png`
     }
 
