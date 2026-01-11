@@ -12,6 +12,7 @@ export enum ViewTypes {
   draft = 'hexo.draft',
   categories = 'hexo.categories',
   tags = 'hexo.tags',
+  toc = 'hexo.toc',
 }
 
 export class BaseDispose implements Disposable {

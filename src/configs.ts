@@ -19,6 +19,7 @@ export enum ConfigProperties {
   assetFolderType = 'assetFolderType',
   deployCommand = 'deploy.command',
   showDeployButton = 'deploy.showButton',
+  enableTocNumbering = 'toc.enableNumbering',
 }
 
 export interface ImgChrOption {
@@ -73,6 +74,7 @@ type ConfigTypeMap = {
   [ConfigProperties.uploadType]: UploadType
   [ConfigProperties.deployCommand]: string
   [ConfigProperties.showDeployButton]: boolean
+  [ConfigProperties.enableTocNumbering]: boolean
 }
 
 export function getConfig<T extends ConfigProperties>(propName: T, section = ConfigSection) {

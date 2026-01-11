@@ -173,6 +173,11 @@
           "type": "boolean",
           "default": false,
           "description": "Controls whether show deploy button on editor title."
+        },
+        "hexo.toc.enableNumbering": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-numbering for TOC."
         }
       }
     },
@@ -289,6 +294,16 @@
         "title": "Deploy",
         "category": "Hexo Utils",
         "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "hexo.toc.rename",
+        "title": "Rename",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.toc.delete",
+        "title": "Delete",
+        "category": "Hexo Utils"
       }
     ],
     "keybindings": [
@@ -327,6 +342,10 @@
         {
           "id": "hexo.tags",
           "name": "tags"
+        },
+        {
+          "id": "hexo.toc",
+          "name": "toc"
         }
       ]
     },
@@ -350,6 +369,14 @@
         },
         {
           "command": "hexo.delete",
+          "when": "false"
+        },
+        {
+          "command": "hexo.toc.rename",
+          "when": "false"
+        },
+        {
+          "command": "hexo.toc.delete",
           "when": "false"
         }
       ],
@@ -418,6 +445,16 @@
         {
           "command": "hexo.rename",
           "when": "view =~ /hexo.(draft|post)/",
+          "group": "hexo@2"
+        },
+        {
+          "command": "hexo.toc.rename",
+          "when": "view == hexo.toc",
+          "group": "hexo@1"
+        },
+        {
+          "command": "hexo.toc.delete",
+          "when": "view == hexo.toc",
           "group": "hexo@2"
         }
       ]
