@@ -26,6 +26,7 @@ export enum Commands {
   uploadImages = 'hexo.uploadImages',
   selectTags = 'hexo.selectTags',
   updateDate = 'hexo.updateDate',
+  deploy = 'hexo.deploy',
 }
 
 export enum BuiltInCommands {
