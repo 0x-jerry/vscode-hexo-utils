@@ -273,6 +273,52 @@
         "command": "hexo.open",
         "title": "Open a article",
         "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.classify.add[tags]",
+        "title": "Add Tag",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-add.svg",
+          "dark": "resources/dark/icon-add.svg"
+        }
+      },
+      {
+        "command": "hexo.classify.add[categories]",
+        "title": "Add Category",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-add.svg",
+          "dark": "resources/dark/icon-add.svg"
+        }
+      },
+      {
+        "command": "hexo.classify.rename[tags]",
+        "title": "Rename Tag",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.classify.rename[categories]",
+        "title": "Rename Category",
+        "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.classify.delete[tags]",
+        "title": "Delete Tag",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-trash.svg",
+          "dark": "resources/dark/icon-trash.svg"
+        }
+      },
+      {
+        "command": "hexo.classify.delete[categories]",
+        "title": "Delete Category",
+        "category": "Hexo Utils",
+        "icon": {
+          "light": "resources/light/icon-trash.svg",
+          "dark": "resources/dark/icon-trash.svg"
+        }
       }
     ],
     "keybindings": [
@@ -335,6 +381,30 @@
         {
           "command": "hexo.delete",
           "when": "false"
+        },
+        {
+          "command": "hexo.classify.add[tags]",
+          "when": "false"
+        },
+        {
+          "command": "hexo.classify.add[categories]",
+          "when": "false"
+        },
+        {
+          "command": "hexo.classify.rename[tags]",
+          "when": "false"
+        },
+        {
+          "command": "hexo.classify.rename[categories]",
+          "when": "false"
+        },
+        {
+          "command": "hexo.classify.delete[tags]",
+          "when": "false"
+        },
+        {
+          "command": "hexo.classify.delete[categories]",
+          "when": "false"
         }
       ],
       "view/title": [
@@ -396,6 +466,36 @@
           "command": "hexo.rename",
           "when": "view =~ /hexo.(draft|post)/",
           "group": "hexo@2"
+        },
+        {
+          "command": "hexo.classify.rename[tags]",
+          "when": "view == hexo.tags && viewItem == hexoClassifyItem",
+          "group": "hexo@2"
+        },
+        {
+          "command": "hexo.classify.rename[categories]",
+          "when": "view == hexo.categories && viewItem == hexoClassifyItem",
+          "group": "hexo@2"
+        },
+        {
+          "command": "hexo.classify.add[tags]",
+          "when": "view == hexo.tags && viewItem == hexoClassifyItem",
+          "group": "hexo@1"
+        },
+        {
+          "command": "hexo.classify.add[categories]",
+          "when": "view == hexo.categories && viewItem == hexoClassifyItem",
+          "group": "hexo@1"
+        },
+        {
+          "command": "hexo.classify.delete[tags]",
+          "when": "view == hexo.tags && viewItem == hexoClassifyItem",
+          "group": "hexo@3"
+        },
+        {
+          "command": "hexo.classify.delete[categories]",
+          "when": "view == hexo.categories && viewItem == hexoClassifyItem",
+          "group": "hexo@3"
         }
       ]
     },
@@ -446,7 +546,6 @@
     "@types/mustache": "^4.2.6",
     "@types/node": "^25.0.3",
     "@types/vscode": "^1.67.0",
-    "@types/yamljs": "^0.2.34",
     "@vscode/vsce": "^3.7.1",
     "axios": "^1.13.2",
     "cos-nodejs-sdk-v5": "^2.15.4",
@@ -458,6 +557,6 @@
     "mustache": "^4.2.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "yamljs": "^0.3.0"
+    "yaml": "^2.8.2"
   }
 }

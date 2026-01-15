@@ -25,7 +25,14 @@ export enum Commands {
   moveToPost = 'hexo.moveTo[post]',
   uploadImages = 'hexo.uploadImages',
   selectTags = 'hexo.selectTags',
+  selectCategories = 'hexo.selectCategories',
   updateDate = 'hexo.updateDate',
+  classifyAddTag = 'hexo.classify.add[tags]',
+  classifyAddCategory = 'hexo.classify.add[categories]',
+  classifyRenameTag = 'hexo.classify.rename[tags]',
+  classifyRenameCategory = 'hexo.classify.rename[categories]',
+  classifyDeleteTag = 'hexo.classify.delete[tags]',
+  classifyDeleteCategory = 'hexo.classify.delete[categories]',
 }
 
 export enum BuiltInCommands {

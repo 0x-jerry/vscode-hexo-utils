@@ -5,9 +5,14 @@ import { registerAutoPreview } from './autoPreview'
 import { registerCommands } from './commands'
 import { ConfigProperties, getConfig } from './configs'
 import { HexoCodeLensProvider } from './hexoCodeLensProvider'
-import { HexoCompletionProvider } from './hexoCompletionProvider'
+import {
+  HexoFrontMatterCompletionProvider,
+  HexoImageCompletionProvider,
+} from './hexoCompletionProvider'
 import plugin from './markdownItHexoResource'
 import type { MarkdownIt } from './md-it'
+import debounce from 'debounce'
+import { HexoMetadataUtils } from './hexoMetadata'
 import { registerTreeViews } from './treeViews'
 
 export function activate(context: ExtensionContext) {
@@ -16,21 +21,39 @@ export function activate(context: ExtensionContext) {
     return
   }
 
+  const debouncedUpdate = debounce((uri) => {
+    HexoMetadataUtils.update(uri)
+  }, 1000)
+
+  context.subscriptions.push(
+    workspace.onDidChangeTextDocument((e) => {
+      if (e.document.languageId === 'markdown') {
+        debouncedUpdate(e.document.uri)
+      }
+    }),
+  )
+
   const selectors: DocumentSelector = [{ language: 'markdown' }]
 
-  const completionItemProvider = languages.registerCompletionItemProvider(
+  const frontMatterCompletionProvider = languages.registerCompletionItemProvider(
     selectors,
-    new HexoCompletionProvider(),
-    '(',
+    new HexoFrontMatterCompletionProvider(),
     ':',
     ' ',
     ',',
     '[',
+    '\n',
+  )
+
+  const imageCompletionProvider = languages.registerCompletionItemProvider(
+    selectors,
+    new HexoImageCompletionProvider(),
+    '(',
   )
 
   const codeLensProvider = languages.registerCodeLensProvider(selectors, new HexoCodeLensProvider())
 
-  context.subscriptions.push(completionItemProvider, codeLensProvider)
+  context.subscriptions.push(frontMatterCompletionProvider, imageCompletionProvider, codeLensProvider)
 
   registerAutoPreview(context)
 
