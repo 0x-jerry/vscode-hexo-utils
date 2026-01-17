@@ -33,6 +33,7 @@ export enum Commands {
   classifyRenameCategory = 'hexo.classify.rename[categories]',
   classifyDeleteTag = 'hexo.classify.delete[tags]',
   classifyDeleteCategory = 'hexo.classify.delete[categories]',
+  deploy = 'hexo.deploy',
 }
 
 export enum BuiltInCommands {

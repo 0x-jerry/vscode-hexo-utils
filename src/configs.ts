@@ -17,6 +17,8 @@ export enum ConfigProperties {
   customUpload = 'uploadCustom',
   generateTimeFormat = 'generateTimeFormat',
   assetFolderType = 'assetFolderType',
+  deployCommand = 'deploy.command',
+  showDeployButton = 'deploy.showButton',
 }
 
 export interface ImgChrOption {
@@ -69,6 +71,8 @@ type ConfigTypeMap = {
   [ConfigProperties.tencentOSS]: TencentOSSOption
   [ConfigProperties.upload]: boolean
   [ConfigProperties.uploadType]: UploadType
+  [ConfigProperties.deployCommand]: string
+  [ConfigProperties.showDeployButton]: boolean
 }
 
 export function getConfig<T extends ConfigProperties>(propName: T, section = ConfigSection) {
