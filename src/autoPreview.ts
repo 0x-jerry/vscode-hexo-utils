@@ -1,9 +1,7 @@
-import { commands, type ExtensionContext, ViewColumn, window, workspace } from 'vscode'
+import { commands, type ExtensionContext, type Tab, ViewColumn, window } from 'vscode'
 import { ConfigProperties, configs, getConfig } from './configs'
 
 export function registerAutoPreview(context: ExtensionContext) {
-  let lastActiveFile: string | undefined
-
   context.subscriptions.push(
     window.onDidChangeActiveTextEditor(async (editor) => {
       if (!editor) return
@@ -11,59 +9,25 @@ export function registerAutoPreview(context: ExtensionContext) {
       const autoPreview = getConfig(ConfigProperties.autoPreview)
       if (!autoPreview) return
 
-      const tabGroups = window.tabGroups
-      const activeTab = tabGroups?.activeTabGroup?.activeTab
-      const isDiff =
-        activeTab?.input && 'original' in (activeTab.input as any) && 'modified' in (activeTab.input as any)
+      if (isActiveDiffTab()) {
+        const previewTab = getMarkdownPreviewTab()
 
-      if (isDiff) {
-        if (tabGroups) {
-          for (const group of tabGroups.all) {
-            for (const tab of group.tabs) {
-              const input = tab.input as any
-              if (
-                input &&
-                typeof input.viewType === 'string' &&
-                input.viewType.includes('markdown.preview')
-              ) {
-                await tabGroups.close(tab)
-                lastActiveFile = undefined
-              }
-            }
-          }
+        if (previewTab) {
+          window.tabGroups.close(previewTab)
         }
         return
       }
 
+      const previewTab = getMarkdownPreviewTab()
+      if (previewTab) return
+
       const doc = editor.document
       if (doc.languageId !== 'markdown') return
-
-      const filePath = doc.uri.fsPath
-      if (lastActiveFile === filePath) return
 
       const isPost = doc.uri.toString().startsWith(configs.paths.post.toString())
       const isDraft = doc.uri.toString().startsWith(configs.paths.draft.toString())
 
       if (isPost || isDraft) {
-        lastActiveFile = filePath
-
-        const tabGroups = window.tabGroups
-        let isPreviewOpen = false
-
-        if (tabGroups) {
-          for (const group of tabGroups.all) {
-            for (const tab of group.tabs) {
-              const input = tab.input as any
-              if (input && typeof input.viewType === 'string' && input.viewType.includes('markdown.preview')) {
-                isPreviewOpen = true
-                break
-              }
-            }
-          }
-        }
-
-        if (isPreviewOpen) return
-
         // 2. Ensure the article is in the first column
         if (editor.viewColumn !== ViewColumn.One) {
           await window.showTextDocument(doc, { viewColumn: ViewColumn.One, preview: false })
@@ -76,10 +40,37 @@ export function registerAutoPreview(context: ExtensionContext) {
         await window.showTextDocument(doc, { viewColumn: ViewColumn.One, preserveFocus: false })
       }
     }),
-    workspace.onDidCloseTextDocument((doc) => {
-      if (lastActiveFile === doc.uri.fsPath) {
-        lastActiveFile = undefined
-      }
-    }),
   )
+}
+function isActiveDiffTab() {
+  const tabGroups = window.tabGroups
+  const activeTab = tabGroups.activeTabGroup.activeTab
+  const isDiff =
+    activeTab?.input &&
+    typeof activeTab.input === 'object' &&
+    'original' in activeTab.input &&
+    'modified' in activeTab.input
+
+  return isDiff
+}
+
+function isMarkdownPreviewTab(tab: Tab) {
+  const input = tab.input
+  return (
+    input &&
+    typeof input === 'object' &&
+    'viewType' in input &&
+    typeof input.viewType === 'string' &&
+    input.viewType.includes('markdown.preview')
+  )
+}
+
+function getMarkdownPreviewTab() {
+  for (const group of window.tabGroups.all) {
+    for (const tab of group.tabs) {
+      if (isMarkdownPreviewTab(tab)) {
+        return tab
+      }
+    }
+  }
 }
