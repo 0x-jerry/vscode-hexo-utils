@@ -15,7 +15,7 @@ A sidebar for [Hexo] blog system.
 - Support remote development
 - Automatically open Markdown side preview when opening a blog post (Thanks [ruanimal])
 - Deploy button in editor title bar to publish your blog with one click (Thanks [ruanimal])
-- Markdown Table of Contents (TOC) sidebar, support travel/rename/delete headings, and auto-numbering.
+- Markdown Table of Contents (TOC) sidebar, support travel/move headings, and auto-numbering.
 - And more ...
 
 ![feature](docs-images/feature.png)

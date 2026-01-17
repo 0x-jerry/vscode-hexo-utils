@@ -37,7 +37,6 @@ export class TocItem extends TreeItem {
       displayLabel,
       TreeItemCollapsibleState.Collapsed, // Will be updated after children are populated
     )
-    this.contextValue = 'tocItem'
     this.command = {
       command: 'hexo.toc.reveal',
       title: 'Reveal',

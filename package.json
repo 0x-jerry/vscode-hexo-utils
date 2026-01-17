@@ -294,16 +294,6 @@
         "title": "Deploy",
         "category": "Hexo Utils",
         "icon": "$(cloud-upload)"
-      },
-      {
-        "command": "hexo.toc.rename",
-        "title": "Rename",
-        "category": "Hexo Utils"
-      },
-      {
-        "command": "hexo.toc.delete",
-        "title": "Delete",
-        "category": "Hexo Utils"
       }
     ],
     "keybindings": [
@@ -369,14 +359,6 @@
         },
         {
           "command": "hexo.delete",
-          "when": "false"
-        },
-        {
-          "command": "hexo.toc.rename",
-          "when": "false"
-        },
-        {
-          "command": "hexo.toc.delete",
           "when": "false"
         }
       ],
@@ -445,16 +427,6 @@
         {
           "command": "hexo.rename",
           "when": "view =~ /hexo.(draft|post)/",
-          "group": "hexo@2"
-        },
-        {
-          "command": "hexo.toc.rename",
-          "when": "view == hexo.toc",
-          "group": "hexo@1"
-        },
-        {
-          "command": "hexo.toc.delete",
-          "when": "view == hexo.toc",
           "group": "hexo@2"
         }
       ]
