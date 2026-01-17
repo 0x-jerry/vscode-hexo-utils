@@ -171,7 +171,7 @@
         },
         "hexo.deploy.showButton": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Controls whether show deploy button on editor title."
         }
       }
