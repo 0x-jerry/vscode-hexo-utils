@@ -8,23 +8,15 @@ export function registerAutoPreview(context: ExtensionContext) {
     window.onDidChangeActiveTextEditor(async (editor) => {
       if (!editor) return
 
-      const doc = editor.document
-      if (doc.languageId !== 'markdown') return
-
       const autoPreview = getConfig(ConfigProperties.autoPreview)
       if (!autoPreview) return
 
-      const filePath = doc.uri.fsPath
-      if (lastActiveFile === filePath) return
+      const tabGroups = window.tabGroups
+      const activeTab = tabGroups?.activeTabGroup?.activeTab
+      const isDiff =
+        activeTab?.input && 'original' in (activeTab.input as any) && 'modified' in (activeTab.input as any)
 
-      const isPost = doc.uri.toString().startsWith(configs.paths.post.toString())
-      const isDraft = doc.uri.toString().startsWith(configs.paths.draft.toString())
-
-      if (isPost || isDraft) {
-        lastActiveFile = filePath
-
-        // 1. Close all existing markdown previews to keep only one preview column
-        const tabGroups = window.tabGroups
+      if (isDiff) {
         if (tabGroups) {
           for (const group of tabGroups.all) {
             for (const tab of group.tabs) {
@@ -35,10 +27,42 @@ export function registerAutoPreview(context: ExtensionContext) {
                 input.viewType.includes('markdown.preview')
               ) {
                 await tabGroups.close(tab)
+                lastActiveFile = undefined
               }
             }
           }
         }
+        return
+      }
+
+      const doc = editor.document
+      if (doc.languageId !== 'markdown') return
+
+      const filePath = doc.uri.fsPath
+      if (lastActiveFile === filePath) return
+
+      const isPost = doc.uri.toString().startsWith(configs.paths.post.toString())
+      const isDraft = doc.uri.toString().startsWith(configs.paths.draft.toString())
+
+      if (isPost || isDraft) {
+        lastActiveFile = filePath
+
+        const tabGroups = window.tabGroups
+        let isPreviewOpen = false
+
+        if (tabGroups) {
+          for (const group of tabGroups.all) {
+            for (const tab of group.tabs) {
+              const input = tab.input as any
+              if (input && typeof input.viewType === 'string' && input.viewType.includes('markdown.preview')) {
+                isPreviewOpen = true
+                break
+              }
+            }
+          }
+        }
+
+        if (isPreviewOpen) return
 
         // 2. Ensure the article is in the first column
         if (editor.viewColumn !== ViewColumn.One) {
@@ -55,39 +79,6 @@ export function registerAutoPreview(context: ExtensionContext) {
     workspace.onDidCloseTextDocument((doc) => {
       if (lastActiveFile === doc.uri.fsPath) {
         lastActiveFile = undefined
-      }
-
-      const autoPreview = getConfig(ConfigProperties.autoPreview)
-      if (!autoPreview) return
-
-      const isPost = doc.uri.toString().startsWith(configs.paths.post.toString())
-      const isDraft = doc.uri.toString().startsWith(configs.paths.draft.toString())
-
-      if (isPost || isDraft) {
-        const tabGroups = window.tabGroups
-        if (tabGroups) {
-          for (const group of tabGroups.all) {
-            for (const tab of group.tabs) {
-              const input = tab.input as any
-              if (
-                input &&
-                typeof input.viewType === 'string' &&
-                input.viewType.includes('markdown.preview')
-              ) {
-                // Try to match URI in any property of the input object
-                const isMatch = Object.values(input).some(
-                  (val: any) =>
-                    val?.toString?.() === doc.uri.toString() ||
-                    (val?.fsPath && val.fsPath === doc.uri.fsPath),
-                )
-
-                if (isMatch) {
-                  tabGroups.close(tab)
-                }
-              }
-            }
-          }
-        }
       }
     }),
   )
