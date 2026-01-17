@@ -18,9 +18,6 @@ export const frontMatterKeys = [
   'published',
 ]
 
-/**
- * Update a specific key in the front matter using 'yaml' library to preserve comments and formatting.
- */
 const rangeCache: Record<string, { version: number; range: { start: number; end: number } | undefined }> =
   {}
 
@@ -82,9 +79,6 @@ export function parseFrontMatter<T = any>(text: string): T | undefined {
   }
 }
 
-/**
- * Update a specific key in the front matter using 'yaml' library to preserve comments and formatting.
- */
 export function updateFrontMatter(
   text: string,
   key: string,
@@ -121,9 +115,6 @@ export function updateFrontMatter(
   return `${beforeFM}\n${newFrontMatter}${afterFM}`
 }
 
-/**
- * Apply custom formatting to categories node
- */
 function applyCategoriesStyle(node: any) {
   if (yaml.isSeq(node)) {
     node.flow = false
@@ -135,9 +126,6 @@ function applyCategoriesStyle(node: any) {
   }
 }
 
-/**
- * Apply custom formatting to tags node
- */
 function applyTagsStyle(node: any) {
   if (yaml.isSeq(node)) {
     node.flow = true
@@ -166,9 +154,6 @@ export function prepareCategoriesValue(values: string[]): any {
   return result
 }
 
-/**
- * Prepare value for tags based on string[] input
- */
 export function prepareTagsValue(values: string[]): any {
   if (values.length === 0) return []
   if (values.length === 1) return values[0]

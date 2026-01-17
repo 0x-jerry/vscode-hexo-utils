@@ -72,7 +72,6 @@ export abstract class ClassifyCommand extends Command {
   }
 
   protected async updateEditor(editor: TextEditor, key: string, values: string[]) {
-    // 复用 updateFile 的逻辑
     await this.updateFile(editor.document.uri, key, values)
   }
 
