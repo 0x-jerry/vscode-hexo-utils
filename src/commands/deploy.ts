@@ -45,11 +45,15 @@ export class Deploy extends Command {
     try {
       await this.runCommand(deployCommand, hexoRoot)
       window.showInformationMessage('Hexo: Deploy completed successfully!')
-      outputChannel.appendLine(`[INFO] ${new Date().toLocaleString()}: Deploy completed successfully!`)
+      outputChannel.appendLine(
+        `[INFO] ${new Date().toLocaleString()}: Deploy completed successfully!`,
+      )
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error)
       window.showErrorMessage(`Hexo: Deploy failed - ${errorMessage}`)
-      outputChannel.appendLine(`[ERROR] ${new Date().toLocaleString()}: Deploy failed - ${errorMessage}`)
+      outputChannel.appendLine(
+        `[ERROR] ${new Date().toLocaleString()}: Deploy failed - ${errorMessage}`,
+      )
     }
   }
 
@@ -79,6 +83,7 @@ export class Deploy extends Command {
       })
 
       child.on('error', (error) => {
+        outputChannel.append(`[ERROR] ${new Date().toLocaleString()}: ${error.message}`)
         reject(error)
       })
 
