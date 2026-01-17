@@ -163,6 +163,16 @@
           ],
           "default": "post",
           "description": "Paste image folder type. (if `post`, paste image to current post folder, else the image would be at global folder `/sources/images/<__post>/`)"
+        },
+        "hexo.deploy.command": {
+          "type": "string",
+          "default": "npx hexo deploy",
+          "description": "Custom deploy command. The environment variable HEXO_ROOT will be set to the hexo project root path."
+        },
+        "hexo.deploy.showButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Controls whether show deploy button on editor title."
         }
       }
     },
@@ -273,6 +283,12 @@
         "command": "hexo.open",
         "title": "Open a article",
         "category": "Hexo Utils"
+      },
+      {
+        "command": "hexo.deploy",
+        "title": "Deploy",
+        "category": "Hexo Utils",
+        "icon": "$(cloud-upload)"
       }
     ],
     "keybindings": [
@@ -367,6 +383,13 @@
           "command": "hexo.new[draft]",
           "group": "navigation",
           "when": "view == hexo.draft"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "hexo.deploy",
+          "group": "navigation",
+          "when": "config.hexo.deploy.showButton"
         }
       ],
       "editor/context": [
