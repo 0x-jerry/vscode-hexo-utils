@@ -451,7 +451,7 @@
     "entry": [
       "src/extension.ts"
     ],
-    "sourcemap": true,
+    "sourcemap": false,
     "clean": true,
     "external": [
       "vscode"
