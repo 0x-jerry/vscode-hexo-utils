@@ -22,14 +22,11 @@ import { BaseDispose } from '../common'
 import { ConfigProperties, getConfig } from '../../configs'
 
 export class TocItem extends TreeItem {
-  public readonly parent?: TocItem
-
   constructor(
     public readonly displayLabel: string, // includes numbering if enabled
     public readonly symbol: DocumentSymbol,
     public readonly level: number,
     public readonly children: TocItem[] = [],
-    parent?: TocItem,
   ) {
     super(
       displayLabel,
@@ -40,13 +37,6 @@ export class TocItem extends TreeItem {
       title: 'Reveal',
       arguments: [{ lineStart: this.lineStart }],
     }
-    this.parent = parent
-    // Use defineProperty to make parent non-enumerable to avoid circular structure error during JSON.stringify
-    Object.defineProperty(this, 'parent', {
-      enumerable: false,
-      configurable: true,
-      writable: true,
-    })
   }
 
   get lineStart() {
@@ -115,7 +105,7 @@ export class HexoTocProvider
 
     const enableNumbering = getConfig(ConfigProperties.enableTocNumbering)
 
-    const convert = (symbol: DocumentSymbol, index: number, parentIndices: number[], parent?: TocItem): TocItem => {
+    const convert = (symbol: DocumentSymbol, index: number, parentIndices: number[]): TocItem => {
       const currentIndices = [...parentIndices, index + 1]
       // Remove all leading # and the following space
       const rawTitle = symbol.name.replace(/^#+\s*/, '').trim()
@@ -132,7 +122,6 @@ export class HexoTocProvider
         symbol,
         parentIndices.length + 1, // level
         [],
-        parent
       )
 
       if (symbol.children && symbol.children.length > 0) {
@@ -140,7 +129,7 @@ export class HexoTocProvider
         // We look for symbols that occupy some space and are likely headings.
         const childHeadings = symbol.children.filter((s) => s.name.trim().length > 0)
         item.children.push(
-          ...childHeadings.map((child, idx) => convert(child, idx, currentIndices, item))
+          ...childHeadings.map((child, idx) => convert(child, idx, currentIndices))
         )
       }
 
@@ -166,9 +155,6 @@ export class HexoTocProvider
     return element ? element.children : this.toc
   }
 
-  getParent(element: TocItem): ProviderResult<TocItem> {
-    return element.parent
-  }
 
   // Drag and Drop implementation
   dropMimeTypes = ['application/vnd.code.tree.hexotoc']
@@ -248,11 +234,6 @@ export class HexoTocProvider
   }
 
   private isDescendant(parent: TocItem, child: TocItem): boolean {
-    let curr: TocItem | undefined = child.parent
-    while (curr) {
-      if (curr === parent) return true
-      curr = curr.parent
-    }
-    return false
+    return parent.symbol.range.contains(child.symbol.range)
   }
 }
