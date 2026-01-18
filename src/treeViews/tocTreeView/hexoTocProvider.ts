@@ -21,6 +21,8 @@ import debounce from 'debounce'
 import { BaseDispose } from '../common'
 import { ConfigProperties, getConfig } from '../../configs'
 
+const MIME_TYPE = 'application/vnd.code.tree.hexotoc'
+
 export class TocItem extends TreeItem {
   constructor(
     public readonly displayLabel: string, // includes numbering if enabled
@@ -35,7 +37,7 @@ export class TocItem extends TreeItem {
     this.command = {
       command: 'hexo.toc.reveal',
       title: 'Reveal',
-      arguments: [{ lineStart: this.lineStart }],
+      arguments: [this.symbol.selectionRange],
     }
   }
 
@@ -146,20 +148,20 @@ export class HexoTocProvider
   }
 
   getChildren(element?: TocItem): ProviderResult<TocItem[]> {
-    return element ? element.children : this.toc
+    return element?.children ?? this.toc
   }
 
 
   // Drag and Drop implementation
-  dropMimeTypes = ['application/vnd.code.tree.hexotoc']
-  dragMimeTypes = ['application/vnd.code.tree.hexotoc']
+  dropMimeTypes = [MIME_TYPE]
+  dragMimeTypes = [MIME_TYPE]
 
   handleDrag(source: TocItem[], dataTransfer: DataTransfer, _token: CancellationToken): void {
-    dataTransfer.set('application/vnd.code.tree.hexotoc', new DataTransferItem(source))
+    dataTransfer.set(MIME_TYPE, new DataTransferItem(source))
   }
 
   async handleDrop(target: TocItem | undefined, dataTransfer: DataTransfer, _token: CancellationToken) {
-    const transferItem = dataTransfer.get('application/vnd.code.tree.hexotoc')
+    const transferItem = dataTransfer.get(MIME_TYPE)
     if (!transferItem) return
 
     const sources: TocItem[] = transferItem.value

@@ -1,4 +1,4 @@
-import { Selection, window } from 'vscode'
+import { Selection, window, Range } from 'vscode'
 import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
@@ -7,15 +7,14 @@ export class TocReveal extends Command {
     super(Commands.tocReveal)
   }
 
-  async execute(_cmd: ICommandParsed, item: { lineStart: number }) {
+  async execute(_cmd: ICommandParsed, range: Range) {
     const editor = window.activeTextEditor
-    if (!editor || !('lineStart' in item)) {
+    if (!editor || !(range instanceof Range)) {
       return
     }
 
-    const lineStart = item.lineStart
-    const range = editor.document.lineAt(lineStart).range
-    editor.selection = new Selection(range.start, range.start)
+    editor.selection = new Selection(range.start, range.end)
     editor.revealRange(range)
+    await window.showTextDocument(editor.document, { preserveFocus: false })
   }
 }
