@@ -25,11 +25,9 @@ export class TocItem extends TreeItem {
   public readonly parent?: TocItem
 
   constructor(
-    public readonly rawLabel: string,
     public readonly displayLabel: string, // includes numbering if enabled
+    public readonly symbol: DocumentSymbol,
     public readonly level: number,
-    public readonly lineStart: number, // 0-indexed
-    public lineEnd: number,             // 0-indexed (inclusive)
     public readonly children: TocItem[] = [],
     parent?: TocItem,
   ) {
@@ -49,6 +47,18 @@ export class TocItem extends TreeItem {
       configurable: true,
       writable: true,
     })
+  }
+
+  get lineStart() {
+    return this.symbol.selectionRange.start.line
+  }
+
+  get lineEnd() {
+    return this.symbol.range.end.line
+  }
+
+  get rawLabel() {
+    return this.symbol.name.replace(/^#+\s*/, '').trim()
   }
 }
 
@@ -118,11 +128,9 @@ export class HexoTocProvider
       }
 
       const item = new TocItem(
-        rawTitle,
         displayTitle,
+        symbol,
         parentIndices.length + 1, // level
-        symbol.selectionRange.start.line,
-        symbol.range.end.line,
         [],
         parent
       )
