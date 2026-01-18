@@ -39,6 +39,37 @@ export class TocItem extends TreeItem {
     }
   }
 
+  static from(
+    symbol: DocumentSymbol,
+    index: number,
+    parentIndices: number[],
+    enableNumbering: boolean,
+  ): TocItem {
+    const currentIndices = [...parentIndices, index + 1]
+    const rawTitle = symbol.name.replace(/^#+\s*/, '').trim()
+    let displayTitle = rawTitle
+
+    if (enableNumbering) {
+      const numbering = currentIndices.join('.')
+      const suffix = currentIndices.length === 1 ? '.' : ''
+      displayTitle = `${numbering}${suffix} ${rawTitle}`
+    }
+
+    const item = new TocItem(displayTitle, symbol, parentIndices.length + 1)
+
+    if (symbol.children && symbol.children.length > 0) {
+      const childHeadings = symbol.children.filter((s) => s.name.trim().length > 0)
+      item.children.push(
+        ...childHeadings.map((child, idx) => TocItem.from(child, idx, currentIndices, enableNumbering)),
+      )
+    }
+
+    item.collapsibleState =
+      item.children.length > 0 ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None
+
+    return item
+  }
+
   get lineStart() {
     return this.symbol.selectionRange.start.line
   }
@@ -105,46 +136,9 @@ export class HexoTocProvider
 
     const enableNumbering = getConfig(ConfigProperties.enableTocNumbering)
 
-    const convert = (symbol: DocumentSymbol, index: number, parentIndices: number[]): TocItem => {
-      const currentIndices = [...parentIndices, index + 1]
-      // Remove all leading # and the following space
-      const rawTitle = symbol.name.replace(/^#+\s*/, '').trim()
-      let displayTitle = rawTitle
-
-      if (enableNumbering) {
-        const numbering = currentIndices.join('.')
-        const suffix = currentIndices.length === 1 ? '.' : ''
-        displayTitle = `${numbering}${suffix} ${rawTitle}`
-      }
-
-      const item = new TocItem(
-        displayTitle,
-        symbol,
-        parentIndices.length + 1, // level
-        [],
-      )
-
-      if (symbol.children && symbol.children.length > 0) {
-        // Filter children to only sub-headings if possible, but for Markdown it's usually just headings.
-        // We look for symbols that occupy some space and are likely headings.
-        const childHeadings = symbol.children.filter((s) => s.name.trim().length > 0)
-        item.children.push(
-          ...childHeadings.map((child, idx) => convert(child, idx, currentIndices))
-        )
-      }
-
-      // NOTE: wait Extension API to expose 'hideTwistiesOfChildlessElements' option
-      // indent may be different for childless elements
-      item.collapsibleState = item.children.length > 0
-        ? TreeItemCollapsibleState.Expanded
-        : TreeItemCollapsibleState.None
-
-      return item
-    }
-
     // Filter top-level symbols. For Markdown, they should be headings.
     const rootHeadings = symbols.filter((s) => s.name.trim().length > 0)
-    this.toc = rootHeadings.map((symbol, idx) => convert(symbol, idx, []))
+    this.toc = rootHeadings.map((symbol, idx) => TocItem.from(symbol, idx, [], enableNumbering))
   }
 
   getTreeItem(element: TocItem): TreeItem {
