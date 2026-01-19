@@ -101,7 +101,7 @@ export class HexoTocProvider
   constructor() {
     super()
     this.subscribe(
-      window.onDidChangeActiveTextEditor(() => this.refresh()),
+      window.onDidChangeActiveTextEditor(() => this.debouncedRefresh()),
       workspace.onDidChangeTextDocument((e) => {
         if (e.document === window.activeTextEditor?.document) {
           this.debouncedRefresh()
@@ -109,11 +109,12 @@ export class HexoTocProvider
       }),
       workspace.onDidChangeConfiguration((e) => {
         if (e.affectsConfiguration(getConfigKey(ConfigProperties.enableTocNumbering))) {
-          this.refresh()
+          this.debouncedRefresh()
         }
       }),
     )
-    this.refresh()
+
+    this.debouncedRefresh()
   }
 
   async refresh() {
