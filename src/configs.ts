@@ -2,7 +2,7 @@ import path from 'node:path'
 import { Uri, workspace } from 'vscode'
 import yamljs from 'yamljs'
 
-export const ConfigSection = 'hexo'
+const ConfigSection = 'hexo'
 
 export enum ConfigProperties {
   includeDraft = 'includeDraft',
@@ -112,6 +112,10 @@ export const configs = {
   project: {
     resource: path.join(__dirname, '..', 'resources'),
   },
+}
+
+export function getConfigKey(propName: ConfigProperties) {
+  return `${ConfigSection}.${propName}`
 }
 
 export const isDev = process.env.NODE_ENV === 'development'

@@ -18,7 +18,7 @@ import {
   window,
   workspace,
 } from 'vscode'
-import { ConfigProperties, getConfig } from '../../configs'
+import { ConfigProperties, getConfig, getConfigKey } from '../../configs'
 import { BaseDispose } from '../common'
 
 const MIME_TYPE = 'application/vnd.code.tree.hexotoc'
@@ -108,7 +108,7 @@ export class HexoTocProvider
         }
       }),
       workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration('hexo.toc.enableNumbering')) {
+        if (e.affectsConfiguration(getConfigKey(ConfigProperties.enableTocNumbering))) {
           this.refresh()
         }
       }),
