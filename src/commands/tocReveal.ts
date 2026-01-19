@@ -1,4 +1,4 @@
-import { Selection, window, Range } from 'vscode'
+import { Range, Selection, window } from 'vscode'
 import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()

@@ -1,6 +1,6 @@
-import { type TreeViewOptions } from 'vscode'
+import type { TreeViewOptions } from 'vscode'
 import { BaseTreeView } from '../common'
-import { HexoTocProvider, TocItem } from './hexoTocProvider'
+import { HexoTocProvider, type TocItem } from './hexoTocProvider'
 
 export class HexoTocTreeView extends BaseTreeView<TocItem> {
   provider: HexoTocProvider

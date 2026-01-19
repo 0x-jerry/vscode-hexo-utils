@@ -1,25 +1,25 @@
+import debounce from 'debounce'
 import {
   type CancellationToken,
+  commands,
   type DataTransfer,
   DataTransferItem,
+  type DocumentSymbol,
+  EndOfLine,
   EventEmitter,
+  Position,
   type ProviderResult,
+  Range,
+  type TextDocument,
   type TreeDataProvider,
   type TreeDragAndDropController,
   TreeItem,
   TreeItemCollapsibleState,
   window,
   workspace,
-  Range,
-  Position,
-  commands,
-  type DocumentSymbol,
-  type TextDocument,
-  EndOfLine,
 } from 'vscode'
-import debounce from 'debounce'
-import { BaseDispose } from '../common'
 import { ConfigProperties, getConfig } from '../../configs'
+import { BaseDispose } from '../common'
 
 const MIME_TYPE = 'application/vnd.code.tree.hexotoc'
 
@@ -62,7 +62,9 @@ export class TocItem extends TreeItem {
     if (symbol.children && symbol.children.length > 0) {
       const childHeadings = symbol.children.filter((s) => s.name.trim().length > 0)
       item.children.push(
-        ...childHeadings.map((child, idx) => TocItem.from(child, idx, currentIndices, enableNumbering)),
+        ...childHeadings.map((child, idx) =>
+          TocItem.from(child, idx, currentIndices, enableNumbering),
+        ),
       )
     }
 
@@ -109,7 +111,7 @@ export class HexoTocProvider
         if (e.affectsConfiguration('hexo.toc.enableNumbering')) {
           this.refresh()
         }
-      })
+      }),
     )
     this.refresh()
   }
@@ -151,7 +153,6 @@ export class HexoTocProvider
     return element?.children ?? this.toc
   }
 
-
   // Drag and Drop implementation
   dropMimeTypes = [MIME_TYPE]
   dragMimeTypes = [MIME_TYPE]
@@ -160,7 +161,11 @@ export class HexoTocProvider
     dataTransfer.set(MIME_TYPE, new DataTransferItem(source))
   }
 
-  async handleDrop(target: TocItem | undefined, dataTransfer: DataTransfer, _token: CancellationToken) {
+  async handleDrop(
+    target: TocItem | undefined,
+    dataTransfer: DataTransfer,
+    _token: CancellationToken,
+  ) {
     const transferItem = dataTransfer.get(MIME_TYPE)
     if (!transferItem) return
 
@@ -190,12 +195,12 @@ export class HexoTocProvider
 
       // 2. Insert at target
       // Add trailing newline if necessary
-      const eol = (document.eol === EndOfLine.LF) ? '\n' : '\r\n'
+      const eol = document.eol === EndOfLine.LF ? '\n' : '\r\n'
       if (!adjustedText.endsWith(eol)) {
         adjustedText += eol
       }
       const pos = target ? new Position(target.lineEnd + 1, 0) : new Position(document.lineCount, 0)
-      const lastLineText = document.getText(document.lineAt(pos.line-1).rangeIncludingLineBreak)
+      const lastLineText = document.getText(document.lineAt(pos.line - 1).rangeIncludingLineBreak)
       if (!lastLineText.endsWith(eol)) {
         adjustedText = eol + adjustedText
       }
@@ -214,7 +219,7 @@ export class HexoTocProvider
     let result = ''
     for (let i = source.lineStart; i <= source.lineEnd; i++) {
       const line = document.lineAt(i)
-      let text = document.getText(line.rangeIncludingLineBreak);
+      let text = document.getText(line.rangeIncludingLineBreak)
 
       if (headingLines.has(i)) {
         text = text.replace(/^(#+)/, (match: string) => {
