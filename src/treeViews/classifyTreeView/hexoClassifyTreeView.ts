@@ -13,7 +13,10 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
     opts: Partial<TreeViewOptions<ClassifyItem>> = {},
   ) {
     const provider = new HexoClassifyProvider(type)
-    super(viewId, provider, opts)
+    super(viewId, provider, {
+      ...opts,
+      canSelectMany: false,
+    })
 
     this.provider = provider
 

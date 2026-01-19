@@ -6,6 +6,10 @@ A sidebar for [Hexo] blog system.
 
 - Create new article with exists template
 - Sidebar, include tags, categories, posts and drafts
+- Manage tags and categories directly from the sidebar:
+  - **Add**: Add a new tag/category to all articles currently listed under a specific tag/category.
+  - **Rename**: Rename a tag/category across all articles globally.
+  - **Delete**: Remove a tag/category from all articles.
 - Front Matter completion for tags and categories (Thanks [ruanimal])
 - Front Matter shortcut action buttons (CodeLens) to select tags, update or insert date/updated fields (Thanks [ruanimal])
 - Preview image with assets folder

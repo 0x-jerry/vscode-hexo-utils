@@ -13,8 +13,10 @@ import {
 } from 'vscode'
 import { configs } from './configs'
 import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
+import { isInFrontMatter, parseFrontMatter, frontMatterKeys } from './utils'
 
-export class HexoCompletionProvider implements CompletionItemProvider {
+
+export class HexoFrontMatterCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
     document: TextDocument,
     position: Position,
@@ -29,41 +31,121 @@ export class HexoCompletionProvider implements CompletionItemProvider {
     const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character)
 
     // Check if in Front Matter
-    const isFrontMatter = this.isInFrontMatter(document, position)
-    if (isFrontMatter) {
-      let key: string | undefined
+    const isFrontMatter = isInFrontMatter(document, position)
+    if (!isFrontMatter) {
+      return []
+    }
 
-      // tags: xxx, yyy
-      const tagMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.tags}:\\s*(.*)$`))
-      if (tagMatch) {
-        key = HexoMetadataKeys.tags
-      }
+    let key: string | undefined
 
-      // categories: xxx
-      const categoryMatch = lineTextBefore.match(
-        new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`),
+    // tags: xxx, yyy
+    const tagMatch = lineTextBefore.match(new RegExp(`^\\s*(${HexoMetadataKeys.tags}|tag):\\s*(.*)$`))
+    if (tagMatch) {
+      key = HexoMetadataKeys.tags
+    }
+
+    // categories: xxx
+    const categoryMatch = lineTextBefore.match(
+      new RegExp(`^\\s*(${HexoMetadataKeys.categories}|category):\\s*(.*)$`),
+    )
+    if (categoryMatch) {
+      key = HexoMetadataKeys.categories
+    }
+
+    // - xxx (list format)
+    const listMatch = lineTextBefore.match(/^\s*-\s*(.*)$/)
+    if (listMatch) {
+      key = this.getParentKey(document, position.line)
+    }
+
+    if (key === HexoMetadataKeys.tags || key === 'tag') {
+      return this.completeByMetaKey(HexoMetadataKeys.tags, await HexoMetadataUtils.getTags())
+    }
+
+    if (key === HexoMetadataKeys.categories || key === 'category') {
+      return this.completeByMetaKey(
+        HexoMetadataKeys.categories,
+        await HexoMetadataUtils.getCategories(),
       )
-      if (categoryMatch) {
-        key = HexoMetadataKeys.categories
-      }
+    }
 
-      // - xxx (list format)
-      const listMatch = lineTextBefore.match(/^\s*-\s*(.*)$/)
-      if (listMatch) {
-        key = this.getParentKey(document, position.line)
-      }
+    // Key completion
+    const keyMatch = lineTextBefore.match(/^(\s*)([\w-]*)$/)
+    if (keyMatch) {
+      const allKeys = await HexoMetadataUtils.getAllKeys()
+      const documentKeys = this.getDocumentKeys(document)
 
-      if (key === HexoMetadataKeys.tags) {
-        return this.completeByMetaKey(HexoMetadataKeys.tags, await HexoMetadataUtils.getTags())
-      }
+      const candidates = Array.from(new Set([...frontMatterKeys, ...allKeys])).filter(
+        (k) => !documentKeys.includes(k),
+      )
 
-      if (key === HexoMetadataKeys.categories) {
-        return this.completeByMetaKey(
-          HexoMetadataKeys.categories,
-          await HexoMetadataUtils.getCategories(),
-        )
+      return candidates.map((k) => {
+        const item = new CompletionItem(k, CompletionItemKind.Property)
+        item.insertText = `${k}: `
+        return item
+      })
+    }
+
+    return []
+  }
+
+  private completeByMetaKey(key: string, values: string[]): CompletionItem[] {
+    return values.map((val) => {
+      const item = new CompletionItem(val, CompletionItemKind.Keyword)
+      if (val && key === HexoMetadataKeys.categories) {
+        const parts = val.split(' / ')
+        if (parts.length > 1) {
+          item.insertText = `[${parts.join(', ')}]`
+        }
+      }
+      return item
+    })
+  }
+
+  private getDocumentKeys(document: TextDocument): string[] {
+    const data = parseFrontMatter(document.getText())
+    if (!data) return []
+
+    return Object.keys(data)
+  }
+
+  private getParentKey(document: TextDocument, line: number): string | undefined {
+    const currentLineText = document.lineAt(line).text
+    const match = currentLineText.match(/^(\s*)-/)
+    if (!match) return undefined
+
+    const currentIndentation = match[1].length
+
+    for (let i = line - 1; i >= 0; i--) {
+      const l = document.lineAt(i)
+      const text = l.text
+      if (text.trim() === '---') break
+
+      const m = text.match(/^(\s*)([\w-]+)\s*:/)
+      if (m) {
+        const indentation = m[1].length
+        if (indentation <= currentIndentation) {
+          return m[2]
+        }
       }
     }
+    return undefined
+  }
+}
+
+export class HexoImageCompletionProvider implements CompletionItemProvider {
+  async provideCompletionItems(
+    document: TextDocument,
+    position: Position,
+    token: CancellationToken,
+    context: CompletionContext,
+  ): Promise<CompletionItem[] | CompletionList> {
+    // Filter md file
+    if (!document.uri.fsPath.endsWith('.md')) {
+      return []
+    }
+
+    const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character)
 
     // ![xxx]()
     const matches = lineTextBefore.match(/!\[[^\]]*?\]\(([^)]*?)[\\/]?[^\\/)]*$/)
@@ -96,56 +178,5 @@ export class HexoCompletionProvider implements CompletionItemProvider {
         return item
       })
     })
-  }
-
-  private completeByMetaKey(key: string, values: string[]): CompletionItem[] {
-    return values.map((val) => {
-      const item = new CompletionItem(val, CompletionItemKind.Keyword)
-      if (key === HexoMetadataKeys.categories) {
-        const parts = val.split(' / ')
-        if (parts.length > 1) {
-          item.insertText = `[${parts.join(', ')}]`
-        }
-      }
-      return item
-    })
-  }
-
-  private isInFrontMatter(document: TextDocument, position: Position): boolean {
-    const text = document.getText()
-    const lines = text.split(/\r?\n/)
-    let dashCount = 0
-    for (let i = 0; i <= position.line; i++) {
-      if (lines[i].trim() === '---') {
-        dashCount++
-      }
-    }
-    // If we are between the first and second '---', we are in Front Matter
-    // But if the current line is the second '---', we might still be considered "in" it depending on logic.
-    // Usually, Front Matter starts at line 0 with '---'.
-    return dashCount === 1 && lines[position.line].trim() !== '---'
-  }
-
-  private getParentKey(document: TextDocument, line: number): string | undefined {
-    const currentLineText = document.lineAt(line).text
-    const match = currentLineText.match(/^(\s*)-/)
-    if (!match) return undefined
-
-    const currentIndentation = match[1].length
-
-    for (let i = line - 1; i >= 0; i--) {
-      const l = document.lineAt(i)
-      const text = l.text
-      if (text.trim() === '---') break
-
-      const m = text.match(/^(\s*)([\w-]+)\s*:/)
-      if (m) {
-        const indentation = m[1].length
-        if (indentation <= currentIndentation) {
-          return m[2]
-        }
-      }
-    }
-    return undefined
   }
 }

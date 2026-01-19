@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { type Uri, window, workspace } from 'vscode'
-import yamljs from 'yamljs'
 import { HexoMetadataKeys, type IHexoMetadata } from '../hexoMetadata'
+import { parseFrontMatter } from './frontMatter'
 
 /**
  * true if yse
@@ -17,10 +17,57 @@ export async function askForNext(placeHolder: string): Promise<boolean> {
 
 const metaCache: Record<string, IHexoMetadata> = {}
 
-export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
-  const stat = await workspace.fs.stat(uri)
+export function parseMetadata(text: string, uri: Uri, mtime: number): IHexoMetadata {
+  const data = parseFrontMatter(text) || {}
 
+  const rawCategories = data[HexoMetadataKeys.categories] || data.category || []
+  const categories: (string | string[])[] = Array.isArray(rawCategories)
+    ? rawCategories
+    : typeof rawCategories === 'string'
+      ? [rawCategories]
+      : []
+
+  const normalizedCategories = categories
+    .filter((c) => !!c)
+    .map((c) => (Array.isArray(c) ? c.join(' / ') : String(c)))
+
+  const rawTags = data[HexoMetadataKeys.tags] || data.tag || []
+  const tags: string[] = Array.isArray(rawTags)
+    ? rawTags.map(String)
+    : typeof rawTags === 'string'
+      ? [rawTags]
+      : []
+
+  return {
+    tags,
+    filePath: uri,
+    categories: normalizedCategories,
+    title: data[HexoMetadataKeys.title] || '',
+    date: data[HexoMetadataKeys.date] || '',
+    mtime,
+    keys: Object.keys(data),
+  }
+}
+
+export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
   const cacheId = uri.toString()
+  const doc = workspace.textDocuments.find((d) => d.uri.toString() === cacheId)
+
+  if (doc) {
+    const text = doc.getText()
+    const mtime = doc.isDirty ? Date.now() : (await workspace.fs.stat(uri)).mtime
+
+    const hit = metaCache[cacheId]
+    if (hit && mtime === hit.mtime) {
+      return hit
+    }
+
+    const metadata = parseMetadata(text, uri, mtime)
+    metaCache[cacheId] = metadata
+    return metadata
+  }
+
+  const stat = await workspace.fs.stat(uri)
   const hit = metaCache[cacheId]
 
   if (hit && stat.mtime === hit.mtime) {
@@ -29,36 +76,8 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
 
   try {
     const content = await workspace.fs.readFile(uri)
-    // /---(data)---/ => $1 === data
-    const yamlReg = /^---((.|\n|\r)+?)---$/m
-
-    const yamlData = yamlReg.exec(content.toString()) || []
-
-    const data = yamljs.parse(yamlData[1]) || {}
-
-    const categories: (string | string[])[] = Array.isArray(data[HexoMetadataKeys.categories])
-      ? data[HexoMetadataKeys.categories]
-      : typeof data[HexoMetadataKeys.categories] === 'string'
-        ? [data[HexoMetadataKeys.categories]]
-        : []
-
-    const hasSubCategory = categories.find((n) => Array.isArray(n))
-
-    const normalizedCategories = hasSubCategory
-      ? categories.map((c) => (Array.isArray(c) ? c.join(' / ') : c))
-      : categories.length
-        ? [categories.join(' / ')]
-        : []
-
-    const metadata = {
-      tags: Array.isArray(data[HexoMetadataKeys.tags]) ? data[HexoMetadataKeys.tags] : [],
-      filePath: uri,
-      // →  · /
-      categories: normalizedCategories,
-      title: data[HexoMetadataKeys.title] || '',
-      date: data[HexoMetadataKeys.date] || '',
-      mtime: stat.mtime,
-    }
+    const text = content.toString()
+    const metadata = parseMetadata(text, uri, stat.mtime)
 
     metaCache[cacheId] = metadata
 
@@ -71,6 +90,7 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
       title: path.parse(uri.fsPath).name,
       date: new Date(stat.ctime),
       mtime: 0,
+      keys: [],
     }
 
     metaCache[cacheId] = metadata
