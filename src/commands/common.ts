@@ -27,6 +27,7 @@ export enum Commands {
   selectTags = 'hexo.selectTags',
   updateDate = 'hexo.updateDate',
   deploy = 'hexo.deploy',
+  tocReveal = 'hexo.toc.reveal',
 }
 
 export enum BuiltInCommands {

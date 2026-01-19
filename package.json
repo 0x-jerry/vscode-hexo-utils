@@ -173,6 +173,11 @@
           "type": "boolean",
           "default": false,
           "description": "Controls whether show deploy button on editor title."
+        },
+        "hexo.toc.enableNumbering": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-numbering for TOC."
         }
       }
     },
@@ -327,6 +332,10 @@
         {
           "id": "hexo.tags",
           "name": "tags"
+        },
+        {
+          "id": "hexo.toc",
+          "name": "toc"
         }
       ]
     },
