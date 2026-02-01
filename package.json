@@ -2,7 +2,7 @@
   "name": "vscode-hexo-utils",
   "displayName": "Hexo Utils",
   "description": "vscode extension for hexo",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "MIT",
   "author": {
     "name": "Jerry wang",
@@ -173,6 +173,11 @@
           "type": "boolean",
           "default": false,
           "description": "Controls whether show deploy button on editor title."
+        },
+        "hexo.toc.enableNumbering": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-numbering for TOC."
         }
       }
     },
@@ -373,6 +378,10 @@
         {
           "id": "hexo.tags",
           "name": "tags"
+        },
+        {
+          "id": "hexo.toc",
+          "name": "toc"
         }
       ]
     },
@@ -551,7 +560,7 @@
     "entry": [
       "src/extension.ts"
     ],
-    "sourcemap": true,
+    "sourcemap": false,
     "clean": true,
     "external": [
       "vscode"

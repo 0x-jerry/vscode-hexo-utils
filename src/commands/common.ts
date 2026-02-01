@@ -34,6 +34,7 @@ export enum Commands {
   classifyDeleteTag = 'hexo.classify.delete[tags]',
   classifyDeleteCategory = 'hexo.classify.delete[categories]',
   deploy = 'hexo.deploy',
+  tocReveal = 'hexo.toc.reveal',
 }
 
 export enum BuiltInCommands {

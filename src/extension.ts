@@ -55,10 +55,9 @@ export function activate(context: ExtensionContext) {
 
   context.subscriptions.push(frontMatterCompletionProvider, imageCompletionProvider, codeLensProvider)
 
-  registerAutoPreview(context)
-
   try {
     registerTreeViews(context)
+    registerAutoPreview(context)
     registerCommands(context)
   } catch (err) {
     window.showErrorMessage(String(err))

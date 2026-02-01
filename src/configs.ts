@@ -2,7 +2,7 @@ import path from 'node:path'
 import { Uri, workspace } from 'vscode'
 import yaml from 'yaml'
 
-export const ConfigSection = 'hexo'
+const ConfigSection = 'hexo'
 
 export enum ConfigProperties {
   includeDraft = 'includeDraft',
@@ -19,6 +19,7 @@ export enum ConfigProperties {
   assetFolderType = 'assetFolderType',
   deployCommand = 'deploy.command',
   showDeployButton = 'deploy.showButton',
+  enableTocNumbering = 'toc.enableNumbering',
 }
 
 export interface ImgChrOption {
@@ -73,6 +74,7 @@ type ConfigTypeMap = {
   [ConfigProperties.uploadType]: UploadType
   [ConfigProperties.deployCommand]: string
   [ConfigProperties.showDeployButton]: boolean
+  [ConfigProperties.enableTocNumbering]: boolean
 }
 
 export function getConfig<T extends ConfigProperties>(propName: T, section = ConfigSection) {
@@ -110,6 +112,10 @@ export const configs = {
   project: {
     resource: path.join(__dirname, '..', 'resources'),
   },
+}
+
+export function getConfigKey(propName: ConfigProperties) {
+  return `${ConfigSection}.${propName}`
 }
 
 export const isDev = process.env.NODE_ENV === 'development'
