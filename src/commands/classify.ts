@@ -1,13 +1,21 @@
-import { Range, type TextEditor, window, workspace, Uri, commands, WorkspaceEdit } from 'vscode'
+import {
+  commands,
+  Range,
+  type TextEditor,
+  type Uri,
+  WorkspaceEdit,
+  window,
+  workspace,
+} from 'vscode'
 import { HexoMetadataKeys, HexoMetadataUtils } from '../hexoMetadata'
-import { Command, Commands, command, type ICommandParsed } from './common'
 import { ClassifyItem } from '../treeViews/classifyTreeView/hexoClassifyProvider'
 import {
-  updateFrontMatter,
+  parseFrontMatter,
   prepareCategoriesValue,
   prepareTagsValue,
-  parseFrontMatter
+  updateFrontMatter,
 } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 export abstract class ClassifyCommand extends Command {
   protected getType(cmd: ICommandParsed, item?: ClassifyItem): HexoMetadataKeys {
@@ -47,9 +55,9 @@ export abstract class ClassifyCommand extends Command {
     const text = document.getText()
 
     const preparedValue =
-        key === HexoMetadataKeys.categories
-            ? prepareCategoriesValue(values)
-            : prepareTagsValue(values)
+      key === HexoMetadataKeys.categories
+        ? prepareCategoriesValue(values)
+        : prepareTagsValue(values)
 
     const newText = updateFrontMatter(text, key, preparedValue)
 
@@ -57,7 +65,12 @@ export abstract class ClassifyCommand extends Command {
       const edit = new WorkspaceEdit()
       edit.replace(
         uri,
-        new Range(0, 0, document.lineCount, document.lineAt(document.lineCount - 1).range.end.character),
+        new Range(
+          0,
+          0,
+          document.lineCount,
+          document.lineAt(document.lineCount - 1).range.end.character,
+        ),
         newText,
       )
       await workspace.applyEdit(edit)
@@ -267,7 +280,9 @@ export class ClassifyRename extends ClassifyCommand {
       }
     }
 
-    window.showInformationMessage(`Renamed ${oldName} to ${newName} in ${classify.files.length} files`)
+    window.showInformationMessage(
+      `Renamed ${oldName} to ${newName} in ${classify.files.length} files`,
+    )
     commands.executeCommand(Commands.refresh)
   }
 }
@@ -315,7 +330,9 @@ export class ClassifyDelete extends ClassifyCommand {
       }
     }
 
-    window.showInformationMessage(`Deleted ${typeLabel} ${name} from ${classify.files.length} files`)
+    window.showInformationMessage(
+      `Deleted ${typeLabel} ${name} from ${classify.files.length} files`,
+    )
     commands.executeCommand(Commands.refresh)
   }
 }

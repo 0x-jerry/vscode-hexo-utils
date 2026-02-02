@@ -1,7 +1,6 @@
+import type { Position, TextDocument } from 'vscode'
 import yaml from 'yaml'
-import { type Position, type TextDocument } from 'vscode'
 import { HexoMetadataKeys } from '../hexoMetadata'
-
 
 export const frontMatterKeys = [
   'layout',
@@ -18,10 +17,14 @@ export const frontMatterKeys = [
   'published',
 ]
 
-const rangeCache: Record<string, { version: number; range: { start: number; end: number } | undefined }> =
-  {}
+const rangeCache: Record<
+  string,
+  { version: number; range: { start: number; end: number } | undefined }
+> = {}
 
-export function getFrontMatterLinesRange(lines: string[]): { start: number; end: number } | undefined {
+export function getFrontMatterLinesRange(
+  lines: string[],
+): { start: number; end: number } | undefined {
   let start = -1
   let end = -1
   for (let i = 0; i < lines.length; i++) {
@@ -79,11 +82,7 @@ export function parseFrontMatter<T = any>(text: string): T | undefined {
   }
 }
 
-export function updateFrontMatter(
-  text: string,
-  key: string,
-  value: any,
-): string {
+export function updateFrontMatter(text: string, key: string, value: any): string {
   const lines = text.split(/\r?\n/)
 
   const range = getFrontMatterLinesRange(lines)

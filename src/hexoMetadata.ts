@@ -86,32 +86,32 @@ export class HexoMetadataUtils {
   }
 
   static async update(uri: Uri) {
-    if (!this._instance) {
-      await this.get()
+    if (!HexoMetadataUtils._instance) {
+      await HexoMetadataUtils.get()
       return
     }
 
     const metadata = await getMDFileMetadata(uri)
-    this._instance._metadataMap.set(uri.toString(), metadata)
-    this._instance.rebuildClassifies()
+    HexoMetadataUtils._instance._metadataMap.set(uri.toString(), metadata)
+    HexoMetadataUtils._instance.rebuildClassifies()
   }
 
   private static _getPromise?: Promise<HexoMetadataUtils>
 
   static async get(forceRefresh = false): Promise<HexoMetadataUtils> {
     if (forceRefresh) {
-      this.clear()
+      HexoMetadataUtils.clear()
     }
 
-    if (this._instance) {
-      return this._instance
+    if (HexoMetadataUtils._instance) {
+      return HexoMetadataUtils._instance
     }
 
-    if (this._getPromise) {
-      return this._getPromise
+    if (HexoMetadataUtils._getPromise) {
+      return HexoMetadataUtils._getPromise
     }
 
-    this._getPromise = (async () => {
+    HexoMetadataUtils._getPromise = (async () => {
       try {
         const postFolder = configs.paths.post
         const draftFolder = configs.paths.draft
@@ -128,14 +128,14 @@ export class HexoMetadataUtils {
           filesPath.map((filePath) => getMDFileMetadata(filePath)),
         )
 
-        this._instance = new HexoMetadataUtils(filesData)
-        return this._instance
+        HexoMetadataUtils._instance = new HexoMetadataUtils(filesData)
+        return HexoMetadataUtils._instance
       } finally {
-        this._getPromise = undefined
+        HexoMetadataUtils._getPromise = undefined
       }
     })()
 
-    return this._getPromise
+    return HexoMetadataUtils._getPromise
   }
 
   static async getTags(): Promise<string[]> {

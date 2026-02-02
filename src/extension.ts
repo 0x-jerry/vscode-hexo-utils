@@ -1,5 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+
+import debounce from 'debounce'
 import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
 import { registerAutoPreview } from './autoPreview'
 import { registerCommands } from './commands'
@@ -9,10 +11,9 @@ import {
   HexoFrontMatterCompletionProvider,
   HexoImageCompletionProvider,
 } from './hexoCompletionProvider'
+import { HexoMetadataUtils } from './hexoMetadata'
 import plugin from './markdownItHexoResource'
 import type { MarkdownIt } from './md-it'
-import debounce from 'debounce'
-import { HexoMetadataUtils } from './hexoMetadata'
 import { registerTreeViews } from './treeViews'
 
 export function activate(context: ExtensionContext) {
@@ -53,7 +54,11 @@ export function activate(context: ExtensionContext) {
 
   const codeLensProvider = languages.registerCodeLensProvider(selectors, new HexoCodeLensProvider())
 
-  context.subscriptions.push(frontMatterCompletionProvider, imageCompletionProvider, codeLensProvider)
+  context.subscriptions.push(
+    frontMatterCompletionProvider,
+    imageCompletionProvider,
+    codeLensProvider,
+  )
 
   try {
     registerTreeViews(context)

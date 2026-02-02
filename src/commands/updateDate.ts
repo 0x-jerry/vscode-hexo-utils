@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
-import { Range, type TextEditor, WorkspaceEdit, workspace, window } from 'vscode'
+import { Range, type TextEditor, WorkspaceEdit, window, workspace } from 'vscode'
 import { ConfigProperties, getConfig } from '../configs'
-import { Command, Commands, command, type ICommandParsed } from './common'
 import { updateFrontMatter } from '../utils'
+import { Command, Commands, command, type ICommandParsed } from './common'
 
 @command()
 export class UpdateDate extends Command {
@@ -37,7 +37,12 @@ export class UpdateDate extends Command {
       const edit = new WorkspaceEdit()
       edit.replace(
         document.uri,
-        new Range(0, 0, document.lineCount, document.lineAt(document.lineCount - 1).range.end.character),
+        new Range(
+          0,
+          0,
+          document.lineCount,
+          document.lineAt(document.lineCount - 1).range.end.character,
+        ),
         newText,
       )
       await workspace.applyEdit(edit)

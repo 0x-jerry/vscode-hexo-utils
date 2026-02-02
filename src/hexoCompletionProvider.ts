@@ -13,8 +13,7 @@ import {
 } from 'vscode'
 import { configs } from './configs'
 import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
-import { isInFrontMatter, frontMatterKeys, getMDFileMetadata } from './utils'
-
+import { frontMatterKeys, getMDFileMetadata, isInFrontMatter } from './utils'
 
 export class HexoFrontMatterCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
