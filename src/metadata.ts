@@ -9,7 +9,7 @@ export interface IFrontmatterData {
   [key: string]: unknown
 
   tags: string[]
-  categories: string[]
+  categories: (string | string[])[]
   title: string
   date?: Date
 }
@@ -101,13 +101,14 @@ class MetadataManager {
 
     for (const data of allData) {
       for (const category of data.data.categories) {
-        const group = grouped.find((group) => group.name === category)
+        const name = toCategoryName(category)
+        const group = grouped.find((group) => group.name === name)
 
         if (group) {
           group.items.push(data)
         } else {
           grouped.push({
-            name: category,
+            name: name,
             items: [data],
           })
         }
@@ -127,7 +128,8 @@ class MetadataManager {
 
     for (const metadata of await this.getAll()) {
       for (const category of metadata.data.categories) {
-        categories.add(category)
+        const name = toCategoryName(category)
+        categories.add(name)
       }
     }
 
@@ -161,6 +163,15 @@ class MetadataManager {
       this.allAvailableKeys.add(key)
     }
   }
+}
+
+/**
+ * Convert category to string, if category is array, join it with '/'
+ * @param category
+ * @returns
+ */
+function toCategoryName(category: string | string[]) {
+  return typeof category === 'string' ? category : category.join(' / ')
 }
 
 function getSortFn() {
