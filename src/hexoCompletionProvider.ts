@@ -13,7 +13,22 @@ import {
 } from 'vscode'
 import { configs } from './configs'
 import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
-import { frontMatterKeys, getMDFileMetadata, isInFrontMatter } from './utils'
+import { getMDFileMetadata, isInFrontMatter } from './utils'
+
+const builtinFrontmatterKeys = [
+  'layout',
+  'title',
+  'date',
+  'updated',
+  'comments',
+  'tags',
+  'categories',
+  'permalink',
+  'excerpt',
+  'disableNunjucks',
+  'lang',
+  'published',
+]
 
 export class HexoFrontMatterCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -74,7 +89,7 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
       const allKeys = await HexoMetadataUtils.getAllKeys()
       const documentKeys = (await getMDFileMetadata(document.uri)).keys
 
-      const candidates = Array.from(new Set([...frontMatterKeys, ...allKeys])).filter(
+      const candidates = Array.from(new Set([...builtinFrontmatterKeys, ...allKeys])).filter(
         (k) => !documentKeys.includes(k),
       )
 

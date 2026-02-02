@@ -2,21 +2,6 @@ import type { Position, TextDocument } from 'vscode'
 import yaml from 'yaml'
 import { HexoMetadataKeys } from '../hexoMetadata'
 
-export const frontMatterKeys = [
-  'layout',
-  'title',
-  'date',
-  'updated',
-  'comments',
-  'tags',
-  'categories',
-  'permalink',
-  'excerpt',
-  'disableNunjucks',
-  'lang',
-  'published',
-]
-
 const rangeCache: Record<
   string,
   { version: number; range: { start: number; end: number } | undefined }
