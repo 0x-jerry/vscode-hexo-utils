@@ -7,6 +7,7 @@ import {
 } from 'vscode'
 import { Commands } from './commands/common'
 import { HexoMetadataKeys } from './hexoMetadata'
+import { getFrontMatterRange } from './utils'
 
 export class HexoCodeLensProvider implements CodeLensProvider {
   provideCodeLenses(
@@ -14,58 +15,58 @@ export class HexoCodeLensProvider implements CodeLensProvider {
     token: CancellationToken,
   ): CodeLens[] | Thenable<CodeLens[]> {
     const lenses: CodeLens[] = []
-    const text = document.getText()
+    const lines = document.getText().split(/\r?\n/)
 
-    // Only in Front Matter
-    const lines = text.split(/\r?\n/)
-    let inFrontMatter = false
-    let fmStart = -1
-    let fmEnd = -1
-    for (let i = 0; i < lines.length; i++) {
+    const range = getFrontMatterRange(document)
+    if (!range) {
+      return []
+    }
+
+    const { start: fmStart, end: fmEnd } = range
+
+    for (let i = fmStart + 1; i < fmEnd; i++) {
       const line = lines[i]
-      if (line.trim() === '---') {
-        if (!inFrontMatter) {
-          inFrontMatter = true
-          fmStart = i
-          continue
-        } else {
-          fmEnd = i
-          break // End of Front Matter
-        }
+
+      if (line.startsWith(`${HexoMetadataKeys.tags}:`)) {
+        const range = new Range(i, 0, i, 0)
+        lenses.push(
+          new CodeLens(range, {
+            title: '$(tag) Select Tags',
+            command: Commands.selectTags,
+          }),
+        )
       }
 
-      if (inFrontMatter) {
-        if (line.startsWith(`${HexoMetadataKeys.tags}:`)) {
-          const range = new Range(i, 0, i, 0)
-          lenses.push(
-            new CodeLens(range, {
-              title: '$(tag) Select Tags',
-              command: Commands.selectTags,
-            }),
-          )
-        }
+      if (line.startsWith(`${HexoMetadataKeys.categories}:`)) {
+        const range = new Range(i, 0, i, 0)
+        lenses.push(
+          new CodeLens(range, {
+            title: '$(list-unordered) Select Categories',
+            command: Commands.selectCategories,
+          }),
+        )
+      }
 
-        if (line.startsWith(`${HexoMetadataKeys.date}:`)) {
-          const range = new Range(i, 0, i, 0)
-          lenses.push(
-            new CodeLens(range, {
-              title: '$(calendar) Update Date',
-              command: Commands.updateDate,
-              arguments: [HexoMetadataKeys.date],
-            }),
-          )
-        }
+      if (line.startsWith(`${HexoMetadataKeys.date}:`)) {
+        const range = new Range(i, 0, i, 0)
+        lenses.push(
+          new CodeLens(range, {
+            title: '$(calendar) Update Date',
+            command: Commands.updateDate,
+            arguments: [HexoMetadataKeys.date],
+          }),
+        )
+      }
 
-        if (line.startsWith(`${HexoMetadataKeys.updated}:`)) {
-          const range = new Range(i, 0, i, 0)
-          lenses.push(
-            new CodeLens(range, {
-              title: '$(calendar) Update Updated',
-              command: Commands.updateDate,
-              arguments: [HexoMetadataKeys.updated],
-            }),
-          )
-        }
+      if (line.startsWith(`${HexoMetadataKeys.updated}:`)) {
+        const range = new Range(i, 0, i, 0)
+        lenses.push(
+          new CodeLens(range, {
+            title: '$(calendar) Update Updated',
+            command: Commands.updateDate,
+            arguments: [HexoMetadataKeys.updated],
+          }),
+        )
       }
     }
 

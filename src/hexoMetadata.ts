@@ -22,6 +22,10 @@ export interface IHexoMetadata {
    * For cache, latest modification time.
    */
   mtime: number
+  /**
+   * All keys in Front Matter
+   */
+  keys: string[]
 }
 
 type THexoMeta = IHexoMetadata & { name?: string }
@@ -33,12 +37,29 @@ interface IClassify {
 
 export class HexoMetadataUtils {
   private static _instance?: HexoMetadataUtils
+  static clear() {
+    HexoMetadataUtils._instance = undefined
+  }
 
   tags: IClassify[] = []
   categories: IClassify[] = []
+  allKeys: string[] = []
+  private _metadataMap: Map<string, THexoMeta> = new Map()
 
   constructor(metadatas: THexoMeta[]) {
     for (const metadata of metadatas) {
+      this._metadataMap.set(metadata.filePath.toString(), metadata)
+    }
+
+    this.rebuildClassifies()
+  }
+
+  private rebuildClassifies() {
+    this.tags = []
+    this.categories = []
+    const keysSet = new Set<string>()
+
+    for (const metadata of this._metadataMap.values()) {
       metadata.name = path.parse(metadata.filePath.fsPath).name
 
       if (metadata.tags) {
@@ -52,33 +73,69 @@ export class HexoMetadataUtils {
           this.addClassify(ClassifyTypes.category, t, metadata)
         }
       }
+
+      if (metadata.keys) {
+        for (const key of metadata.keys) {
+          keysSet.add(key)
+        }
+      }
     }
 
+    this.allKeys = Array.from(keysSet)
     this.sort()
   }
 
+  static async update(uri: Uri) {
+    if (!this._instance) {
+      await this.get()
+      return
+    }
+
+    const metadata = await getMDFileMetadata(uri)
+    this._instance._metadataMap.set(uri.toString(), metadata)
+    this._instance.rebuildClassifies()
+  }
+
+  private static _getPromise?: Promise<HexoMetadataUtils>
+
   static async get(forceRefresh = false): Promise<HexoMetadataUtils> {
-    if (HexoMetadataUtils._instance && !forceRefresh) {
-      return HexoMetadataUtils._instance
+    if (forceRefresh) {
+      this.clear()
     }
 
-    const postFolder = configs.paths.post
-    const draftFolder = configs.paths.draft
-    const includeDraft = getConfig(ConfigProperties.includeDraft)
-
-    const postsPath = await getMDFiles(postFolder)
-    let draftsPath: Uri[] = []
-    if (includeDraft) {
-      draftsPath = await getMDFiles(draftFolder)
+    if (this._instance) {
+      return this._instance
     }
 
-    const filesPath = postsPath.concat(draftsPath)
-    const filesData: IHexoMetadata[] = await Promise.all(
-      filesPath.map((filePath) => getMDFileMetadata(filePath)),
-    )
+    if (this._getPromise) {
+      return this._getPromise
+    }
 
-    HexoMetadataUtils._instance = new HexoMetadataUtils(filesData)
-    return HexoMetadataUtils._instance
+    this._getPromise = (async () => {
+      try {
+        const postFolder = configs.paths.post
+        const draftFolder = configs.paths.draft
+        const includeDraft = getConfig(ConfigProperties.includeDraft)
+
+        const postsPath = await getMDFiles(postFolder)
+        let draftsPath: Uri[] = []
+        if (includeDraft) {
+          draftsPath = await getMDFiles(draftFolder)
+        }
+
+        const filesPath = postsPath.concat(draftsPath)
+        const filesData: IHexoMetadata[] = await Promise.all(
+          filesPath.map((filePath) => getMDFileMetadata(filePath)),
+        )
+
+        this._instance = new HexoMetadataUtils(filesData)
+        return this._instance
+      } finally {
+        this._getPromise = undefined
+      }
+    })()
+
+    return this._getPromise
   }
 
   static async getTags(): Promise<string[]> {
@@ -89,6 +146,15 @@ export class HexoMetadataUtils {
   static async getCategories(): Promise<string[]> {
     const utils = await HexoMetadataUtils.get()
     return utils.categories.map((c) => c.name)
+  }
+
+  static async getAllKeys(): Promise<string[]> {
+    const utils = await HexoMetadataUtils.get()
+    return utils.allKeys
+  }
+
+  getMetadataByUri(uri: Uri): THexoMeta | undefined {
+    return this._metadataMap.get(uri.toString())
   }
 
   private sort() {
@@ -108,20 +174,27 @@ export class HexoMetadataUtils {
   }
 
   private addClassify(type: ClassifyTypes, name: string, metadata: IHexoMetadata) {
+    const hexoMeta = metadata as THexoMeta
+    if (!hexoMeta.name) {
+      hexoMeta.name = path.parse(hexoMeta.filePath.fsPath).name
+    }
+
+    this._metadataMap.set(hexoMeta.filePath.toString(), hexoMeta)
+
     const find = this[type].find((t) => t.name === name)
 
     if (!find) {
       this[type].push({
         name,
-        files: [metadata],
+        files: [hexoMeta],
       })
       return
     }
 
-    const exist = find.files.find((f) => f.filePath === metadata.filePath)
+    const exist = find.files.find((f) => f.filePath === hexoMeta.filePath)
 
     if (!exist) {
-      find.files.push(metadata)
+      find.files.push(hexoMeta)
     }
   }
 }

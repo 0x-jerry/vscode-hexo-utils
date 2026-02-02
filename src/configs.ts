@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { Uri, workspace } from 'vscode'
-import yamljs from 'yamljs'
+import yaml from 'yaml'
 
 const ConfigSection = 'hexo'
 
@@ -104,7 +104,7 @@ export const configs = {
     try {
       const configUri = Uri.joinPath(configs.hexoRoot, '_config.yml')
       const hexoConf = await workspace.fs.readFile(configUri)
-      return yamljs.parse(hexoConf.toString())
+      return yaml.parse(hexoConf.toString())
     } catch (error) {
       return null
     }

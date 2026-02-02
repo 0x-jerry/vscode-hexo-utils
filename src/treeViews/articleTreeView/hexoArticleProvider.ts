@@ -15,7 +15,7 @@ import { MoveFile } from '../../commands'
 import { Commands } from '../../commands/common'
 import { ArticleTypes } from '../../commands/createArticle'
 import { ConfigProperties, configs, getConfig, SortBy } from '../../configs'
-import type { IHexoMetadata } from '../../hexoMetadata'
+import { HexoMetadataUtils, type IHexoMetadata } from '../../hexoMetadata'
 import { getMDFileMetadata, getMDFiles } from '../../utils'
 import { BaseDispose } from '../common'
 import { mineTypePrefix } from './const'
@@ -111,10 +111,11 @@ export class HexoArticleProvider
       this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
 
     const paths = await getMDFiles(articleRootPath)
+    const utils = await HexoMetadataUtils.get()
 
     await Promise.all(
       paths.map(async (p) => {
-        const metadata = await getMDFileMetadata(p)
+        const metadata = utils.getMetadataByUri(p) || (await getMDFileMetadata(p))
 
         const name = p.fsPath.slice(articleRootPath.fsPath.length + 1)
 

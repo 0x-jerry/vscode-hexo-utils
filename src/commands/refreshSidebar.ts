@@ -8,7 +8,7 @@ export class RefreshSidebar extends Command {
   constructor() {
     super(Commands.refresh)
 
-    this.refreshAll = debounce(this.refreshAll, 20)
+    this.refreshAll = debounce(this.refreshAll, 500)
 
     this.watchFiles()
     this.configChanged()
