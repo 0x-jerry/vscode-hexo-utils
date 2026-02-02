@@ -27,7 +27,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
     for (let i = fmStart + 1; i < fmEnd; i++) {
       const line = lines[i]
 
-      if (line.startsWith(`${HexoMetadataKeys.tags}:`) || line.startsWith('tag:')) {
+      if (line.startsWith(`${HexoMetadataKeys.tags}:`)) {
         const range = new Range(i, 0, i, 0)
         lenses.push(
           new CodeLens(range, {
@@ -37,7 +37,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
         )
       }
 
-      if (line.startsWith(`${HexoMetadataKeys.categories}:`) || line.startsWith('category:')) {
+      if (line.startsWith(`${HexoMetadataKeys.categories}:`)) {
         const range = new Range(i, 0, i, 0)
         lenses.push(
           new CodeLens(range, {

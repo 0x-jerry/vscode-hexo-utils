@@ -136,7 +136,7 @@ function applyTagsStyle(node: any) {
  * Prepare value for categories based on string[] input
  * Converts ["Frontend / React", "Backend"] to [["Frontend", "React"], "Backend"]
  */
-export function prepareCategoriesValue(values: string[]): any {
+export function prepareCategoriesValue(values: string[]): string | (string | string[])[] {
   if (values.length === 0) return []
 
   const result = values.map((val) => {
@@ -154,7 +154,7 @@ export function prepareCategoriesValue(values: string[]): any {
   return result
 }
 
-export function prepareTagsValue(values: string[]): any {
+export function prepareTagsValue(values: string[]): string | string[] {
   if (values.length === 0) return []
   if (values.length === 1) return values[0]
   return values

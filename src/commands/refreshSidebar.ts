@@ -11,7 +11,6 @@ export class RefreshSidebar extends Command {
     this.refreshAll = debounce(this.refreshAll, 500)
 
     this.watchFiles()
-    this.watchTextDocuments()
     this.configChanged()
   }
 
@@ -24,15 +23,6 @@ export class RefreshSidebar extends Command {
     commands.executeCommand(Commands.refreshDraft)
     commands.executeCommand(Commands.refreshCategories)
     commands.executeCommand(Commands.refreshTags)
-  }
-
-  watchTextDocuments() {
-    const listener = workspace.onDidChangeTextDocument((e) => {
-      if (e.document.languageId === 'markdown') {
-        this.refreshAll()
-      }
-    })
-    this.subscribe(listener)
   }
 
   configChanged() {

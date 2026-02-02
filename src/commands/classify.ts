@@ -24,13 +24,7 @@ export abstract class ClassifyCommand extends Command {
     const text = editor.document.getText()
     const data = parseFrontMatter(text) || {}
 
-    const rawVal =
-      data[key] ||
-      (key === HexoMetadataKeys.categories
-        ? data.category
-        : key === HexoMetadataKeys.tags
-          ? data.tag
-          : undefined)
+    const rawVal = data[key]
 
     if (!rawVal) return []
 

@@ -13,7 +13,7 @@ import {
 } from 'vscode'
 import { configs } from './configs'
 import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
-import { isInFrontMatter, parseFrontMatter, frontMatterKeys } from './utils'
+import { isInFrontMatter, frontMatterKeys, getMDFileMetadata } from './utils'
 
 
 export class HexoFrontMatterCompletionProvider implements CompletionItemProvider {
@@ -39,14 +39,14 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
     let key: string | undefined
 
     // tags: xxx, yyy
-    const tagMatch = lineTextBefore.match(new RegExp(`^\\s*(${HexoMetadataKeys.tags}|tag):\\s*(.*)$`))
+    const tagMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.tags}:\\s*(.*)$`))
     if (tagMatch) {
       key = HexoMetadataKeys.tags
     }
 
     // categories: xxx
     const categoryMatch = lineTextBefore.match(
-      new RegExp(`^\\s*(${HexoMetadataKeys.categories}|category):\\s*(.*)$`),
+      new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`),
     )
     if (categoryMatch) {
       key = HexoMetadataKeys.categories
@@ -58,11 +58,11 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
       key = this.getParentKey(document, position.line)
     }
 
-    if (key === HexoMetadataKeys.tags || key === 'tag') {
+    if (key === HexoMetadataKeys.tags) {
       return this.completeByMetaKey(HexoMetadataKeys.tags, await HexoMetadataUtils.getTags())
     }
 
-    if (key === HexoMetadataKeys.categories || key === 'category') {
+    if (key === HexoMetadataKeys.categories) {
       return this.completeByMetaKey(
         HexoMetadataKeys.categories,
         await HexoMetadataUtils.getCategories(),
@@ -73,7 +73,7 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
     const keyMatch = lineTextBefore.match(/^(\s*)([\w-]*)$/)
     if (keyMatch) {
       const allKeys = await HexoMetadataUtils.getAllKeys()
-      const documentKeys = this.getDocumentKeys(document)
+      const documentKeys = (await getMDFileMetadata(document.uri)).keys
 
       const candidates = Array.from(new Set([...frontMatterKeys, ...allKeys])).filter(
         (k) => !documentKeys.includes(k),
@@ -100,13 +100,6 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
       }
       return item
     })
-  }
-
-  private getDocumentKeys(document: TextDocument): string[] {
-    const data = parseFrontMatter(document.getText())
-    if (!data) return []
-
-    return Object.keys(data)
   }
 
   private getParentKey(document: TextDocument, line: number): string | undefined {

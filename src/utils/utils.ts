@@ -20,7 +20,7 @@ const metaCache: Record<string, IHexoMetadata> = {}
 export function parseMetadata(text: string, uri: Uri, mtime: number): IHexoMetadata {
   const data = parseFrontMatter(text) || {}
 
-  const rawCategories = data[HexoMetadataKeys.categories] || data.category || []
+  const rawCategories = data[HexoMetadataKeys.categories] || []
   const categories: (string | string[])[] = Array.isArray(rawCategories)
     ? rawCategories
     : typeof rawCategories === 'string'
@@ -31,7 +31,7 @@ export function parseMetadata(text: string, uri: Uri, mtime: number): IHexoMetad
     .filter((c) => !!c)
     .map((c) => (Array.isArray(c) ? c.join(' / ') : String(c)))
 
-  const rawTags = data[HexoMetadataKeys.tags] || data.tag || []
+  const rawTags = data[HexoMetadataKeys.tags] || []
   const tags: string[] = Array.isArray(rawTags)
     ? rawTags.map(String)
     : typeof rawTags === 'string'
@@ -52,35 +52,17 @@ export function parseMetadata(text: string, uri: Uri, mtime: number): IHexoMetad
 export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
   const cacheId = uri.toString()
   const doc = workspace.textDocuments.find((d) => d.uri.toString() === cacheId)
+  const mtime = doc?.isDirty ? Date.now() : (await workspace.fs.stat(uri)).mtime
 
-  if (doc) {
-    const text = doc.getText()
-    const mtime = doc.isDirty ? Date.now() : (await workspace.fs.stat(uri)).mtime
-
+  try {
     const hit = metaCache[cacheId]
     if (hit && mtime === hit.mtime) {
       return hit
     }
 
-    const metadata = parseMetadata(text, uri, mtime)
+    const content = doc?.getText() || (await workspace.fs.readFile(uri)).toString()
+    const metadata = parseMetadata(content, uri, mtime)
     metaCache[cacheId] = metadata
-    return metadata
-  }
-
-  const stat = await workspace.fs.stat(uri)
-  const hit = metaCache[cacheId]
-
-  if (hit && stat.mtime === hit.mtime) {
-    return hit
-  }
-
-  try {
-    const content = await workspace.fs.readFile(uri)
-    const text = content.toString()
-    const metadata = parseMetadata(text, uri, stat.mtime)
-
-    metaCache[cacheId] = metadata
-
     return metadata
   } catch (error) {
     const metadata = {
@@ -88,8 +70,8 @@ export async function getMDFileMetadata(uri: Uri): Promise<IHexoMetadata> {
       categories: [],
       filePath: uri,
       title: path.parse(uri.fsPath).name,
-      date: new Date(stat.ctime),
-      mtime: 0,
+      date: new Date(mtime),
+      mtime,
       keys: [],
     }
 
