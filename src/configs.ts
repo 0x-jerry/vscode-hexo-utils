@@ -1,11 +1,11 @@
 import path from 'node:path'
 import { Uri, workspace } from 'vscode'
 import yaml from 'yaml'
+import type { IFileMetadata } from './metadata'
 
 const ConfigSection = 'hexo'
 
 export enum ConfigProperties {
-  includeDraft = 'includeDraft',
   resolveMarkdownResource = 'markdown.resource',
   autoPreview = 'markdown.autoPreview',
   hexoRoot = 'hexoProjectRoot',
@@ -65,7 +65,6 @@ type ConfigTypeMap = {
   [ConfigProperties.hexoRoot]: string
   [ConfigProperties.imgChr]: ImgChrOption
   [ConfigProperties.customUpload]: CustomUploadOption
-  [ConfigProperties.includeDraft]: boolean
   [ConfigProperties.resolveMarkdownResource]: boolean
   [ConfigProperties.autoPreview]: boolean
   [ConfigProperties.sortMethod]: SortBy
@@ -119,3 +118,21 @@ export function getConfigKey(propName: ConfigProperties) {
 }
 
 export const isDev = process.env.NODE_ENV === 'development'
+
+export function getSortMethodFn() {
+  const sortMethod = getConfig(ConfigProperties.sortMethod)
+
+  return sortFn
+
+  function sortFn(a: IFileMetadata, b: IFileMetadata) {
+    if (sortMethod === SortBy.name) {
+      return a.name < b.name ? -1 : 1
+    }
+
+    if (sortMethod === SortBy.date) {
+      return (a.data.date ?? 0) < (b.data.date ?? 0) ? 1 : -1
+    }
+
+    return 0
+  }
+}

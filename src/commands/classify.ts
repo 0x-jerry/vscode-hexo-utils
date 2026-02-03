@@ -1,23 +1,16 @@
+import { remove } from '@0x-jerry/utils'
+import { isEqual, uniq, uniqWith } from 'lodash-es'
+import { window, workspace } from 'vscode'
 import {
-  commands,
-  Range,
-  type TextEditor,
-  type Uri,
-  WorkspaceEdit,
-  window,
-  workspace,
-} from 'vscode'
-import { HexoMetadataKeys, HexoMetadataUtils } from '../hexoMetadata'
+  HexoMetadataKeys,
+  metadataManager,
+  toCategoryLabel,
+  updateDocumentFrontmatter,
+} from '../metadata'
 import { ClassifyItem } from '../treeViews/classifyTreeView/hexoClassifyProvider'
-import {
-  parseFrontMatter,
-  prepareCategoriesValue,
-  prepareTagsValue,
-  updateFrontMatter,
-} from '../utils'
 import { Command, Commands, command, type ICommandParsed } from './common'
 
-export abstract class ClassifyCommand extends Command {
+abstract class ClassifyCommand extends Command {
   protected getType(cmd: ICommandParsed, item?: ClassifyItem): HexoMetadataKeys {
     if (cmd.args[0] === 'tags') {
       return HexoMetadataKeys.tags
@@ -26,72 +19,6 @@ export abstract class ClassifyCommand extends Command {
       return HexoMetadataKeys.categories
     }
     return (item?.type as unknown as HexoMetadataKeys) || HexoMetadataKeys.tags
-  }
-
-  protected getCurrentValues(editor: TextEditor, key: string): string[] {
-    const text = editor.document.getText()
-    const data = parseFrontMatter(text) || {}
-
-    const rawVal = data[key]
-
-    if (!rawVal) return []
-
-    if (Array.isArray(rawVal)) {
-      if (key === HexoMetadataKeys.categories) {
-        return rawVal.map((v) => (Array.isArray(v) ? v.join(' / ') : String(v)))
-      }
-      return rawVal.map((v) => String(v))
-    }
-
-    if (typeof rawVal === 'string') {
-      return [rawVal]
-    }
-
-    return []
-  }
-
-  protected async updateFile(uri: Uri, key: string, values: string[]) {
-    const document = await workspace.openTextDocument(uri)
-    const text = document.getText()
-
-    const preparedValue =
-      key === HexoMetadataKeys.categories
-        ? prepareCategoriesValue(values)
-        : prepareTagsValue(values)
-
-    const newText = updateFrontMatter(text, key, preparedValue)
-
-    if (newText !== text) {
-      const edit = new WorkspaceEdit()
-      edit.replace(
-        uri,
-        new Range(
-          0,
-          0,
-          document.lineCount,
-          document.lineAt(document.lineCount - 1).range.end.character,
-        ),
-        newText,
-      )
-      await workspace.applyEdit(edit)
-      await document.save()
-    }
-  }
-
-  protected async updateEditor(editor: TextEditor, key: string, values: string[]) {
-    await this.updateFile(editor.document.uri, key, values)
-  }
-
-  protected normalizeCategory(val: string): string {
-    let parts: string[] = []
-    const trimmedVal = val.trim()
-    if (trimmedVal.startsWith('[') && trimmedVal.endsWith(']')) {
-      const content = trimmedVal.slice(1, -1)
-      parts = content.split(',').map((s) => s.trim().replace(/^["']|["']$/g, ''))
-    } else {
-      parts = val.split('/').map((s) => s.trim())
-    }
-    return parts.filter(Boolean).join(' / ')
   }
 }
 
@@ -103,14 +30,19 @@ export class SelectTags extends ClassifyCommand {
 
   async execute(): Promise<void> {
     const editor = window.activeTextEditor
+    const metadataKey = HexoMetadataKeys.tags
+
     if (!editor) {
       return
     }
 
-    const currentTags = this.getCurrentValues(editor, HexoMetadataKeys.tags)
-    const allTags = await HexoMetadataUtils.getTags()
+    const metadata = await metadataManager.get(editor.document.uri)
 
-    const items = allTags
+    const currentTags = metadata.data.tags || []
+
+    const allTags = await metadataManager.getAvailableValuesByKey<string[]>(metadataKey)
+
+    const items = uniq(allTags.flat())
       .map((tag) => ({
         label: tag,
         picked: currentTags.includes(tag),
@@ -122,13 +54,13 @@ export class SelectTags extends ClassifyCommand {
       placeHolder: 'Select tags',
     })
 
-    if (selected) {
-      this.updateEditor(
-        editor,
-        HexoMetadataKeys.tags,
-        selected.map((item) => item.label),
-      )
+    const newSelectedTags = selected?.map((item) => item.label)
+
+    if (!newSelectedTags) {
+      return
     }
+
+    await updateDocumentFrontmatter(editor.document, metadataKey, newSelectedTags)
   }
 }
 
@@ -144,13 +76,21 @@ export class SelectCategories extends ClassifyCommand {
       return
     }
 
-    const currentCategories = this.getCurrentValues(editor, HexoMetadataKeys.categories)
-    const allCategories = await HexoMetadataUtils.getCategories()
+    const metadataKey = HexoMetadataKeys.categories
 
-    const items = allCategories
+    const metadata = await metadataManager.get(editor.document.uri)
+
+    const currentCategories = metadata.data.categories || []
+
+    const allCategories = (
+      await metadataManager.getAvailableValuesByKey<string[][]>(metadataKey)
+    ).flat()
+
+    const items = uniqWith(allCategories, isEqual)
       .map((category) => ({
-        label: category,
-        picked: currentCategories.includes(category),
+        label: toCategoryLabel(category),
+        value: category,
+        picked: currentCategories.some((c) => isEqual(c, category)),
       }))
       .sort((a, b) => Number(b.picked) - Number(a.picked))
 
@@ -159,18 +99,20 @@ export class SelectCategories extends ClassifyCommand {
       placeHolder: 'Select categories',
     })
 
-    if (selected) {
-      this.updateEditor(
-        editor,
-        HexoMetadataKeys.categories,
-        selected.map((item) => item.label),
-      )
+    const newSelectedCategories = selected?.map((item) =>
+      item.value.length > 1 ? item.value : item.value[0],
+    )
+
+    if (!newSelectedCategories) {
+      return
     }
+
+    await updateDocumentFrontmatter(editor.document, metadataKey, newSelectedCategories)
   }
 }
 
 @command()
-export class ClassifyAdd extends ClassifyCommand {
+export class AddTagOrCategory extends ClassifyCommand {
   constructor() {
     super(Commands.classifyAddTag, Commands.classifyAddCategory)
   }
@@ -180,54 +122,104 @@ export class ClassifyAdd extends ClassifyCommand {
       return
     }
 
-    const type = this.getType(cmd, item)
-    const oldName = typeof item.label === 'string' ? item.label : item.label.label
+    const type = cmd.args[0]
+
+    const currentClassifiedName = typeof item.label === 'string' ? item.label : item.label.label
     const typeLabel = type === HexoMetadataKeys.tags ? 'tag' : 'category'
 
-    let newName = await window.showInputBox({
-      prompt: `Add new ${typeLabel} to articles under "${oldName}"`,
+    const newName = await window.showInputBox({
+      prompt: `Please input new ${typeLabel} to articles under "${currentClassifiedName}" ${typeLabel}`,
     })
 
     if (!newName) {
       return
     }
 
-    if (type === HexoMetadataKeys.categories) {
-      newName = this.normalizeCategory(newName)
+    if (type === HexoMetadataKeys.tags) {
+      await this.applyByTag(newName, currentClassifiedName)
+    } else {
+      await this.applyByCategory(newName, currentClassifiedName)
     }
+  }
 
-    const utils = await HexoMetadataUtils.get()
-    const classifies = type === HexoMetadataKeys.tags ? utils.tags : utils.categories
-    const classify = classifies.find((c) => c.name === oldName)
+  async applyByTag(newTag: string, currentGroupedName: string) {
+    const grouped = await metadataManager.getGroupedMetadataByTags()
 
-    if (!classify) {
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    if (!group) {
       return
     }
 
     let updatedCount = 0
 
-    for (const metadata of classify.files) {
-      const file = metadata.filePath
-      const values = type === HexoMetadataKeys.tags ? [...metadata.tags] : [...metadata.categories]
-
-      if (!values.includes(newName)) {
-        values.push(newName)
-        await this.updateFile(file, type, values)
-        updatedCount++
+    for (const metadata of group.items) {
+      if (metadata.data.tags?.includes(newTag)) {
+        continue
       }
+
+      updatedCount++
+
+      const newTags = uniq([...(metadata.data.tags || []), newTag])
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.tags, newTags)
     }
 
     if (updatedCount > 0) {
-      window.showInformationMessage(`Added ${typeLabel} "${newName}" to ${updatedCount} files`)
-      commands.executeCommand(Commands.refresh)
+      window.showInformationMessage(`Added new tag "${newTag}" to ${updatedCount} files`)
     } else {
-      window.showInformationMessage(`All files already have ${typeLabel} "${newName}"`)
+      window.showInformationMessage(`All files already have tag "${newTag}"`)
+    }
+  }
+
+  /**
+   *
+   * @param newCategory example.: `c1` or `c1 / c2`
+   */
+  async applyByCategory(newCategory: string, currentGroupedName: string) {
+    const newNormalizedCategory = newCategory
+      .split('/')
+      .map((c) => c.trim())
+      .filter(Boolean)
+
+    const grouped = await metadataManager.getGroupedMetadataByCategories()
+
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    if (!group) {
+      return
+    }
+
+    let updatedCount = 0
+
+    for (const metadata of group.items) {
+      if (metadata.data.categories?.some((c) => isEqual(c, newNormalizedCategory))) {
+        continue
+      }
+
+      updatedCount++
+
+      const newCategories = uniq([...(metadata.data.categories || []), newNormalizedCategory])
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.categories, newCategories)
+    }
+
+    const categoryLabel = toCategoryLabel(newNormalizedCategory)
+
+    if (updatedCount > 0) {
+      window.showInformationMessage(
+        `Added new category "${categoryLabel}" to ${updatedCount} files`,
+      )
+    } else {
+      window.showInformationMessage(`All files already have tag "${categoryLabel}"`)
     }
   }
 }
 
 @command()
-export class ClassifyRename extends ClassifyCommand {
+export class RenameTagOrCategory extends ClassifyCommand {
   constructor() {
     super(Commands.classifyRenameTag, Commands.classifyRenameCategory)
   }
@@ -237,58 +229,88 @@ export class ClassifyRename extends ClassifyCommand {
       return
     }
 
-    const type = this.getType(cmd, item)
-    const oldName = typeof item.label === 'string' ? item.label : item.label.label
-    const typeLabel = type === HexoMetadataKeys.tags ? 'Tag' : 'Category'
+    const type = cmd.args[0]
 
-    let newName = await window.showInputBox({
-      value: oldName,
-      prompt: `Rename ${typeLabel}`,
+    const currentClassifiedName = typeof item.label === 'string' ? item.label : item.label.label
+    const typeLabel = type === HexoMetadataKeys.tags ? 'tag' : 'category'
+
+    const newName = await window.showInputBox({
+      value: currentClassifiedName,
+      prompt: `Please input new ${typeLabel}`,
     })
 
-    if (!newName || newName === oldName) {
+    if (!newName || newName === currentClassifiedName) {
       return
     }
 
-    if (type === HexoMetadataKeys.categories) {
-      newName = this.normalizeCategory(newName)
-      if (newName === oldName) {
-        return
-      }
+    if (type === HexoMetadataKeys.tags) {
+      await this.applyByTag(newName, currentClassifiedName)
+    } else {
+      await this.applyByCategory(newName, currentClassifiedName)
     }
 
-    const utils = await HexoMetadataUtils.get()
-    const classifies = type === HexoMetadataKeys.tags ? utils.tags : utils.categories
-    const classify = classifies.find((c) => c.name === oldName)
+    return
+  }
 
-    if (!classify) {
+  async applyByTag(newTag: string, currentGroupedName: string) {
+    const grouped = await metadataManager.getGroupedMetadataByTags()
+
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    if (!group?.items.length) {
       return
     }
 
-    for (const metadata of classify.files) {
-      const file = metadata.filePath
-      const values = type === HexoMetadataKeys.tags ? [...metadata.tags] : [...metadata.categories]
-      const index = values.indexOf(oldName)
-      if (index !== -1) {
-        // If newName already exists, just remove oldName, else replace it
-        if (values.includes(newName)) {
-          values.splice(index, 1)
-        } else {
-          values[index] = newName
-        }
-        await this.updateFile(file, type, values)
-      }
+    for (const metadata of group.items) {
+      const newTags = [...(metadata.data.tags || []), newTag]
+      remove(newTags, currentGroupedName)
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.tags, newTags)
     }
 
-    window.showInformationMessage(
-      `Renamed ${oldName} to ${newName} in ${classify.files.length} files`,
-    )
-    commands.executeCommand(Commands.refresh)
+    const msg = `Renamed ${currentGroupedName} to ${newTag} in ${group.items.length} files`
+    window.showInformationMessage(msg)
+  }
+
+  /**
+   *
+   * @param newCategory example.: `c1` or `c1 / c2`
+   */
+  async applyByCategory(newCategory: string, currentGroupedName: string) {
+    const newNormalizedCategory = newCategory
+      .split('/')
+      .map((c) => c.trim())
+      .filter(Boolean)
+
+    const grouped = await metadataManager.getGroupedMetadataByCategories()
+
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    if (!group?.items.length) {
+      return
+    }
+
+    const currentNormalizedCategory = currentGroupedName
+      .split('/')
+      .map((n) => n.trim())
+      .filter(Boolean)
+
+    for (const metadata of group.items) {
+      const newCategories = [...(metadata.data.categories || []), newNormalizedCategory]
+      remove(newCategories, (c) => isEqual(c, currentNormalizedCategory))
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.categories, newCategories)
+    }
+
+    const msg = `Renamed ${currentGroupedName} to ${toCategoryLabel(newNormalizedCategory)} in ${group.items.length} files`
+    window.showInformationMessage(msg)
   }
 }
 
 @command()
-export class ClassifyDelete extends ClassifyCommand {
+export class RemoveTagOrCategory extends ClassifyCommand {
   constructor() {
     super(Commands.classifyDeleteTag, Commands.classifyDeleteCategory)
   }
@@ -298,12 +320,13 @@ export class ClassifyDelete extends ClassifyCommand {
       return
     }
 
-    const type = this.getType(cmd, item)
-    const name = typeof item.label === 'string' ? item.label : item.label.label
+    const type = cmd.args[0]
+
+    const currentClassifiedName = typeof item.label === 'string' ? item.label : item.label.label
     const typeLabel = type === HexoMetadataKeys.tags ? 'tag' : 'category'
 
     const confirm = await window.showWarningMessage(
-      `Are you sure you want to delete ${typeLabel} "${name}" from all files?`,
+      `Are you sure you want to delete ${typeLabel} "${currentClassifiedName}" from all files?`,
       { modal: true },
       'Delete',
     )
@@ -312,27 +335,64 @@ export class ClassifyDelete extends ClassifyCommand {
       return
     }
 
-    const utils = await HexoMetadataUtils.get()
-    const classifies = type === HexoMetadataKeys.tags ? utils.tags : utils.categories
-    const classify = classifies.find((c) => c.name === name)
+    if (type === HexoMetadataKeys.tags) {
+      await this.applyByTag(currentClassifiedName)
+    } else {
+      await this.applyByCategory(currentClassifiedName)
+    }
 
-    if (!classify) {
+    return
+  }
+
+  async applyByTag(currentGroupedName: string) {
+    const grouped = await metadataManager.getGroupedMetadataByTags()
+
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    if (!group?.items.length) {
       return
     }
 
-    for (const metadata of classify.files) {
-      const file = metadata.filePath
-      const values = type === HexoMetadataKeys.tags ? [...metadata.tags] : [...metadata.categories]
-      const index = values.indexOf(name)
-      if (index !== -1) {
-        values.splice(index, 1)
-        await this.updateFile(file, type, values)
-      }
+    for (const metadata of group.items) {
+      const newTags = [...(metadata.data.tags || [])]
+      remove(newTags, currentGroupedName)
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.tags, newTags)
     }
 
-    window.showInformationMessage(
-      `Deleted ${typeLabel} ${name} from ${classify.files.length} files`,
-    )
-    commands.executeCommand(Commands.refresh)
+    const msg = `Deleted tag ${currentGroupedName} from ${group.items.length} files`
+    window.showInformationMessage(msg)
+  }
+
+  /**
+   *
+   * @param newCategory example.: `c1` or `c1 / c2`
+   */
+  async applyByCategory(currentGroupedName: string) {
+    const grouped = await metadataManager.getGroupedMetadataByCategories()
+
+    const group = grouped.find((g) => g.name === currentGroupedName)
+
+    console.log(group, grouped)
+    if (!group?.items.length) {
+      return
+    }
+
+    const currentNormalizedCategory = currentGroupedName
+      .split('/')
+      .map((n) => n.trim())
+      .filter(Boolean)
+
+    for (const metadata of group.items) {
+      const newCategories = [...(metadata.data.categories || [])]
+      remove(newCategories, (c) => isEqual(c, currentNormalizedCategory))
+
+      const doc = await workspace.openTextDocument(metadata.uri)
+      await updateDocumentFrontmatter(doc, HexoMetadataKeys.categories, newCategories)
+    }
+
+    const msg = `Deleted category ${currentGroupedName} from ${group.items.length} files`
+    window.showInformationMessage(msg)
   }
 }

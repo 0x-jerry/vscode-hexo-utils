@@ -1,3 +1,4 @@
+import { toValue, type Value } from '@0x-jerry/utils'
 import {
   type CancellationToken,
   CodeLens,
@@ -6,100 +7,104 @@ import {
   type TextDocument,
 } from 'vscode'
 import { Commands } from './commands/common'
-import { HexoMetadataKeys } from './hexoMetadata'
-import { getFrontMatterRange } from './utils'
+import { HexoMetadataKeys, metadataManager } from './metadata'
 
 export class HexoCodeLensProvider implements CodeLensProvider {
-  provideCodeLenses(
-    document: TextDocument,
-    token: CancellationToken,
-  ): CodeLens[] | Thenable<CodeLens[]> {
+  async provideCodeLenses(document: TextDocument, _token: CancellationToken): Promise<CodeLens[]> {
     const lenses: CodeLens[] = []
-    const lines = document.getText().split(/\r?\n/)
+    const data = await metadataManager.get(document.uri)
 
-    const range = getFrontMatterRange(document)
+    const range = data.range
     if (!range) {
-      return []
+      return lenses
     }
 
     const { start: fmStart, end: fmEnd } = range
 
+    const lines = document.getText().split(/\r?\n/)
+
+    const hasLens = {
+      date: false,
+      updated: false,
+    }
+
     for (let i = fmStart + 1; i < fmEnd; i++) {
       const line = lines[i]
 
-      if (line.startsWith(`${HexoMetadataKeys.tags}:`)) {
-        const range = new Range(i, 0, i, 0)
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(tag) Select Tags',
-            command: Commands.selectTags,
-          }),
-        )
-      }
+      pushLenseIf({
+        condition: line.startsWith(`${HexoMetadataKeys.tags}:`),
+        line: i,
+        title: '$(tag) Select Tags',
+        command: Commands.selectTags,
+      })
 
-      if (line.startsWith(`${HexoMetadataKeys.categories}:`)) {
-        const range = new Range(i, 0, i, 0)
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(list-unordered) Select Categories',
-            command: Commands.selectCategories,
-          }),
-        )
-      }
+      pushLenseIf({
+        condition: line.startsWith(`${HexoMetadataKeys.categories}:`),
+        line: i,
+        title: '$(list-unordered) Select Categories',
+        command: Commands.selectCategories,
+      })
 
       if (line.startsWith(`${HexoMetadataKeys.date}:`)) {
-        const range = new Range(i, 0, i, 0)
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(calendar) Update Date',
-            command: Commands.updateDate,
-            arguments: [HexoMetadataKeys.date],
-          }),
-        )
+        hasLens.date = true
+        pushLenseIf({
+          condition: true,
+          line: i,
+          title: '$(calendar) Update Date',
+          command: Commands.updateDate,
+        })
       }
 
       if (line.startsWith(`${HexoMetadataKeys.updated}:`)) {
-        const range = new Range(i, 0, i, 0)
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(calendar) Update Updated',
-            command: Commands.updateDate,
-            arguments: [HexoMetadataKeys.updated],
-          }),
-        )
+        hasLens.updated = true
+
+        pushLenseIf({
+          condition: true,
+          line: i,
+          title: '$(calendar) Update Updated',
+          command: Commands.updateDate,
+        })
       }
     }
 
-    // If date or updated is missing, provide insert option
-    if (fmStart !== -1 && fmEnd !== -1) {
-      const hasDate = lines
-        .slice(fmStart, fmEnd)
-        .some((l) => l.startsWith(`${HexoMetadataKeys.date}:`))
-      const hasUpdated = lines
-        .slice(fmStart, fmEnd)
-        .some((l) => l.startsWith(`${HexoMetadataKeys.updated}:`))
+    pushLenseIf({
+      condition: !hasLens.date,
+      line: fmStart,
+      title: '$(calendar) Insert Date',
+      command: Commands.updateDate,
+      arguments: [HexoMetadataKeys.date],
+    })
 
-      const range = new Range(fmStart, 0, fmStart, 0)
-      if (!hasDate) {
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(calendar) Insert Date',
-            command: Commands.updateDate,
-            arguments: [HexoMetadataKeys.date],
-          }),
-        )
-      }
-      if (!hasUpdated) {
-        lenses.push(
-          new CodeLens(range, {
-            title: '$(calendar) Insert Updated',
-            command: Commands.updateDate,
-            arguments: [HexoMetadataKeys.updated],
-          }),
-        )
-      }
-    }
+    pushLenseIf({
+      condition: !hasLens.updated,
+      line: fmStart,
+      title: '$(calendar) Insert Updated',
+      command: Commands.updateDate,
+      arguments: [HexoMetadataKeys.updated],
+    })
 
     return lenses
+
+    function pushLenseIf(opt: {
+      condition: Value<boolean>
+      line: number
+      title: string
+      command: string
+      arguments?: unknown[]
+    }) {
+      const { line, condition, title, command, arguments: args } = opt
+
+      if (!toValue(condition)) {
+        return
+      }
+
+      lenses.push(
+        new CodeLens(new Range(line, 0, line, 0), {
+          title,
+          command,
+          arguments: args,
+        }),
+      )
+    }
   }
 }

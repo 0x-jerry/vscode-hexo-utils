@@ -1,7 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 
-import debounce from 'debounce'
 import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
 import { registerAutoPreview } from './autoPreview'
 import { registerCommands } from './commands'
@@ -11,25 +10,25 @@ import {
   HexoFrontMatterCompletionProvider,
   HexoImageCompletionProvider,
 } from './hexoCompletionProvider'
-import { HexoMetadataUtils } from './hexoMetadata'
-import plugin from './markdownItHexoResource'
 import type { MarkdownIt } from './md-it'
+import plugin from './md-it/markdownItHexoResource'
+import { metadataManager } from './metadata'
 import { registerTreeViews } from './treeViews'
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
   // Only activate when open with a workspace folder, close #98.
   if (!workspace.workspaceFolders?.length) {
     return
   }
 
-  const debouncedUpdate = debounce((uri) => {
-    HexoMetadataUtils.update(uri)
-  }, 1000)
+  context.subscriptions.push(metadataManager)
+
+  await metadataManager.buildCache()
 
   context.subscriptions.push(
     workspace.onDidChangeTextDocument((e) => {
       if (e.document.languageId === 'markdown') {
-        debouncedUpdate(e.document.uri)
+        metadataManager.update(e.document.uri)
       }
     }),
   )

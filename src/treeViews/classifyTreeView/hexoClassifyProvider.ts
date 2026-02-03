@@ -9,8 +9,8 @@ import {
   Uri,
 } from 'vscode'
 import { Commands } from '../../commands/common'
-import { ConfigProperties, configs, getConfig } from '../../configs'
-import { HexoMetadataKeys, HexoMetadataUtils } from '../../hexoMetadata'
+import { configs } from '../../configs'
+import { HexoMetadataKeys, metadataManager } from '../../metadata'
 import { BaseDispose } from '../common'
 
 export enum ClassifyTypes {
@@ -24,7 +24,6 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
   type: ClassifyTypes = ClassifyTypes.category
 
-  private _hexoMetadataUtils?: HexoMetadataUtils
   private _allItems: Map<string, ClassifyItem> = new Map()
 
   constructor(type: ClassifyTypes) {
@@ -36,9 +35,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
 
   refresh() {
     this._allItems = new Map()
-    HexoMetadataUtils.get(true).then(() => {
-      this._onDidChangeTreeData.fire(null)
-    })
+    this._onDidChangeTreeData.fire(null)
   }
 
   getTreeItem(element: ClassifyItem): TreeItem | Thenable<TreeItem> {
@@ -58,32 +55,28 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
     const postFolder = configs.paths.post
     const draftFolder = configs.paths.draft
 
-    const include = getConfig(ConfigProperties.includeDraft)
-
-    this._hexoMetadataUtils = await HexoMetadataUtils.get()
-
     const items: ClassifyItem[] = []
-    if (element && this._hexoMetadataUtils) {
-      const classify = this._hexoMetadataUtils[this.type].find((t) => t.name === element.label)
+    const grouped = await metadataManager.getGroupedMetadataByTags()
 
-      if (classify) {
-        for (const metadata of classify.files) {
-          const isDraft = include && metadata.filePath.fsPath.startsWith(draftFolder.fsPath)
+    if (element) {
+      const classify = grouped.find((n) => n.name === element.label)
 
-          const name = path.relative(
-            isDraft ? draftFolder.fsPath : postFolder.fsPath,
-            metadata.filePath.fsPath,
-          )
+      for (const metadata of classify?.items || []) {
+        const isDraft = metadata.uri.fsPath.startsWith(draftFolder.fsPath)
 
-          const item = new ClassifyItem(name, this.type, metadata.filePath)
-          item.parent = element
+        const name = path.relative(
+          isDraft ? draftFolder.fsPath : postFolder.fsPath,
+          metadata.uri.fsPath,
+        )
 
-          this._allItems.set(metadata.filePath.fsPath, item)
-          items.push(item)
-        }
+        const item = new ClassifyItem(name, this.type, metadata.uri, undefined, isDraft)
+        item.parent = element
+
+        this._allItems.set(metadata.uri.fsPath, item)
+        items.push(item)
       }
     } else {
-      const classifies = this._hexoMetadataUtils?.[this.type] || []
+      const classifies = grouped
 
       for (const t of classifies) {
         const item = new ClassifyItem(
@@ -110,6 +103,7 @@ export class ClassifyItem extends TreeItem {
     readonly type: ClassifyTypes,
     uri?: Uri,
     collapsibleState?: TreeItemCollapsibleState,
+    isDraft?: boolean,
   ) {
     super(label, collapsibleState)
     const resourcesFolder = configs.project.resource
@@ -122,6 +116,10 @@ export class ClassifyItem extends TreeItem {
           dark: Uri.file(path.join(resourcesFolder, 'dark', `icon-${type}.svg`)),
           light: Uri.file(path.join(resourcesFolder, 'light', `icon-${type}.svg`)),
         }
+
+    if (isDraft) {
+      this.description = 'Draft'
+    }
 
     if (uri) {
       this.resourceUri = uri

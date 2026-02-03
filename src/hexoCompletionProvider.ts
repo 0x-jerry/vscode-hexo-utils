@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { uniq } from 'lodash-es'
 import {
   type CancellationToken,
   type CompletionContext,
@@ -12,8 +13,7 @@ import {
   workspace,
 } from 'vscode'
 import { configs } from './configs'
-import { HexoMetadataKeys, HexoMetadataUtils } from './hexoMetadata'
-import { getMDFileMetadata, isInFrontMatter } from './utils'
+import { HexoMetadataKeys, isInFrontmatterRange, metadataManager } from './metadata'
 
 const builtinFrontmatterKeys = [
   'layout',
@@ -30,95 +30,90 @@ const builtinFrontmatterKeys = [
   'published',
 ]
 
+const YAML_KEY_RE = /^(\s*)([\w-]+)\s*:/
+const YAML_LIST_ITEM_RE = /^(\s*)-/
+
 export class HexoFrontMatterCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
     document: TextDocument,
     position: Position,
-    token: CancellationToken,
-    context: CompletionContext,
+    _token: CancellationToken,
+    _context: CompletionContext,
   ): Promise<CompletionItem[] | CompletionList> {
-    // Filter md file
-    if (!document.uri.fsPath.endsWith('.md')) {
+    const data = await metadataManager.get(document.uri)
+    const range = data.range
+
+    if (!range) {
+      return []
+    }
+
+    // Check if in Front Matter
+    if (!isInFrontmatterRange(range, position.line)) {
       return []
     }
 
     const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character)
 
-    // Check if in Front Matter
-    const isFrontMatter = isInFrontMatter(document, position)
-    if (!isFrontMatter) {
+    let key: undefined | string
+
+    // - xxx (list format)
+    const isListItem = lineTextBefore.match(YAML_LIST_ITEM_RE)
+
+    if (isListItem) {
+      key = this._getParentKey(document, position.line)
+    } else {
+      key = lineTextBefore.match(YAML_KEY_RE)?.at(2)
+    }
+
+    if (!key) {
+      // Key completion
+      const keyMatch = lineTextBefore.match(/^(\s*)([\w-]*)$/)
+      if (keyMatch) {
+        const allKeys = metadataManager.allFrontmatterKeys
+        const documentKeys = Object.keys((await metadataManager.get(document.uri)).data)
+
+        const candidates = Array.from(new Set([...builtinFrontmatterKeys, ...allKeys])).filter(
+          (k) => !documentKeys.includes(k),
+        )
+
+        return candidates.map((k) => {
+          const item = new CompletionItem(k, CompletionItemKind.Property)
+          item.insertText = `${k}: `
+          return item
+        })
+      }
+
       return []
     }
 
-    let key: string | undefined
+    const values = await metadataManager.getAvailableValuesByKey(key, [document.uri])
 
-    // tags: xxx, yyy
-    const tagMatch = lineTextBefore.match(new RegExp(`^\\s*${HexoMetadataKeys.tags}:\\s*(.*)$`))
-    if (tagMatch) {
-      key = HexoMetadataKeys.tags
-    }
+    return this._buildCompletionItems(HexoMetadataKeys.tags, values)
+  }
 
-    // categories: xxx
-    const categoryMatch = lineTextBefore.match(
-      new RegExp(`^\\s*${HexoMetadataKeys.categories}:\\s*(.*)$`),
-    )
-    if (categoryMatch) {
-      key = HexoMetadataKeys.categories
-    }
-
-    // - xxx (list format)
-    const listMatch = lineTextBefore.match(/^\s*-\s*(.*)$/)
-    if (listMatch) {
-      key = this.getParentKey(document, position.line)
-    }
-
+  _buildCompletionItems(key: string, values: unknown[]): CompletionItem[] {
     if (key === HexoMetadataKeys.tags) {
-      return this.completeByMetaKey(HexoMetadataKeys.tags, await HexoMetadataUtils.getTags())
-    }
-
-    if (key === HexoMetadataKeys.categories) {
-      return this.completeByMetaKey(
-        HexoMetadataKeys.categories,
-        await HexoMetadataUtils.getCategories(),
+      return uniq(values.flat()).map(
+        (tag) => new CompletionItem(String(tag), CompletionItemKind.Keyword),
       )
     }
 
-    // Key completion
-    const keyMatch = lineTextBefore.match(/^(\s*)([\w-]*)$/)
-    if (keyMatch) {
-      const allKeys = await HexoMetadataUtils.getAllKeys()
-      const documentKeys = (await getMDFileMetadata(document.uri)).keys
+    const normalizedValue = values.map((val) =>
+      Array.isArray(val) ? buildArrayValue(val) : String(val),
+    )
 
-      const candidates = Array.from(new Set([...builtinFrontmatterKeys, ...allKeys])).filter(
-        (k) => !documentKeys.includes(k),
-      )
+    return uniq(normalizedValue).map(
+      (label) => new CompletionItem(label, CompletionItemKind.Keyword),
+    )
 
-      return candidates.map((k) => {
-        const item = new CompletionItem(k, CompletionItemKind.Property)
-        item.insertText = `${k}: `
-        return item
-      })
+    function buildArrayValue(value: unknown[]) {
+      return `[${value.join(', ')}]`
     }
-
-    return []
   }
 
-  private completeByMetaKey(key: string, values: string[]): CompletionItem[] {
-    return values.map((val) => {
-      const item = new CompletionItem(val, CompletionItemKind.Keyword)
-      if (val && key === HexoMetadataKeys.categories) {
-        const parts = val.split(' / ')
-        if (parts.length > 1) {
-          item.insertText = `[${parts.join(', ')}]`
-        }
-      }
-      return item
-    })
-  }
-
-  private getParentKey(document: TextDocument, line: number): string | undefined {
+  _getParentKey(document: TextDocument, line: number): string | undefined {
     const currentLineText = document.lineAt(line).text
-    const match = currentLineText.match(/^(\s*)-/)
+    const match = currentLineText.match(YAML_LIST_ITEM_RE)
     if (!match) return undefined
 
     const currentIndentation = match[1].length
@@ -128,7 +123,7 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
       const text = l.text
       if (text.trim() === '---') break
 
-      const m = text.match(/^(\s*)([\w-]+)\s*:/)
+      const m = text.match(YAML_KEY_RE)
       if (m) {
         const indentation = m[1].length
         if (indentation <= currentIndentation) {
@@ -144,14 +139,9 @@ export class HexoImageCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
     document: TextDocument,
     position: Position,
-    token: CancellationToken,
-    context: CompletionContext,
+    _token: CancellationToken,
+    _context: CompletionContext,
   ): Promise<CompletionItem[] | CompletionList> {
-    // Filter md file
-    if (!document.uri.fsPath.endsWith('.md')) {
-      return []
-    }
-
     const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character)
 
     // ![xxx]()
@@ -167,23 +157,21 @@ export class HexoImageCompletionProvider implements CompletionItemProvider {
       .relative(isDraft ? configs.paths.draft.fsPath : configs.paths.post.fsPath, filePath)
       .replace(/\.md$/, '')
 
-    const resFolder = `source/_posts/${fileDir}/**/*.{png,jpg,jpeg,svg,gif}`
+    const resourceFilePattern = `source/_posts/${fileDir}/**/*.{png,jpg,jpeg,svg,gif}`
 
-    return workspace.findFiles(resFolder, '**/node_modules/**').then((uris) => {
-      return uris.map((imgUri) => {
-        const relPath = path.relative(document.uri.fsPath, imgUri.fsPath)
+    const uris = await workspace.findFiles(resourceFilePattern, '**/node_modules/**')
 
-        const resourceDir = path.join(configs.paths.post.fsPath, fileDir)
+    return uris.map((imgUri) => {
+      const relPath = path.relative(document.uri.fsPath, imgUri.fsPath)
 
-        const itemLabel = imgUri.fsPath.substr(resourceDir.length + 1).replace('\\', '/')
+      const resourceDir = path.join(configs.paths.post.fsPath, fileDir)
 
-        const item = new CompletionItem(itemLabel, CompletionItemKind.File)
+      const itemLabel = imgUri.fsPath.slice(resourceDir.length + 1).replace('\\', '/')
 
-        item.documentation = new MarkdownString(
-          `![${relPath}](${imgUri.fsPath.replace(/\\/g, '/')})`,
-        )
-        return item
-      })
+      const item = new CompletionItem(itemLabel, CompletionItemKind.File)
+
+      item.documentation = new MarkdownString(`![${relPath}](${imgUri.fsPath.replace(/\\/g, '/')})`)
+      return item
     })
   }
 }

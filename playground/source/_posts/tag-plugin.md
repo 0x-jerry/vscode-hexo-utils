@@ -1,7 +1,11 @@
 ---
 title: test hexo tag plugin
-tags: [hexo]
-categories: [test]
+tags:
+  - hexo
+categories:
+  - xx123
+  - utils
+  - [ test, f1 ]
 ---
 
 reference: https://hexo.io/docs/tag-plugins

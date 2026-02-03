@@ -1,16 +1,32 @@
 import path from 'node:path'
 import { ensureArray } from '@0x-jerry/utils'
-import { RelativePattern, type Uri, workspace } from 'vscode'
+import { isEqual, uniqWith } from 'lodash-es'
+import {
+  type Disposable,
+  Range,
+  RelativePattern,
+  type TextDocument,
+  type Uri,
+  WorkspaceEdit,
+  workspace,
+} from 'vscode'
 import yaml from 'yaml'
-import { ConfigProperties, configs, getConfig, SortBy } from './configs'
-import { HexoMetadataKeys } from './hexoMetadata'
+import { configs, getSortMethodFn } from './configs'
+
+export enum HexoMetadataKeys {
+  tags = 'tags',
+  categories = 'categories',
+  title = 'title',
+  date = 'date',
+  updated = 'updated',
+}
 
 export interface IFrontmatterData {
   [key: string]: unknown
 
-  tags: string[]
-  categories: (string | string[])[]
-  title: string
+  tags?: string[]
+  categories?: string[][]
+  title?: string
   date?: Date
 }
 
@@ -23,7 +39,7 @@ interface IFrontmatterRange {
 }
 
 export interface IFileMetadata {
-  uri: string
+  uri: Uri
   name: string
   range?: IFrontmatterRange
   data: IFrontmatterData
@@ -34,10 +50,14 @@ interface IGrouped<T> {
   items: T[]
 }
 
-class MetadataManager {
+class MetadataManager implements Disposable {
   _caches = new Map<string, Promise<IFileMetadata>>()
 
-  allAvailableKeys = new Set<string>()
+  _allAvailableKeys = new Set<string>()
+
+  get allFrontmatterKeys() {
+    return [...this._allAvailableKeys]
+  }
 
   get(uri: Uri) {
     const key = uri.toString()
@@ -72,7 +92,7 @@ class MetadataManager {
     const grouped: IGrouped<IFileMetadata>[] = []
 
     for (const data of allData) {
-      for (const tag of data.data.tags) {
+      for (const tag of data.data.tags || []) {
         const group = grouped.find((group) => group.name === tag)
 
         if (group) {
@@ -86,9 +106,11 @@ class MetadataManager {
       }
     }
 
-    const sortFn = getSortFn()
+    const sortFn = getSortMethodFn()
 
-    grouped.forEach(sortFn)
+    grouped.forEach((g) => {
+      g.items.sort(sortFn)
+    })
     grouped.sort((a, b) => (a.name < b.name ? -1 : 1))
 
     return grouped
@@ -100,8 +122,9 @@ class MetadataManager {
     const grouped: IGrouped<IFileMetadata>[] = []
 
     for (const data of allData) {
-      for (const category of data.data.categories) {
-        const name = toCategoryName(category)
+      for (const category of data.data.categories || []) {
+        const name = toCategoryLabel(category)
+
         const group = grouped.find((group) => group.name === name)
 
         if (group) {
@@ -115,25 +138,40 @@ class MetadataManager {
       }
     }
 
-    const sortFn = getSortFn()
+    const sortFn = getSortMethodFn()
 
-    grouped.forEach(sortFn)
+    grouped.forEach((g) => {
+      g.items.sort(sortFn)
+    })
+
     grouped.sort((a, b) => (a.name < b.name ? -1 : 1))
 
     return grouped
   }
 
-  async getAllCategories() {
-    const categories = new Set<string>()
+  /**
+   * Get all available frontmatter values by key
+   *
+   * @param key
+   */
+  async getAvailableValuesByKey<T>(key: string, exclude?: Uri[]) {
+    const items = await this.getAll()
 
-    for (const metadata of await this.getAll()) {
-      for (const category of metadata.data.categories) {
-        const name = toCategoryName(category)
-        categories.add(name)
+    const values: unknown[] = []
+
+    for (const data of items) {
+      if (exclude?.some((uri) => uri.toString() === data.uri.toString())) {
+        continue
+      }
+
+      const value = data.data[key]
+
+      if (value != null) {
+        values.push(value)
       }
     }
 
-    return [...categories]
+    return uniqWith(values, isEqual) as T[]
   }
 
   async buildCache() {
@@ -147,57 +185,31 @@ class MetadataManager {
     }
   }
 
-  async updateFrontmatter(uri: Uri, frontmatter: IFrontmatterData) {
-    const p = await this.get(uri)
-    p.data = frontmatter
-
-    this._postProcessAfterLoadMetadata(p)
-  }
-
   _postProcessAfterLoadMetadata(metadata: IFileMetadata) {
     this._updateAvailableKeys(metadata)
   }
 
   _updateAvailableKeys(data: IFileMetadata) {
     for (const key in data.data) {
-      this.allAvailableKeys.add(key)
+      this._allAvailableKeys.add(key)
     }
   }
-}
 
-/**
- * Convert category to string, if category is array, join it with '/'
- * @param category
- * @returns
- */
-function toCategoryName(category: string | string[]) {
-  return typeof category === 'string' ? category : category.join(' / ')
-}
-
-function getSortFn() {
-  const sortMethod = getConfig(ConfigProperties.sortMethod)
-
-  const key = sortMethod === SortBy.date ? 'date' : 'name'
-
-  const sortFn = (grouped: IGrouped<IFileMetadata>) => {
-    grouped.items.sort((a, b) => ((a.data[key] ?? 0) < (b.data[key] ?? 0) ? 1 : -1))
+  dispose() {
+    this._caches.clear()
+    this._allAvailableKeys.clear()
   }
-
-  return sortFn
 }
 
 async function parseFileMetadata(uri: Uri) {
-  const content = (await workspace.fs.readFile(uri)).toString()
+  const content =
+    workspace.textDocuments.find((t) => t.uri.toString() === uri.toString())?.getText() ??
+    (await workspace.fs.readFile(uri)).toString()
 
   const metadata: IFileMetadata = {
-    uri: uri.toString(),
+    uri: uri,
     name: path.parse(uri.fsPath).name,
-    data: {
-      categories: [],
-      tags: [],
-      title: '',
-      date: new Date(),
-    },
+    data: {},
   }
 
   const frontmatterContent = extractFrontmatterContent(content)
@@ -210,12 +222,16 @@ async function parseFileMetadata(uri: Uri) {
   try {
     const frontmatter = yaml.parse(frontmatterContent.content)
 
-    metadata.data = {
-      ...frontmatter,
-      categories: ensureArray(frontmatter[HexoMetadataKeys.categories]),
-      tags: ensureArray(frontmatter[HexoMetadataKeys.tags]),
-      title: frontmatter[HexoMetadataKeys.title] || '',
-      date: frontmatter[HexoMetadataKeys.date],
+    metadata.data = frontmatter
+
+    if (frontmatter[HexoMetadataKeys.categories]) {
+      metadata.data.categories = ensureArray(frontmatter[HexoMetadataKeys.categories]).map((c) =>
+        ensureArray(c),
+      )
+    }
+
+    if (frontmatter[HexoMetadataKeys.tags]) {
+      metadata.data.tags = ensureArray(frontmatter[HexoMetadataKeys.tags])
     }
   } catch (_error) {
     // ignore error
@@ -249,6 +265,65 @@ function extractFrontmatterContent(content: string) {
   }
 
   return null
+}
+
+export function isInFrontmatterRange(range: IFrontmatterRange, line: number) {
+  return line > range.start && line < range.end
+}
+
+export function toCategoryLabel(category: string[]) {
+  return category.join(' / ')
+}
+
+export async function updateDocumentFrontmatter(doc: TextDocument, key: string, value: unknown) {
+  const metadata = await metadataManager.get(doc.uri)
+  const frontmatter = structuredClone(metadata.data)
+
+  if (isEqual(frontmatter[key], value)) {
+    return
+  }
+
+  frontmatter[key] = value
+
+  const yamlDoc = new yaml.Document(frontmatter)
+
+  {
+    const key = HexoMetadataKeys.tags
+    const node = yamlDoc.get(key)
+
+    if (yaml.isSeq(node)) {
+      node.items.forEach((item) => {
+        if (yaml.isSeq(item)) {
+          item.flow = true
+        }
+      })
+    }
+  }
+
+  {
+    const key = HexoMetadataKeys.categories
+    const node = yamlDoc.get(key)
+
+    if (yaml.isSeq(node)) {
+      node.items.forEach((item) => {
+        if (yaml.isCollection(item)) {
+          item.flow = true
+        }
+      })
+    }
+  }
+
+  const newFrontmatterText = yamlDoc.toString()
+
+  const applyRange = metadata.range
+    ? new Range(metadata.range.start + 1, 0, metadata.range.end, 0)
+    : new Range(0, 0, 0, 0)
+
+  const edit = new WorkspaceEdit()
+  edit.replace(doc.uri, applyRange, newFrontmatterText)
+
+  await workspace.applyEdit(edit)
+  await doc.save()
 }
 
 export const metadataManager = new MetadataManager()

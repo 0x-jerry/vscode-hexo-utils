@@ -20,8 +20,6 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
 
     this.provider = provider
 
-    this.onDidChanged()
-
     this.autoFocus()
   }
 
@@ -53,12 +51,6 @@ export class ClassifyTreeView extends BaseTreeView<ClassifyItem> {
         this.focus(editor)
       }),
     )
-  }
-
-  onDidChanged() {
-    // this.treeView.onDidChangeSelection((e) => {
-    //   console.log(e);
-    // });
   }
 
   registerRefreshCmd(cmd: Commands) {

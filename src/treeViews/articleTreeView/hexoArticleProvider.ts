@@ -14,9 +14,9 @@ import {
 import { MoveFile } from '../../commands'
 import { Commands } from '../../commands/common'
 import { ArticleTypes } from '../../commands/createArticle'
-import { ConfigProperties, configs, getConfig, SortBy } from '../../configs'
-import { HexoMetadataUtils, type IHexoMetadata } from '../../hexoMetadata'
-import { getMDFileMetadata, getMDFiles } from '../../utils'
+import { configs, getSortMethodFn } from '../../configs'
+import { type IFileMetadata, metadataManager } from '../../metadata'
+import { getMDFiles } from '../../utils'
 import { BaseDispose } from '../common'
 import { mineTypePrefix } from './const'
 
@@ -64,15 +64,15 @@ export class HexoArticleProvider
   handleDrag(
     source: readonly ArticleItem[],
     dataTransfer: DataTransfer,
-    token: CancellationToken,
+    _token: CancellationToken,
   ): void {
     dataTransfer.set(this.mimeType, new DataTransferItem(source))
   }
 
   async handleDrop(
-    target: ArticleItem | undefined,
+    _target: ArticleItem | undefined,
     dataTransfer: DataTransfer,
-    token: CancellationToken,
+    _token: CancellationToken,
   ) {
     const transferItem = dataTransfer.get(this.dropMimeTypes[0])
 
@@ -100,22 +100,21 @@ export class HexoArticleProvider
     return this.allItems.get(file)
   }
 
-  getParent(element: ArticleItem): ProviderResult<ArticleItem> {
+  getParent(_element: ArticleItem): ProviderResult<ArticleItem> {
     return null
   }
 
-  async getChildren(element?: ArticleItem): Promise<ArticleItem[]> {
+  async getChildren(_element?: ArticleItem): Promise<ArticleItem[]> {
     const items: ArticleItem[] = []
 
     const articleRootPath =
       this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
 
     const paths = await getMDFiles(articleRootPath)
-    const utils = await HexoMetadataUtils.get()
 
     await Promise.all(
       paths.map(async (p) => {
-        const metadata = utils.getMetadataByUri(p) || (await getMDFileMetadata(p))
+        const metadata = await metadataManager.get(p)
 
         const name = p.fsPath.slice(articleRootPath.fsPath.length + 1)
 
@@ -126,30 +125,19 @@ export class HexoArticleProvider
       }),
     )
 
-    return items.sort((a, b) => {
-      const sortMethod = getConfig(ConfigProperties.sortMethod)
-
-      switch (sortMethod) {
-        case SortBy.name:
-          return String(a.label) < String(b.label) ? -1 : 1
-        case SortBy.date:
-          return a.metadata.date < b.metadata.date ? 1 : -1
-
-        default:
-          return String(a.label) < String(b.label) ? -1 : 1
-      }
-    })
+    const sortFn = getSortMethodFn()
+    return items.sort((a, b) => sortFn(a.metadata, b.metadata))
   }
 }
 
 export class ArticleItem extends TreeItem {
   iconPath = ThemeIcon.File
-  metadata: IHexoMetadata
+  metadata: IFileMetadata
 
   constructor(
     label: string,
     uri: Uri,
-    metadata: IHexoMetadata,
+    metadata: IFileMetadata,
     collapsibleState?: TreeItemCollapsibleState,
   ) {
     super(label, collapsibleState)
