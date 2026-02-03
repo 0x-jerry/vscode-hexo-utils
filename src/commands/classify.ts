@@ -99,9 +99,7 @@ export class SelectCategories extends ClassifyCommand {
       placeHolder: 'Select categories',
     })
 
-    const newSelectedCategories = selected?.map((item) =>
-      item.value.length > 1 ? item.value : item.value[0],
-    )
+    const newSelectedCategories = selected?.map((item) => item.value)
 
     if (!newSelectedCategories) {
       return

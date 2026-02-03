@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 
+import debounce from 'lodash-es/debounce'
 import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
 import { registerAutoPreview } from './autoPreview'
 import { registerCommands } from './commands'
@@ -25,10 +26,12 @@ export async function activate(context: ExtensionContext) {
 
   await metadataManager.buildCache()
 
+  const debouncedUpdate = debounce(metadataManager.update.bind(metadataManager), 20)
+
   context.subscriptions.push(
     workspace.onDidChangeTextDocument((e) => {
       if (e.document.languageId === 'markdown') {
-        metadataManager.update(e.document.uri)
+        debouncedUpdate(e.document.uri)
       }
     }),
   )

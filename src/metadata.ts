@@ -278,7 +278,7 @@ export function toCategoryLabel(category: string[]) {
 
 export async function updateDocumentFrontmatter(doc: TextDocument, key: string, value: unknown) {
   const metadata = await metadataManager.get(doc.uri)
-  const frontmatter = structuredClone(metadata.data)
+  const frontmatter: Record<string, any> = structuredClone(metadata.data)
 
   if (isEqual(frontmatter[key], value)) {
     return
@@ -286,20 +286,11 @@ export async function updateDocumentFrontmatter(doc: TextDocument, key: string, 
 
   frontmatter[key] = value
 
+  frontmatter[HexoMetadataKeys.categories] = frontmatter[HexoMetadataKeys.categories]?.map(
+    (c: string[]) => (c.length === 1 ? c[0] : c),
+  )
+
   const yamlDoc = new yaml.Document(frontmatter)
-
-  {
-    const key = HexoMetadataKeys.tags
-    const node = yamlDoc.get(key)
-
-    if (yaml.isSeq(node)) {
-      node.items.forEach((item) => {
-        if (yaml.isSeq(item)) {
-          item.flow = true
-        }
-      })
-    }
-  }
 
   {
     const key = HexoMetadataKeys.categories
@@ -307,7 +298,7 @@ export async function updateDocumentFrontmatter(doc: TextDocument, key: string, 
 
     if (yaml.isSeq(node)) {
       node.items.forEach((item) => {
-        if (yaml.isCollection(item)) {
+        if (yaml.isSeq(item)) {
           item.flow = true
         }
       })
