@@ -14,7 +14,7 @@ export class RefreshSidebar extends Command {
     this.configChanged()
   }
 
-  async execute(cmd: ICommandParsed, ...arg: unknown[]): Promise<void> {
+  async execute(_cmd: ICommandParsed, ..._arg: unknown[]): Promise<void> {
     this.refreshAll()
   }
 

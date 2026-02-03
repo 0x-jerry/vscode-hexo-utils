@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { uniq } from 'lodash-es'
+import { isEqual, uniq, uniqWith } from 'lodash-es'
 import {
   type CancellationToken,
   type CompletionContext,
@@ -88,7 +88,7 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
 
     const values = await metadataManager.getAvailableValuesByKey(key, [document.uri])
 
-    return this._buildCompletionItems(HexoMetadataKeys.tags, values)
+    return this._buildCompletionItems(key, values)
   }
 
   _buildCompletionItems(key: string, values: unknown[]): CompletionItem[] {
@@ -96,6 +96,16 @@ export class HexoFrontMatterCompletionProvider implements CompletionItemProvider
       return uniq(values.flat()).map(
         (tag) => new CompletionItem(String(tag), CompletionItemKind.Keyword),
       )
+    }
+
+    if (key === HexoMetadataKeys.categories) {
+      const _value = values as string[][][]
+
+      return uniqWith(_value.flat(), isEqual).map((category) => {
+        const name = category.length === 1 ? category[0] : buildArrayValue(category)
+
+        return new CompletionItem(String(name), CompletionItemKind.Keyword)
+      })
     }
 
     const normalizedValue = values.map((val) =>

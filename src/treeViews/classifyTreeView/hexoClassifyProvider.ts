@@ -56,7 +56,10 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
     const draftFolder = configs.paths.draft
 
     const items: ClassifyItem[] = []
-    const grouped = await metadataManager.getGroupedMetadataByTags()
+    const grouped =
+      this.type === ClassifyTypes.tag
+        ? await metadataManager.getGroupedMetadataByTags()
+        : await metadataManager.getGroupedMetadataByCategories()
 
     if (element) {
       const classify = grouped.find((n) => n.name === element.label)
