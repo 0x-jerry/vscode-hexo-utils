@@ -4,7 +4,6 @@ import { isEqual, uniqWith } from 'lodash-es'
 import {
   type Disposable,
   Range,
-  RelativePattern,
   type TextDocument,
   type Uri,
   WorkspaceEdit,
@@ -12,7 +11,7 @@ import {
 } from 'vscode'
 import yaml from 'yaml'
 import { configs, getSortMethodFn } from './configs'
-import { findMarkdownFiles } from './utils'
+import { findMarkdownFiles, outputChannel } from './utils'
 
 export enum HexoMetadataKeys {
   tags = 'tags',
@@ -81,7 +80,9 @@ class MetadataManager implements Disposable {
     return Promise.all(this._caches.values())
   }
 
-  update(uri: Uri) {
+  update = (uri: Uri) => {
+    outputChannel.appendLine(`Updating metadata for: ${uri.fsPath}`)
+
     this._caches.delete(uri.toString())
 
     return this.get(uri)

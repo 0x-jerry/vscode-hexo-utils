@@ -26,12 +26,10 @@ export async function activate(context: ExtensionContext) {
 
   await metadataManager.buildCache()
 
-  const debouncedUpdate = debounce(metadataManager.update.bind(metadataManager), 20)
-
   context.subscriptions.push(
     workspace.onDidChangeTextDocument((e) => {
       if (e.document.languageId === 'markdown') {
-        debouncedUpdate(e.document.uri)
+        metadataManager.update(e.document.uri)
       }
     }),
   )

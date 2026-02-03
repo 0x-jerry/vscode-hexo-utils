@@ -372,7 +372,6 @@ export class RemoveTagOrCategory extends ClassifyCommand {
 
     const group = grouped.find((g) => g.name === currentGroupedName)
 
-    console.log(group, grouped)
     if (!group?.items.length) {
       return
     }
