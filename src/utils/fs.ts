@@ -10,7 +10,7 @@ export async function getDirFiles(dir: Uri) {
   return workspace.fs.readDirectory(dir)
 }
 
-export async function getMDFiles(dir: Uri) {
+export async function findMarkdownFiles(dir: Uri) {
   const mds = await workspace.findFiles(new RelativePattern(dir, '**/*.md'), 'node_modules')
 
   return mds

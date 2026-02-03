@@ -12,6 +12,7 @@ import {
 } from 'vscode'
 import yaml from 'yaml'
 import { configs, getSortMethodFn } from './configs'
+import { findMarkdownFiles } from './utils'
 
 export enum HexoMetadataKeys {
   tags = 'tags',
@@ -175,10 +176,10 @@ class MetadataManager implements Disposable {
   }
 
   async buildCache() {
-    const files = await workspace.findFiles(
-      new RelativePattern(configs.hexoRoot, '**/*.md'),
-      'node_modules',
-    )
+    const draftFiles = await findMarkdownFiles(configs.paths.draft)
+    const postFiles = await findMarkdownFiles(configs.paths.post)
+
+    const files = [...draftFiles, ...postFiles]
 
     for (const file of files) {
       await this.get(file)

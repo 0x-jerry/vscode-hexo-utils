@@ -16,7 +16,7 @@ import { Commands } from '../../commands/common'
 import { ArticleTypes } from '../../commands/createArticle'
 import { configs, getSortMethodFn } from '../../configs'
 import { type IFileMetadata, metadataManager } from '../../metadata'
-import { getMDFiles } from '../../utils'
+import { findMarkdownFiles } from '../../utils'
 import { BaseDispose } from '../common'
 import { mineTypePrefix } from './const'
 
@@ -110,7 +110,7 @@ export class HexoArticleProvider
     const articleRootPath =
       this.type === ArticleTypes.draft ? configs.paths.draft : configs.paths.post
 
-    const paths = await getMDFiles(articleRootPath)
+    const paths = await findMarkdownFiles(articleRootPath)
 
     await Promise.all(
       paths.map(async (p) => {
