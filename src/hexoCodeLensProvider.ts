@@ -52,6 +52,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
           line: i,
           title: '$(calendar) Update Date',
           command: Commands.updateDate,
+          arguments: [HexoMetadataKeys.date],
         })
       }
 
@@ -63,6 +64,7 @@ export class HexoCodeLensProvider implements CodeLensProvider {
           line: i,
           title: '$(calendar) Update Updated',
           command: Commands.updateDate,
+          arguments: [HexoMetadataKeys.updated],
         })
       }
     }
