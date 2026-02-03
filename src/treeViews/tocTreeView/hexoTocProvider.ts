@@ -1,4 +1,4 @@
-import debounce from 'debounce'
+import debounce from 'lodash-es/debounce'
 import {
   type CancellationToken,
   commands,

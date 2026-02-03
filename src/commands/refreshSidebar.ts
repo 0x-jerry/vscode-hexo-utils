@@ -1,4 +1,4 @@
-import debounce from 'debounce'
+import debounce from 'lodash-es/debounce'
 import { commands, workspace } from 'vscode'
 import { ConfigProperties, getConfigKey } from '../configs'
 import { Command, Commands, command, type ICommandParsed } from './common'
