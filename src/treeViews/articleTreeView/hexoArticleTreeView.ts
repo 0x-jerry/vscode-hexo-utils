@@ -25,8 +25,6 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
 
     this.provider = provider
 
-    this.onDidChanged()
-
     this.autoFocus()
   }
 
@@ -62,12 +60,6 @@ export class ArticleTreeView extends BaseTreeView<ArticleItem> {
     )
 
     this.subscribe(this.treeView.onDidChangeVisibility(() => this.focus()))
-  }
-
-  onDidChanged() {
-    // this.treeView.onDidChangeSelection((e) => {
-    //   console.log(e);
-    // });
   }
 
   registerRefreshCmd(cmd: Commands) {

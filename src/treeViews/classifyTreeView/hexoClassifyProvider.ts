@@ -43,8 +43,7 @@ export class HexoClassifyProvider extends BaseDispose implements TreeDataProvide
   }
 
   getItem(file: string) {
-    const name = Uri.parse(file).toString()
-    return this._allItems.get(name)
+    return this._allItems.get(file)
   }
 
   getParent(element: ClassifyItem): ProviderResult<ClassifyItem> {
