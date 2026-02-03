@@ -1,9 +1,8 @@
-.gitignore
-.github
-
-.vscode
+.*
+pnpm-*
+biome.json
 node_modules
 out/
 src/
 tsconfig.json
-webpack.config.js
+playground/
