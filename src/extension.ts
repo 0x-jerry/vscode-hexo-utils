@@ -2,7 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 
 import debounce from 'lodash-es/debounce'
-import { type DocumentSelector, type ExtensionContext, languages, window, workspace } from 'vscode'
+import {
+  type DocumentSelector,
+  type ExtensionContext,
+  type TextDocumentChangeEvent,
+  languages,
+  window,
+  workspace,
+} from 'vscode'
 import { registerAutoPreview } from './autoPreview'
 import { registerCommands } from './commands'
 import { ConfigProperties, getConfig } from './configs'
@@ -26,10 +33,28 @@ export async function activate(context: ExtensionContext) {
 
   await metadataManager.buildCache()
 
+  const debouncedUpdateMap = new Map<string, ReturnType<typeof debounce>>()
+  const latestEventMap = new Map<string, TextDocumentChangeEvent>()
+
   context.subscriptions.push(
     workspace.onDidChangeTextDocument((e) => {
       if (e.document.languageId === 'markdown') {
-        metadataManager.update(e.document.uri)
+        const key = e.document.uri.toString()
+        latestEventMap.set(key, e)
+
+        let debouncedUpdate = debouncedUpdateMap.get(key)
+
+        if (!debouncedUpdate) {
+          debouncedUpdate = debounce(() => {
+            const latest = latestEventMap.get(key)
+            if (latest) {
+              metadataManager.update(latest)
+            }
+          }, 500)
+          debouncedUpdateMap.set(key, debouncedUpdate)
+        }
+
+        debouncedUpdate()
       }
     }),
   )
