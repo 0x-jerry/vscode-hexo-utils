@@ -85,7 +85,7 @@ class MetadataManager implements Disposable {
     const uri = e.document.uri
     const cached = await this._caches.get(uri.toString())
 
-    // If we have a cached range, skip update when all changes are after frontmatter
+    // If we have a cached range, skip update if all changes are made after frontmatter range
     if (cached?.range) {
       const allChangesAfterFrontmatter = e.contentChanges.every(
         (change) => change.range.start.line > cached.range!.end,
