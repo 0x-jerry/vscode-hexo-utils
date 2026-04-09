@@ -575,7 +575,7 @@
     "@types/node": "^25.0.3",
     "@types/vscode": "^1.67.0",
     "@vscode/vsce": "^3.7.1",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "cos-nodejs-sdk-v5": "^2.15.4",
     "dayjs": "^1.11.19",
     "debug": "^4.4.3",
