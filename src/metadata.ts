@@ -5,6 +5,7 @@ import {
   type Disposable,
   Range,
   type TextDocument,
+  type TextDocumentChangeEvent,
   type Uri,
   WorkspaceEdit,
   workspace,
@@ -80,7 +81,21 @@ class MetadataManager implements Disposable {
     return Promise.all(this._caches.values())
   }
 
-  update = (uri: Uri) => {
+  update = async (e: TextDocumentChangeEvent) => {
+    const uri = e.document.uri
+    const cached = await this._caches.get(uri.toString())
+
+    // If we have a cached range, skip update when all changes are after frontmatter
+    if (cached?.range) {
+      const allChangesAfterFrontmatter = e.contentChanges.every(
+        (change) => change.range.start.line > cached.range!.end,
+      )
+
+      if (allChangesAfterFrontmatter) {
+        return cached
+      }
+    }
+
     outputChannel.appendLine(`Updating metadata for: ${uri.fsPath}`)
 
     this._caches.delete(uri.toString())
