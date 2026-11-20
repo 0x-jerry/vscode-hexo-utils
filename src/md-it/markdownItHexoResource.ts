@@ -47,7 +47,7 @@ const hexoAssetLinkTag: ResolveHexoTag = (status, ...attrs) => {
  * @param attrs
  */
 const hexoAssetImgTag: ResolveHexoTag = (status, ...attrs) => {
-  const isImageReg = /\.(jpg|png|jpeg|webp|av)$/
+  const isImageReg = /\.(jpg|png|jpeg|webp|gif|svg|bmp|ico|av)$/
 
   const src = isImageReg.test(attrs[0]) ? attrs[0] : attrs[1]
 
