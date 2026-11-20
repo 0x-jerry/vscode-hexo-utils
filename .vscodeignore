@@ -1,9 +1,11 @@
 .*/
 .*
-pnpm-*
-biome.json
-node_modules
+node_modules/
 out/
 src/
-tsconfig.json
 playground/
+docs-images/
+bun.lock
+*.vsix
+tsconfig.json
+tsdown.config.ts
