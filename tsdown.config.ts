@@ -6,8 +6,8 @@ export default defineConfig({
   platform: 'node',
   sourcemap: false,
   clean: true,
-  external: ['vscode'],
   deps: {
-    onlyBundle: false
+    onlyBundle: false,
+    neverBundle: ['vscode']
   }
 })

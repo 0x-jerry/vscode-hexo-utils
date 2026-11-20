@@ -564,7 +564,7 @@
     "@types/mustache": "^4.2.6",
     "@types/node": "^25.5.2",
     "@types/vscode": "^1.100.0",
-    "@vscode/vsce": "^3.7.1",
+    "@vscode/vsce": "^4.1.1",
     "axios": "^1.15.0",
     "cos-nodejs-sdk-v5": "^2.15.4",
     "dayjs": "^1.11.20",
@@ -574,7 +574,7 @@
     "markdown-it": "^14.1.1",
     "mustache": "^4.2.0",
     "oxfmt": "^0.44.0",
-    "tsdown": "^0.21.7",
+    "tsdown": "^0.23.7",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2",
     "yaml": "^2.8.3"
